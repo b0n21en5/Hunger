@@ -1,0 +1,22 @@
+.col-title {
+  font-weight: 600;
+  font-size: 36px;
+}
+
+.col-text {
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.card-img {
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.card-title {
+  font-size: medium;
+}
+
+.card-text {
+  font-size: small;
+}

@@ -1,0 +1,9 @@
+.card {
+  color: black;
+  border-radius: 12px;
+}
+
+.card-img-top {
+  border-radius: 12px 12px 0 0;
+  object-fit: cover;
+}
