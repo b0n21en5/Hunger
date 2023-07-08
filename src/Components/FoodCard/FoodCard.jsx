@@ -1,0 +1,27 @@
+const FoodCard = ({ title, price, rating, type, imgSrc }) => {
+  return (
+    <div className="card border-0" style={{ width: "18rem" }}>
+      <img
+        src={imgSrc}
+        width="288"
+        height="192"
+        className="card-img-top rounded"
+        alt={title}
+      />
+      <div className="card-body">
+        <div className="d-flex justify-content-between">
+          <div className="card-title">{title}</div>
+          <div className="btn btn-success">{rating}</div>
+        </div>
+        <div className="d-flex justify-content-between">
+          <p className="card-text">
+            {type.substr(0, 24) + (type.length >= 24 ? "..." : "")}
+          </p>
+          <p className="card-text">₹{price}&nbsp;for one</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default FoodCard;

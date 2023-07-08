@@ -7,3 +7,7 @@ body {
 .main {
   padding: 10px 130px;
 }
+
+.link {
+  text-decoration: none;
+}
