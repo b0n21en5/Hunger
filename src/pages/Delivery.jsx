@@ -1,12 +1,13 @@
 import FoodList from "../Components/FoodCard/FoodList";
 import Inspiration from "../Components/Inspiration/Inspiration";
+import Layout from "../Components/Layout/Layout";
 
 const Delivery = () => {
   return (
-    <div className="main">
+    <Layout>
       <Inspiration />
       <FoodList />
-    </div>
+    </Layout>
   );
 };
 

@@ -15,7 +15,7 @@ const Cards = () => {
           text="Stay home and order to your doorstep."
         />
       </Link>
-      <Link to="" className="link">
+      <Link to="resturants" className="link">
         <CatCard
           imgSrc={cd2}
           title="Dining"
