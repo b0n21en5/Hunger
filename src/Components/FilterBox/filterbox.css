@@ -1,0 +1,22 @@
+.filter-box {
+  position: relative;
+  left: 150px;
+  width: 700px;
+  padding: 20px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: rgba(28, 28, 28, 0.15) 0px 12px 70px 0px;
+}
+
+.top {
+  font-size: 1.4rem;
+  border-bottom: 1px solid;
+}
+
+.content {
+  border-bottom: 1px solid;
+}
+
+.content .filter-by {
+  width: 150px;
+}
