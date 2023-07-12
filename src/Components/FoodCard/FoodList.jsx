@@ -4,11 +4,13 @@ import FoodCard from "./FoodCard";
 import filter from "../../assets/filter.svg";
 import FilterBox from "../FilterBox/FilterBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import Cuisines from "../Cuisines/Cuisines";
 
 const FoodList = () => {
   const [foodsData, setFoodsData] = useState(foods);
   const [loadFilter, setLoadFilter] = useState(false);
+  const [loadCuisines, setLoadCuisines] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState([]);
   const [filterApplied, setFilterApplied] = useState(0);
 
@@ -19,7 +21,6 @@ const FoodList = () => {
 
       // clear all filters reset data
       setFoodsData(foods);
-      console.log(foods);
     }
   }, [selectedFilter.length]);
 
@@ -31,14 +32,17 @@ const FoodList = () => {
     setSelectedFilter(filteredArray);
   };
 
+  // method to handle filter button
+  const handleFilterBtn = () => {
+    setLoadFilter((prev) => !prev);
+    setLoadCuisines(false);
+  };
+
   return (
     <>
       <h3 className="mt-5">Order food online in Jai Singh Road</h3>
       <div className="filters mt-4 gap-3 d-flex flex-wrap">
-        <button
-          onClick={() => setLoadFilter((prev) => !prev)}
-          className="btn btn-info text-center"
-        >
+        <button onClick={handleFilterBtn} className="btn btn-info text-center">
           {filterApplied ? (
             <div className="btn btn-danger p-0 ps-1 pe-1 me-1">
               {selectedFilter.length}
@@ -48,6 +52,15 @@ const FoodList = () => {
           )}
           Filters
         </button>
+
+        <div
+          className="btn btn-info text-center"
+          onClick={() => setLoadCuisines(true)}
+        >
+          Cusines
+          <FontAwesomeIcon icon={faChevronDown} />
+        </div>
+
         {selectedFilter?.map((seleFil, ind) => (
           <button
             key={ind}
@@ -59,6 +72,16 @@ const FoodList = () => {
           </button>
         ))}
       </div>
+      {loadCuisines && (
+        <Cuisines
+          title="Cuisines"
+          loadCuisines={loadCuisines}
+          setLoadCuisines={setLoadCuisines}
+          setSelectedFilter={setSelectedFilter}
+          foodsData={foodsData}
+          setFoodsData={setFoodsData}
+        />
+      )}
       {loadFilter && (
         <FilterBox
           setLoadFilter={setLoadFilter}

@@ -63,7 +63,7 @@ const FilterBox = ({ setLoadFilter, setSelectedFilter, foods }) => {
       <div className="content">
         <div className="d-flex">
           <div className="filter-by">
-            <div className="p-2">Sort By</div>
+            <div className="p-2 btn-light">Sort By</div>
           </div>
           <form
             onChange={(e) => setSortValue(e.target.value)}
