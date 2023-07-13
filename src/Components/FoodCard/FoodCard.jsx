@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+
 const FoodCard = ({ title, price, rating, type, imgSrc, location, dist }) => {
   return (
     <div className="card border-0" style={{ width: "18rem" }}>
@@ -11,7 +14,10 @@ const FoodCard = ({ title, price, rating, type, imgSrc, location, dist }) => {
       <div className=" pt-4">
         <div className="d-flex justify-content-between">
           <div className="card-title">{title}</div>
-          <div className="btn btn-success">{rating}</div>
+          <div className="btn btn-success">
+            {rating}&nbsp;
+            <FontAwesomeIcon icon={faStar} />
+          </div>
         </div>
         <div className="d-flex justify-content-between">
           <div className="card-text">

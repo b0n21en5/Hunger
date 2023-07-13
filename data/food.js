@@ -23,6 +23,7 @@ export const foods = [
   {
     id: 1,
     title: "SashMick's Bakery",
+    slug: "sashmick's-bakery",
     type: "Bakery, Desserts",
     rating: 4.0,
     price: 400,
@@ -31,6 +32,7 @@ export const foods = [
   {
     id: 2,
     title: "Dhading KTM",
+    slug: "dhading-ktm",
     type: "Chinese, Fast Food, Burger, Rolls",
     rating: 4.2,
     price: 300,
@@ -39,6 +41,7 @@ export const foods = [
   {
     id: 3,
     title: "The Pizza Kings",
+    slug: "the-pizza-king",
     type: "Pizza, Fast Food, Shake",
     rating: 3.8,
     price: 120,
@@ -47,6 +50,7 @@ export const foods = [
   {
     id: 4,
     title: "Chai Point",
+    slug: "chai-point",
     type: "Tea, Coffee, Beverages, Shake, Fast Food, Rolls, Desserts",
     rating: 3.9,
     price: 250,
@@ -55,6 +59,7 @@ export const foods = [
   {
     id: 5,
     title: "Saravana Bhavan",
+    slug: "saravana-bhavan",
     type: "South Indian, Desserts, Juices, Shake, Beverages",
     rating: 4.3,
     price: 580,
@@ -63,6 +68,7 @@ export const foods = [
   {
     id: 6,
     title: "Chaayos Chai+Snacks=Relax",
+    slug: "chaayos-chai+snacks=relax",
     type: "Tea, Fast Food, Cafe, Beverages, Rolls, Coffee",
     rating: 3.7,
     price: 129,

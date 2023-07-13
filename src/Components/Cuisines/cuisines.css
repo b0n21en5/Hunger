@@ -22,6 +22,7 @@
 }
 
 .search-bar {
+  max-width: 457px;
   padding: 10px;
   border: solid 0.5px;
   border-radius: 4px;
@@ -31,6 +32,10 @@
 .search-bar input {
   border: none;
   width: 88%;
+}
+
+.search-bar input:focus {
+  outline: none;
 }
 
 .checkitems {

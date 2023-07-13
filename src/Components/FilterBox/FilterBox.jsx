@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./filterbox.css";
+import Cuisines from "../Cuisines/Cuisines";
 
-const FilterBox = ({ setLoadFilter, setSelectedFilter, foods }) => {
+const FilterBox = ({
+  setLoadFilter,
+  setSelectedFilter,
+  foods,
+  handleCheckedFilter,
+}) => {
   const [sortValue, setSortValue] = useState("");
+  const [showFilter, setShowFilter] = useState("sort");
 
   // sort by low to high price
   const handleSortBy = () => {
@@ -45,6 +52,7 @@ const FilterBox = ({ setLoadFilter, setSelectedFilter, foods }) => {
   // method to handle apply button
   const handleApply = () => {
     handleSortBy();
+    handleCheckedFilter();
     setLoadFilter(false);
   };
 
@@ -62,32 +70,51 @@ const FilterBox = ({ setLoadFilter, setSelectedFilter, foods }) => {
       </div>
       <div className="content">
         <div className="d-flex">
-          <div className="filter-by">
-            <div className="p-2 btn-light">Sort By</div>
-          </div>
-          <form
-            onChange={(e) => setSortValue(e.target.value)}
-            className="filter-value "
-          >
-            <div className="p-2 d-flex flex-column">
-              <label className="mb-4">
-                <input type="radio" name="sort" value="Rating: High to Low" />
-                &nbsp;Rating: High to Low
-              </label>
-              <label className="mb-4">
-                <input type="radio" name="sort" value="Rating: Low to High" />
-                &nbsp;Rating: Low to High
-              </label>
-              <label className="mb-4">
-                <input type="radio" name="sort" value="Cost: High to Low" />
-                &nbsp;Cost: High to Low
-              </label>
-              <label className="mb-4">
-                <input type="radio" name="sort" value="Cost: Low to High" />
-                &nbsp;Cost: Low to High
-              </label>
+          <div className="filter-by flex btn">
+            <div
+              className="p-2 btn-light"
+              onClick={() => setShowFilter("sort")}
+            >
+              Sort By
             </div>
-          </form>
+            <div
+              className="p-2 btn-light"
+              onClick={() => setShowFilter("cuisines")}
+            >
+              Cuisines
+            </div>
+          </div>
+          {showFilter === "sort" ? (
+            <form
+              onChange={(e) => setSortValue(e.target.value)}
+              className="filter-value "
+            >
+              <div className="p-2 d-flex flex-column">
+                <label className="mb-4">
+                  <input type="radio" name="sort" value="Rating: High to Low" />
+                  &nbsp;Rating: High to Low
+                </label>
+                <label className="mb-4">
+                  <input type="radio" name="sort" value="Rating: Low to High" />
+                  &nbsp;Rating: Low to High
+                </label>
+                <label className="mb-4">
+                  <input type="radio" name="sort" value="Cost: High to Low" />
+                  &nbsp;Cost: High to Low
+                </label>
+                <label className="mb-4">
+                  <input type="radio" name="sort" value="Cost: Low to High" />
+                  &nbsp;Cost: Low to High
+                </label>
+              </div>
+            </form>
+          ) : showFilter === "cuisines" ? (
+            <div className="p-4">
+              <Cuisines setSelectedFilter={setSelectedFilter} />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className="bottom d-flex justify-content-end mt-2 gap-3">
