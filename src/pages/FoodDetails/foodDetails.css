@@ -1,3 +1,7 @@
+.foodDetails {
+  border-bottom: solid 1px;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import "./foodDetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
 
 const FoodDetails = () => {
   const { slug } = useParams();
@@ -16,7 +17,7 @@ const FoodDetails = () => {
   }, []);
 
   return (
-    <div>
+    <div className="">
       <Link to="/">
         <img src="" alt="logo" />
       </Link>
@@ -49,7 +50,7 @@ const FoodDetails = () => {
           </div>
         </div>
 
-        <div className="mt-2">
+        <div className="mt-2 pb-4 foodDetails">
           <h1 className="pd-title d-flex justify-content-between">
             {selectedFood.title}
             <div className="btn btn-success">
@@ -60,6 +61,9 @@ const FoodDetails = () => {
           <div className="">{selectedFood.type}</div>
           <div className="">₹{selectedFood.price}&nbsp;for one</div>
         </div>
+
+        {/* similar products */}
+        <SimilarProducts />
       </div>
     </div>
   );

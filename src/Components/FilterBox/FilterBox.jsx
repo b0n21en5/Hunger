@@ -8,14 +8,16 @@ const FilterBox = ({
   setLoadFilter,
   setSelectedFilter,
   foods,
-  handleCheckedFilter,
+  onCheckedFilter,
+  checked,
+  setChecked,
 }) => {
   const [sortValue, setSortValue] = useState("");
   const [showFilter, setShowFilter] = useState("sort");
 
   // sort by low to high price
   const handleSortBy = () => {
-    setSelectedFilter((prev) => [...prev, sortValue]);
+    setSelectedFilter({ type: "ADD_FILTER_ARR", payload: sortValue });
 
     switch (sortValue) {
       case "Cost: Low to High":
@@ -50,10 +52,10 @@ const FilterBox = ({
   useEffect(() => {}, [sortValue]);
 
   // method to handle apply button
-  const handleApply = () => {
-    handleSortBy();
-    handleCheckedFilter();
-    setLoadFilter(false);
+  const onApplyBtnClicked = () => {
+    if (sortValue) handleSortBy();
+    if (checked.length) onCheckedFilter();
+    setLoadFilter({ type: "LOADFILTER-NO" });
   };
 
   return (
@@ -64,7 +66,7 @@ const FilterBox = ({
           <FontAwesomeIcon
             style={{ cursor: "pointer" }}
             icon={faXmark}
-            onClick={() => setLoadFilter(false)}
+            onClick={() => setLoadFilter({ type: "LOADFILTER-NO" })}
           />
         </div>
       </div>
@@ -110,7 +112,7 @@ const FilterBox = ({
             </form>
           ) : showFilter === "cuisines" ? (
             <div className="p-4">
-              <Cuisines setSelectedFilter={setSelectedFilter} />
+              <Cuisines checked={checked} setChecked={setChecked} />
             </div>
           ) : (
             ""
@@ -120,14 +122,14 @@ const FilterBox = ({
       <div className="bottom d-flex justify-content-end mt-2 gap-3">
         <button
           onClick={() => {
-            setSelectedFilter([]);
-            setLoadFilter(false);
+            setSelectedFilter({ type: "REP_FILTER_ARR", payload: [] });
+            setLoadFilter({ type: "LOADFILTER-NO" });
           }}
           className="btn btn-light"
         >
           Clear all
         </button>
-        <button onClick={() => handleApply()} className="btn btn-danger">
+        <button onClick={() => onApplyBtnClicked()} className="btn btn-danger">
           Apply
         </button>
       </div>

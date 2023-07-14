@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { foods } from "../../../data/food";
 import FoodCard from "./FoodCard";
 import filter from "../../assets/filter.svg";
@@ -7,59 +7,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 import { NavLink } from "react-router-dom";
+import { initialState, reducer } from "../../reducer/useDeliveryReducer";
 
-const FoodList = () => {
-  const [foodsData, setFoodsData] = useState(foods);
-  const [loadFilter, setLoadFilter] = useState(false);
-  const [loadCuisines, setLoadCuisines] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState([]);
-  const [filterApplied, setFilterApplied] = useState(0);
-  const [checked, setChecked] = useState([]);
-
-  useEffect(() => {
-    if (selectedFilter.length) setFilterApplied(selectedFilter.length);
-    else {
-      setFilterApplied(0);
-
-      // clear all filters reset data
-      setFoodsData(foods);
-    }
-  }, [selectedFilter.length]);
-
-  // method to  remove selected filter
-  const handleRemoveFilter = (seleFil) => {
-    const filteredArray = selectedFilter.filter((sf) => {
-      return sf !== seleFil;
-    });
-    setSelectedFilter(filteredArray);
-  };
-
-  // method to handle filter button
-  const handleFilterBtn = () => {
-    setLoadFilter((prev) => !prev);
-    setLoadCuisines(false);
-  };
-
-  //   method apply checked filters
-  const handleCheckedFilter = () => {
-    let checkedArray = [];
-    checked.map((ch) => {
-      foodsData.map((fd) => {
-        if (fd.type.includes(ch)) checkedArray.push(fd);
-      });
-    });
-    setFoodsData(checkedArray);
-    setLoadCuisines(false);
-  };
-
+const FoodList = ({
+  onFilterBtnClick,
+  onCheckedFilter,
+  onFilterRemove,
+  state,
+  dispatch,
+  foodsData,
+}) => {
   return (
     <>
       <h3 className="mt-5">Order food online in Jai Singh Road</h3>
       <div className="filters mt-4 gap-3 d-flex flex-wrap">
-        <button onClick={handleFilterBtn} className="btn btn-info text-center">
-          {filterApplied ? (
+        <button onClick={onFilterBtnClick} className="btn btn-info text-center">
+          {state.filterApplied ? (
             <div className="btn btn-danger p-0 ps-1 pe-1 me-1">
-              {selectedFilter.length}
+              {state.filterApplied}
             </div>
           ) : (
             <img className="me-1" src={filter} alt="filter" />
@@ -69,53 +34,54 @@ const FoodList = () => {
 
         <div
           className="btn btn-info text-center"
-          onClick={() => setLoadCuisines(true)}
+          onClick={() => {
+            dispatch({ type: "LOADCUISINES-YES" });
+            dispatch({ type: "LOADFILTER-NO" });
+          }}
         >
           Cusines
           <FontAwesomeIcon icon={faChevronDown} />
         </div>
 
-        {selectedFilter?.map((seleFil, ind) => (
+        {state.selectedFilter?.map((seleFil, ind) => (
           <button
             key={ind}
             className="btn btn-danger"
-            onClick={() => handleRemoveFilter(seleFil)}
+            onClick={() => onFilterRemove(seleFil)}
           >
             {seleFil}
             <FontAwesomeIcon className="ms-2" icon={faXmark} />
           </button>
         ))}
       </div>
-      {loadCuisines && (
+      {state.loadCuisines && (
         <div className="cuisines-box mt-3">
           <div className="cuisineTitle">Cuisines</div>
-          <Cuisines
-            checked={checked}
-            setChecked={setChecked}
-            setSelectedFilter={setSelectedFilter}
-          />
+          <Cuisines checked={state.checked} setChecked={dispatch} />
           <div className="bottom d-flex justify-content-end mt-4 gap-3">
             <button
               onClick={() => {
-                setLoadCuisines(false);
-                setSelectedFilter([]);
+                dispatch({ type: "LOADCUISINES-NO" });
+                dispatch({ type: "REP_FILTER_ARR", payload: [] });
               }}
               className="btn btn-light"
             >
               Clear all
             </button>
-            <button className="btn btn-danger" onClick={handleCheckedFilter}>
+            <button className="btn btn-danger" onClick={onCheckedFilter}>
               Apply
             </button>
           </div>
         </div>
       )}
-      {loadFilter && (
+      {state.loadFilter && (
         <FilterBox
-          setLoadFilter={setLoadFilter}
+          setLoadFilter={dispatch}
           foods={foodsData}
-          setSelectedFilter={setSelectedFilter}
-          handleCheckedFilter={handleCheckedFilter}
+          setSelectedFilter={dispatch}
+          onCheckedFilter={onCheckedFilter}
+          checked={state.checked}
+          setChecked={dispatch}
         />
       )}
       <div className="flex flex-col" role="button">

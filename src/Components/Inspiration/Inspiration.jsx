@@ -1,12 +1,18 @@
 import { inspirations } from "../../../data/food";
 
-const Inspiration = () => {
+const Inspiration = ({ setChecked }) => {
   return (
     <div className="flex">
       <h3>Inspiration for your first order</h3>
-      <div className="d-flex flex-col gap-5 mt-4">
+      <div className="d-flex flex-col gap-3 mt-4">
         {inspirations.map((ins) => (
-          <div key={ins.id} className="flex justify-content-center">
+          <div
+            key={ins.id}
+            className="flex justify-content-center btn"
+            onClick={() =>
+              setChecked({ type: "ADD_CHECK_FILTER", payload: ins.title })
+            }
+          >
             <img
               width="130"
               height="130"
