@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { clubs } from "../../data/clubs";
 import FoodCard from "../Components/FoodCard/FoodCard";
 import Layout from "../Components/Layout/Layout";
@@ -10,16 +11,22 @@ const Nightlife = () => {
       <h3 className="mt-3">Nightlife Restaurants in Delhi NCR</h3>
       <div className="d-flex flex-col flex-wrap gap-5 mt-5">
         {clubs.map((cb) => (
-          <FoodCard
+          <Link
+            className=" text-decoration-none"
+            to={`/nightlife/${cb.slug}`}
             key={cb.id}
-            title={cb.title}
-            price={cb.price}
-            rating={cb.rating}
-            imgSrc={cb.imgSrc}
-            type={cb.type}
-            location={cb.location}
-            dist={cb.dist}
-          />
+          >
+            {" "}
+            <FoodCard
+              title={cb.title}
+              price={cb.price}
+              rating={cb.rating}
+              imgSrc={cb.imgSrc}
+              type={cb.type}
+              location={cb.location}
+              dist={cb.dist}
+            />
+          </Link>
         ))}
       </div>
     </Layout>

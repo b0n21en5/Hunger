@@ -1,20 +1,34 @@
 import { Link, useParams } from "react-router-dom";
-import { foods } from "../../../data/food";
+// import { foods } from "../../../data/food";
 import { useEffect, useState } from "react";
-import "./foodDetails.css";
+import "./productdetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
 
-const FoodDetails = () => {
+const ProductDetails = ({ foods }) => {
   const { slug } = useParams();
+  const [foodsData, updateFoodsData] = useState([]);
   const [selectedFood, setSelectedFood] = useState({});
+  const [selectedFoodTypes, setSelectedFoodTypes] = useState([]);
 
   useEffect(() => {
     foods.map((fd) => {
-      if (fd.slug === slug) setSelectedFood(fd);
+      if (fd.slug === slug) return setSelectedFood(fd);
     });
   }, []);
+
+  useEffect(() => {
+    // let splittedArr = selectedFood.type?.split(", ");
+    setSelectedFoodTypes(selectedFood.type?.split(", "));
+    // console.log(selFdTypes);
+
+    updateFoodsData(
+      foods.filter((fd) => {
+        return fd.title !== selectedFood.title;
+      })
+    );
+  }, [selectedFood]);
 
   return (
     <div className="">
@@ -58,15 +72,18 @@ const FoodDetails = () => {
               <FontAwesomeIcon icon={faStar} />
             </div>
           </h1>
-          <div className="">{selectedFood.type}</div>
-          <div className="">₹{selectedFood.price}&nbsp;for one</div>
+          <div className="fd-type">{selectedFood.type}</div>
+          <div className="fd-price">₹{selectedFood.price}&nbsp;for one</div>
         </div>
 
         {/* similar products */}
-        <SimilarProducts />
+        <SimilarProducts
+          selectedFoodTypes={selectedFoodTypes}
+          foods={foodsData}
+        />
       </div>
     </div>
   );
 };
 
-export default FoodDetails;
+export default ProductDetails;

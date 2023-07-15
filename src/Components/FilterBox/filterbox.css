@@ -21,3 +21,8 @@
 .content .filter-by {
   width: 150px;
 }
+
+#active {
+  border-left: 2px solid red;
+  background-color: white;
+}

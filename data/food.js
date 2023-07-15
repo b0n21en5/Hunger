@@ -95,7 +95,7 @@ export const inspirations = [
   },
   {
     id: 4,
-    title: "Biriyani",
+    title: "Biryani",
     img: biriyani,
   },
   {

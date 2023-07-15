@@ -6,6 +6,7 @@ export const clubs = [
   {
     id: 1,
     title: "Ten Twenty Two - 1022",
+    slug: "ten-twenty-two-1022",
     type: "European, Asian, Japanese, Pasta, Beverages, Desserts",
     rating: 4.1,
     price: 1500,
@@ -16,6 +17,7 @@ export const clubs = [
   {
     id: 2,
     title: "Kiyan - The Roseate",
+    slug: "kiyan-the-roseate",
     type: "Thai, European, North Indian, Pizza, Salad",
     rating: 4.6,
     price: 5000,
@@ -26,6 +28,7 @@ export const clubs = [
   {
     id: 3,
     title: "Nowhere Terrace Brewpub Cafe",
+    slug: "nowhereterrace-brewpub-cafe",
     type: "North Indian, Asian, Continental, Sushi, Fast Food, Italian, Sandwich",
     rating: 4.2,
     price: 2000,

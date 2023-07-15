@@ -4,7 +4,11 @@ import Home from "./pages/Home";
 import Delivery from "./pages/Delivery";
 import Resturants from "./pages/Resturants";
 import Nightlife from "./pages/Nightlife";
-import FoodDetails from "./pages/FoodDetails/FoodDetails";
+import ProductDetails from "./pages/ProductDetails/ProductDetails";
+import { foods } from "./../data/food";
+import { resturants } from "../data/resturants";
+import { clubs } from "../data/clubs";
+import CollectionDetail from "./pages/CollectionDetail/CollectionDetail";
 
 function App() {
   return (
@@ -12,9 +16,18 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/order-food-online" element={<Delivery />} />
-        <Route path="/order/:slug" element={<FoodDetails />} />
+        <Route path="/order/:slug" element={<ProductDetails foods={foods} />} />
         <Route path="/resturants" element={<Resturants />} />
+        <Route
+          path="/resturants/:slug"
+          element={<ProductDetails foods={resturants} />}
+        />
         <Route path="/nightlife" element={<Nightlife />} />
+        <Route
+          path="/nightlife/:slug"
+          element={<ProductDetails foods={clubs} />}
+        />
+        <Route path="/collections/:slug" element={<CollectionDetail />} />
       </Routes>
     </>
   );

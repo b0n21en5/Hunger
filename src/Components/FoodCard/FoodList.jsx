@@ -6,7 +6,7 @@ import FilterBox from "../FilterBox/FilterBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { initialState, reducer } from "../../reducer/useDeliveryReducer";
 
 const FoodList = ({
@@ -32,16 +32,18 @@ const FoodList = ({
           Filters
         </button>
 
-        <div
-          className="btn btn-info text-center"
-          onClick={() => {
-            dispatch({ type: "LOADCUISINES-YES" });
-            dispatch({ type: "LOADFILTER-NO" });
-          }}
-        >
-          Cusines
-          <FontAwesomeIcon icon={faChevronDown} />
-        </div>
+        {!state.checked.length && (
+          <div
+            className="btn btn-info text-center"
+            onClick={() => {
+              dispatch({ type: "LOADCUISINES-YES" });
+              dispatch({ type: "LOADFILTER-NO" });
+            }}
+          >
+            Cusines
+            <FontAwesomeIcon icon={faChevronDown} />
+          </div>
+        )}
 
         {state.selectedFilter?.map((seleFil, ind) => (
           <button
@@ -87,7 +89,7 @@ const FoodList = ({
       <div className="flex flex-col" role="button">
         <div className="d-flex flex-col flex-wrap gap-5 mt-3">
           {foodsData.map((fd) => (
-            <NavLink
+            <Link
               to={`/order/${fd.slug}`}
               key={fd.id}
               className=" text-decoration-none"
@@ -99,7 +101,7 @@ const FoodList = ({
                 rating={fd.rating}
                 imgSrc={fd.imgSrc}
               />
-            </NavLink>
+            </Link>
           ))}
         </div>
       </div>

@@ -6,6 +6,7 @@ export const resturants = [
   {
     id: 1,
     title: "Pirates Of Grill",
+    slug: "pirates-Of-grill",
     type: "North Indian, BBQ, Chinese, Asian, Mughlai, Salad, Oriental, Desserts",
     rating: 4.6,
     price: 1700,
@@ -16,6 +17,7 @@ export const resturants = [
   {
     id: 2,
     title: "AB's - Absolute Barbecues",
+    slug: "ab's-absolute-barbecues",
     type: "North Indian, BBQ, Kebab, Biryani",
     rating: 4.4,
     price: 500,
@@ -26,6 +28,7 @@ export const resturants = [
   {
     id: 3,
     title: "Food Bazar",
+    slug: "food-bazar",
     type: "South Indian, Chinese, North Indian, Fast Food, Street Food, Salad, Desserts, Beverages",
     rating: 4.1,
     price: 400,

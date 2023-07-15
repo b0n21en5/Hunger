@@ -1,0 +1,20 @@
+.coll-card {
+  position: relative;
+  margin: 50px 80px 0;
+}
+
+.coll-card img {
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.container {
+  color: white;
+  width: 1098px;
+  height: 318px;
+  line-height: 0.8;
+  border-radius: 6px;
+  position: absolute;
+  top: 140px;
+  left: 30px;
+}

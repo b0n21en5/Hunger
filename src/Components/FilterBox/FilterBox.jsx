@@ -14,6 +14,7 @@ const FilterBox = ({
 }) => {
   const [sortValue, setSortValue] = useState("");
   const [showFilter, setShowFilter] = useState("sort");
+  const [isActive, setIsActive] = useState("sort");
 
   // sort by low to high price
   const handleSortBy = () => {
@@ -58,6 +59,13 @@ const FilterBox = ({
     setLoadFilter({ type: "LOADFILTER-NO" });
   };
 
+  // clear all selected filters
+  const onClearBtnClick = () => {
+    // setSelectedFilter({ type: "REP_FILTER_ARR", payload: [] });
+    setLoadFilter({ type: "LOADFILTER-NO" });
+    setChecked({ type: "SET_CHECK_FILTER", payload: [] });
+  };
+
   return (
     <div className="filter-box">
       <div className="top">
@@ -74,14 +82,22 @@ const FilterBox = ({
         <div className="d-flex">
           <div className="filter-by flex btn">
             <div
+              id={`${showFilter === "sort" ? "active" : ""}`}
               className="p-2 btn-light"
-              onClick={() => setShowFilter("sort")}
+              onClick={() => {
+                setShowFilter("sort");
+                setIsActive(showFilter);
+              }}
             >
               Sort By
             </div>
             <div
+              id={`${showFilter === "cuisines" ? "active" : ""}`}
               className="p-2 btn-light"
-              onClick={() => setShowFilter("cuisines")}
+              onClick={() => {
+                setShowFilter("cuisines");
+                setIsActive(showFilter);
+              }}
             >
               Cuisines
             </div>
@@ -120,13 +136,7 @@ const FilterBox = ({
         </div>
       </div>
       <div className="bottom d-flex justify-content-end mt-2 gap-3">
-        <button
-          onClick={() => {
-            setSelectedFilter({ type: "REP_FILTER_ARR", payload: [] });
-            setLoadFilter({ type: "LOADFILTER-NO" });
-          }}
-          className="btn btn-light"
-        >
+        <button onClick={onClearBtnClick} className="btn btn-light">
           Clear all
         </button>
         <button onClick={() => onApplyBtnClicked()} className="btn btn-danger">
