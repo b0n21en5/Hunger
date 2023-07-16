@@ -5,11 +5,12 @@ const CollCard = ({ imgSrc, places, title }) => {
   return (
     <div
       className="card bg-dark text-white"
-      style={{ width: "242px", border: "none" }}
+      style={{ width: "260px", border: "none" }}
     >
       <img
         src={imgSrc}
-        height="300px"
+        height="320"
+        width="260"
         className="card-img"
         alt="collection-card-img"
       />

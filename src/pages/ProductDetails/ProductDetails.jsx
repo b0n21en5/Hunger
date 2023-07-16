@@ -5,6 +5,7 @@ import "./productdetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
+import logo from "../../assets/logo.webp";
 
 const ProductDetails = ({ foods }) => {
   const { slug } = useParams();
@@ -19,9 +20,7 @@ const ProductDetails = ({ foods }) => {
   }, []);
 
   useEffect(() => {
-    // let splittedArr = selectedFood.type?.split(", ");
     setSelectedFoodTypes(selectedFood.type?.split(", "));
-    // console.log(selFdTypes);
 
     updateFoodsData(
       foods.filter((fd) => {
@@ -31,58 +30,61 @@ const ProductDetails = ({ foods }) => {
   }, [selectedFood]);
 
   return (
-    <div className="">
-      <Link to="/">
-        <img src="" alt="logo" />
-      </Link>
-
-      <div className="main mt-4">
-        <div className="grid-container">
-          <div className="grid-item">
-            <img
-              src={selectedFood.imgSrc}
-              alt="food"
-              width="655"
-              height="370"
-            />
-          </div>
-          <div className="grid-item">
-            <img
-              src={selectedFood.imgSrc}
-              width="355"
-              height="180"
-              alt="food"
-            />
-          </div>
-          <div className="grid-item">
-            <img
-              src={selectedFood.imgSrc}
-              width="355"
-              height="180"
-              alt="food"
-            />
-          </div>
-        </div>
-
-        <div className="mt-2 pb-4 foodDetails">
-          <h1 className="pd-title d-flex justify-content-between">
-            {selectedFood.title}
-            <div className="btn btn-success">
-              {selectedFood.rating}&nbsp;
-              <FontAwesomeIcon icon={faStar} />
-            </div>
-          </h1>
-          <div className="fd-type">{selectedFood.type}</div>
-          <div className="fd-price">₹{selectedFood.price}&nbsp;for one</div>
-        </div>
-
-        {/* similar products */}
-        <SimilarProducts
-          selectedFoodTypes={selectedFoodTypes}
-          foods={foodsData}
-        />
+    <>
+      <div className="nav">
+        <Link to="/">
+          <img width="126" height="27" src={logo} alt="logo" />
+        </Link>
       </div>
-    </div>
+      <div style={{ padding: "0 82px" }}>
+        <div className="mt-4">
+          <div className="grid-container">
+            <div className="grid-item">
+              <img
+                src={selectedFood.imgSrc}
+                alt="food"
+                width="655"
+                height="370"
+              />
+            </div>
+            <div className="grid-item">
+              <img
+                src={selectedFood.imgSrc}
+                width="355"
+                height="180"
+                alt="food"
+              />
+            </div>
+            <div className="grid-item">
+              <img
+                src={selectedFood.imgSrc}
+                width="355"
+                height="180"
+                alt="food"
+              />
+            </div>
+          </div>
+
+          <div className="mt-2 pb-4 foodDetails">
+            <h1 className="pd-title d-flex justify-content-between">
+              {selectedFood.title}
+              <div className="btn btn-success">
+                {selectedFood.rating}&nbsp;
+                <FontAwesomeIcon icon={faStar} />
+              </div>
+            </h1>
+            <div className="fd-type">{selectedFood.type}</div>
+            <div className="fd-price">₹{selectedFood.price}&nbsp;for one</div>
+          </div>
+
+          {/* similar products */}
+          <SimilarProducts
+            selectedFoodTypes={selectedFoodTypes}
+            foods={foodsData}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

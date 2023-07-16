@@ -1,63 +1,75 @@
 import { Link } from "react-router-dom";
 import delivery from "../../assets/delivery.webp";
-import dinning from "../../assets/dinning.avif";
+import deliveryActive from "../../assets/del-active.avif";
+import dining from "../../assets/dining.avif";
+import diningActive from "../../assets/dn-active.avif";
 import nightlife from "../../assets/nightlife.webp";
+import nightlifeActive from "../../assets/nt-active.webp";
+import logo from "../../assets/logo.webp";
+import "./layout.css";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, pathname }) => {
   return (
-    <div>
-      <div className="header main">
+    <>
+      <div className="nav">
         <Link to="/">
-          <img src="logo" alt="logo" />
+          <img width="126" height="27" src={logo} alt="logo" />
         </Link>
-        <div className="d-flex gap-5">
+      </div>
+      <div className="header">
+        <div className="d-flex gap-5 mt-4">
           <Link
-            className="text-decoration-none d-flex align-items-center"
+            className={`text-decoration-none d-flex align-items-center link ${
+              pathname === "delivery" ? "active" : ""
+            }`}
             to="/order-food-online"
           >
             <img
-              width="40"
-              height="40"
-              src={delivery}
-              alt="order food online"
-              className="p-2"
-              style={{
-                background: "#f8f8f8",
-                borderRadius: "50%",
-              }}
+              width="60"
+              height="60"
+              src={pathname === "delivery" ? deliveryActive : delivery}
+              alt="delivery"
+              className="p-2 mb-2"
+              style={{ backgroundColor: "#f8f8f8" }}
             />
-            <div style={{ marginLeft: "10px" }}>Delivery</div>
+            <div className="ms-2">Delivery</div>
           </Link>
           <Link
-            className="text-decoration-none d-flex align-items-center"
+            className={`text-decoration-none d-flex align-items-center link ${
+              pathname === "dining" ? "active" : ""
+            }`}
             to="/resturants"
           >
             <img
-              width="30"
-              height="30"
-              src={dinning}
+              width="60"
+              height="60"
+              src={pathname === "dining" ? diningActive : dining}
               alt="dinning"
-              style={{ background: "#f8f8f8", borderRadius: "50%" }}
+              className="p-2 mb-2"
+              style={{ backgroundColor: "#f8f8f8" }}
             />
-            <div style={{ marginLeft: "10px" }}>Dinning Out</div>
+            <div className="ms-2">Dinning Out</div>
           </Link>
           <Link
-            className="text-decoration-none d-flex align-items-center"
+            className={`text-decoration-none d-flex align-items-center link ${
+              pathname === "nightlife" ? "active" : ""
+            }`}
             to="/nightlife"
           >
             <img
-              width="30"
-              height="30"
-              src={nightlife}
+              width="60"
+              height="60"
+              src={pathname === "nightlife" ? nightlifeActive : nightlife}
               alt="nightlife"
-              style={{ background: "#f8f8f8", borderRadius: "50%" }}
+              className="p-2 mb-2"
+              style={{ backgroundColor: "#f8f8f8" }}
             />{" "}
-            <div style={{ marginLeft: "10px" }}>Nightlife</div>
+            <div className="ms-2">Nightlife</div>
           </Link>
         </div>
       </div>
-      <div className="main">{children}</div>
-    </div>
+      {children}
+    </>
   );
 };
 

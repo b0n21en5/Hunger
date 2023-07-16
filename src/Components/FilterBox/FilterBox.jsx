@@ -14,7 +14,7 @@ const FilterBox = ({
 }) => {
   const [sortValue, setSortValue] = useState("");
   const [showFilter, setShowFilter] = useState("sort");
-  const [isActive, setIsActive] = useState("sort");
+  const [isActive, setIsActive] = useState("");
 
   // sort by low to high price
   const handleSortBy = () => {
@@ -46,11 +46,16 @@ const FilterBox = ({
         break;
 
       default:
+        foods.sort((a, b) => {
+          return b.rating - a.rating;
+        });
         break;
     }
   };
 
-  useEffect(() => {}, [sortValue]);
+  useEffect(() => {
+    console.log(sortValue);
+  }, [sortValue]);
 
   // method to handle apply button
   const onApplyBtnClicked = () => {
@@ -66,6 +71,12 @@ const FilterBox = ({
     setChecked({ type: "SET_CHECK_FILTER", payload: [] });
   };
 
+  // handle previous sort value
+  // const isSortChecked = (e) => {
+  //   console.log(e.target.value);
+  //   return e.target.value === sortValue;
+  // };
+
   return (
     <div className="filter-box">
       <div className="top">
@@ -80,23 +91,21 @@ const FilterBox = ({
       </div>
       <div className="content">
         <div className="d-flex">
-          <div className="filter-by flex btn">
+          <div className="filter-by">
             <div
               id={`${showFilter === "sort" ? "active" : ""}`}
-              className="p-2 btn-light"
+              className="p-4 btn-light"
               onClick={() => {
                 setShowFilter("sort");
-                setIsActive(showFilter);
               }}
             >
               Sort By
             </div>
             <div
               id={`${showFilter === "cuisines" ? "active" : ""}`}
-              className="p-2 btn-light"
+              className="p-4 btn-light"
               onClick={() => {
                 setShowFilter("cuisines");
-                setIsActive(showFilter);
               }}
             >
               Cuisines
@@ -105,23 +114,52 @@ const FilterBox = ({
           {showFilter === "sort" ? (
             <form
               onChange={(e) => setSortValue(e.target.value)}
-              className="filter-value "
+              className="p-3"
             >
               <div className="p-2 d-flex flex-column">
                 <label className="mb-4">
-                  <input type="radio" name="sort" value="Rating: High to Low" />
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="popularity"
+                    checked={sortValue === "" || sortValue === "popularity"}
+                  />
+                  &nbsp;Popularity
+                </label>
+                <label className="mb-4">
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Rating: High to Low"
+                    checked={sortValue === "Rating: High to Low"}
+                  />
                   &nbsp;Rating: High to Low
                 </label>
                 <label className="mb-4">
-                  <input type="radio" name="sort" value="Rating: Low to High" />
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Rating: Low to High"
+                    checked={sortValue === "Rating: Low to High"}
+                  />
                   &nbsp;Rating: Low to High
                 </label>
                 <label className="mb-4">
-                  <input type="radio" name="sort" value="Cost: High to Low" />
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Cost: High to Low"
+                    checked={sortValue === "Cost: High to Low"}
+                  />
                   &nbsp;Cost: High to Low
                 </label>
                 <label className="mb-4">
-                  <input type="radio" name="sort" value="Cost: Low to High" />
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Cost: Low to High"
+                    checked={sortValue === "Cost: Low to High"}
+                  />
                   &nbsp;Cost: Low to High
                 </label>
               </div>
@@ -135,7 +173,7 @@ const FilterBox = ({
           )}
         </div>
       </div>
-      <div className="bottom d-flex justify-content-end mt-2 gap-3">
+      <div className="bottom d-flex justify-content-end mt-2 gap-3 p-3">
         <button onClick={onClearBtnClick} className="btn btn-light">
           Clear all
         </button>

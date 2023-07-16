@@ -1,12 +1,20 @@
 import Cards from "../Components/Cards/Cards";
 import Collections from "../Components/Collections/Collections";
-import Header from "../Components/Header/Header";
+import banner from "../assets/banner.avif";
 
 const Home = () => {
   return (
     <div>
-      <Header />
-      <div className="main">
+      <div className="mb-4 position-relative">
+        <img
+          height="380px"
+          width="100%"
+          src={banner}
+          alt="banner"
+          style={{ objectFit: "cover", border: "none" }}
+        />
+      </div>
+      <div className="main-cnt">
         <Cards />
         <Collections />
       </div>

@@ -2,7 +2,7 @@ import { brands } from "../../../data/food";
 
 const Brands = () => {
   return (
-    <div className="flex mt-5">
+    <div className="flex" style={{ padding: "20px 82px" }}>
       <h3>Top brands for you</h3>
       <div className="d-flex flex-col gap-5 mt-4">
         {brands.map((ins) => (

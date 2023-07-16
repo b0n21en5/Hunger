@@ -1,3 +1,7 @@
+.header {
+  padding: 10px 80px 0;
+}
+
 .coll-card {
   position: relative;
   margin: 50px 80px 0;
@@ -17,4 +21,11 @@
   position: absolute;
   top: 140px;
   left: 30px;
+}
+
+.btn-success {
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 2px;
+  border-radius: 4px;
 }

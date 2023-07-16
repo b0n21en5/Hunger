@@ -5,12 +5,14 @@ import Inspiration from "../Components/Inspiration/Inspiration";
 import Layout from "../Components/Layout/Layout";
 import { foods } from "../../data/food";
 import { initialState, reducer } from "../reducer/useDeliveryReducer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faXmark } from "@fortawesome/free-solid-svg-icons";
+import filter from "../assets/filter.svg";
 
 const Delivery = () => {
   const [foodsData, setFoodsData] = useState(foods);
 
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log(state.selectedFilter.length);
 
   useEffect(() => {
     if (state.selectedFilter.length) {
@@ -73,22 +75,84 @@ const Delivery = () => {
   }, [state.checked?.length]);
 
   return (
-    <Layout>
-      {!state.filterApplied && (
-        <>
-          <Inspiration checked={state.checked} setChecked={dispatch} />
-          <Brands />
-        </>
-      )}
-      <FoodList
-        onCheckedFilter={onCheckedFilter}
-        onFilterBtnClick={onFilterBtnClick}
-        onFilterRemove={onFilterRemove}
-        state={state}
-        dispatch={dispatch}
-        foodsData={foodsData}
-      />
-    </Layout>
+    <div
+      className={`${
+        state.loadFilter || state.loadCuisines ? "deactivate" : ""
+      }`}
+    >
+      <Layout pathname="delivery">
+        <div
+          style={{
+            height: "90px",
+            margin: "0 82px",
+            position: "relative",
+          }}
+        >
+          <div
+            className="gap-3 d-flex flex-wrap"
+            style={{
+              padding: "26px 0",
+              position: "sticky",
+              top: "20px",
+              zIndex: "2",
+              backgroundColor: "rgb(255, 255, 255)",
+            }}
+          >
+            <button
+              onClick={onFilterBtnClick}
+              className="btn btn-info text-center"
+            >
+              {state.filterApplied ? (
+                <div className="btn btn-danger p-0 ps-1 pe-1 me-1">
+                  {state.filterApplied}
+                </div>
+              ) : (
+                <img className="me-1" src={filter} alt="filter" />
+              )}
+              Filters
+            </button>
+
+            {!state.checked.length && (
+              <div
+                className="btn btn-info text-center"
+                onClick={() => {
+                  dispatch({ type: "LOADCUISINES-YES" });
+                  dispatch({ type: "LOADFILTER-NO" });
+                }}
+              >
+                Cusines
+                <FontAwesomeIcon icon={faChevronDown} />
+              </div>
+            )}
+
+            {state.selectedFilter?.map((seleFil, ind) => (
+              <button
+                key={ind}
+                className="btn btn-danger"
+                onClick={() => onFilterRemove(seleFil)}
+              >
+                {seleFil}
+                <FontAwesomeIcon className="ms-2" icon={faXmark} />
+              </button>
+            ))}
+          </div>
+        </div>
+        {!state.filterApplied && (
+          <>
+            <Inspiration checked={state.checked} setChecked={dispatch} />
+            <Brands />
+          </>
+        )}
+        <FoodList
+          onCheckedFilter={onCheckedFilter}
+          onFilterBtnClick={onFilterBtnClick}
+          onFilterRemove={onFilterRemove}
+          state={state}
+          dispatch={dispatch}
+          foodsData={foodsData}
+        />
+      </Layout>
+    </div>
   );
 };
 

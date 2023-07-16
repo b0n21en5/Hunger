@@ -1,28 +1,41 @@
 .filter-box {
   margin-top: 1rem;
-  position: relative;
-  left: 150px;
   width: 700px;
-  padding: 20px;
   background: white;
   border-radius: 6px;
-  box-shadow: rgba(28, 28, 28, 0.15) 0px 12px 70px 0px;
+
+  position: fixed;
+  top: 0px;
+  left: 22%;
+  transform: scale(1);
+  box-shadow: rgba(28, 28, 28, 0.15) 0px 1.2rem 7rem;
+  -webkit-box-pack: center;
+  z-index: 11;
+  pointer-events: auto;
 }
 
 .top {
-  font-size: 1.4rem;
-  border-bottom: 1px solid;
+  font-size: 1.6rem;
+  padding: 20px;
+  border-bottom: 0.5px solid rgba(201, 199, 199, 0.671);
 }
 
 .content {
-  border-bottom: 1px solid;
+  min-height: 420px;
+  border-bottom: 0.5px solid rgba(201, 199, 199, 0.671);
 }
 
 .content .filter-by {
-  width: 150px;
+  min-width: 20%;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+label {
+  cursor: pointer;
 }
 
 #active {
-  border-left: 2px solid red;
+  border-left: 4px solid red;
   background-color: white;
 }

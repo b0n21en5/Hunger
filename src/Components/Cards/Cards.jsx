@@ -7,22 +7,22 @@ import "./cards.css";
 
 const Cards = () => {
   return (
-    <div className="d-flex justify-content-between">
-      <Link to="order-food-online" className="link">
+    <div className="d-flex justify-content-between mb-5">
+      <Link to="order-food-online" className="link cats">
         <CatCard
           imgSrc={cd1}
           title="Order Online"
           text="Stay home and order to your doorstep."
         />
       </Link>
-      <Link to="resturants" className="link">
+      <Link to="resturants" className="link cats">
         <CatCard
           imgSrc={cd2}
           title="Dining"
           text="View the city's favourite dining venues"
         />
       </Link>
-      <Link to="" className="link">
+      <Link to="/nightlife" className="link cats">
         <CatCard
           imgSrc={cd3}
           title="Nightlife and Clubs"

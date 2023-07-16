@@ -1,0 +1,19 @@
+.header {
+  padding: 0 82px;
+  border-bottom: 0.5px solid rgba(207, 207, 207, 0.486);
+}
+
+.main-cnt {
+  padding: 0 82px;
+  margin-top: 1.5rem;
+}
+
+#cat-img {
+  background: "#f8f8f8";
+  border-radius: "50%";
+}
+
+.active {
+  color: red;
+  border-bottom: 2px solid red;
+}

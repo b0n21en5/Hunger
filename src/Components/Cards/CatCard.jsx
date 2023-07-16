@@ -2,17 +2,17 @@ import "./cards.css";
 
 const Card = ({ imgSrc, title, text }) => {
   return (
-    <div className="card" style={{ width: "20rem" }}>
+    <div className="card" style={{ width: "353px" }}>
       <img
-        height="140px"
-        width="370px"
+        height="170"
+        width="353"
         src={imgSrc}
         className="card-img-top"
         alt="card"
       />
       <div className="card-body">
-        <h5 className="card-title">{title}</h5>
-        <p className="card-text">{text}</p>
+        <p id="card-title">{title}</p>
+        <p id="card-text">{text}</p>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ export const initialState = {
   selectedFilter: [],
   filterApplied: 0,
   checked: [],
+  radio: "",
 };
 
 export const reducer = (state, action) => {
@@ -32,6 +33,9 @@ export const reducer = (state, action) => {
 
     case "FILTER_APPLIED":
       return { ...state, filterApplied: action.payload };
+
+    case "SET_RADIO":
+      return { ...state, radio: action.payload };
 
     default:
       state;

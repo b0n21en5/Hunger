@@ -1,20 +1,36 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import "./foodcard.css";
 
-const FoodCard = ({ title, price, rating, type, imgSrc, location, dist }) => {
+const FoodCard = ({
+  title,
+  slug,
+  price,
+  rating,
+  type,
+  imgSrc,
+  location,
+  dist,
+}) => {
   return (
-    <div className="card border-0" style={{ width: "18rem" }}>
+    <Link
+      to={slug}
+      className="card p-2 border-0 link"
+      style={{ height: "350px", width: "328px" }}
+    >
       <img
         src={imgSrc}
-        width="288"
-        height="192"
-        className="card-img-top rounded"
+        width="320"
+        height="240"
+        className="card-img-top"
+        style={{ borderRadius: "15px" }}
         alt={title}
       />
-      <div className=" pt-4">
+      <div className="fd-card pt-4">
         <div className="d-flex justify-content-between">
           <div className="card-title">{title}</div>
-          <div className="btn btn-success">
+          <div className="btn-success">
             {rating}&nbsp;
             <FontAwesomeIcon icon={faStar} />
           </div>
@@ -32,7 +48,7 @@ const FoodCard = ({ title, price, rating, type, imgSrc, location, dist }) => {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

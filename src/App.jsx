@@ -9,6 +9,7 @@ import { foods } from "./../data/food";
 import { resturants } from "../data/resturants";
 import { clubs } from "../data/clubs";
 import CollectionDetail from "./pages/CollectionDetail/CollectionDetail";
+import { uniqueDining } from "../data/collections";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
           element={<ProductDetails foods={clubs} />}
         />
         <Route path="/collections/:slug" element={<CollectionDetail />} />
+        <Route
+          path="/coll-details/:slug"
+          element={<ProductDetails foods={uniqueDining} />}
+        />
       </Routes>
     </>
   );

@@ -17,6 +17,8 @@ const Cuisines = ({ checked, setChecked }) => {
       all = all.filter((c) => c !== name);
     }
     setChecked({ type: "SET_CHECK_FILTER", payload: all });
+
+    console.log(checked);
   };
 
   return (
@@ -51,8 +53,10 @@ const Cuisines = ({ checked, setChecked }) => {
               }}
               key={cuisine.id}
               onChange={(e) =>
-                handleCheckedCuisine(e.target.checked, cuisine.name)
+                handleCheckedCuisine(e.target.checked, e.target.name)
               }
+              name={cuisine.name}
+              checked={checked.includes(cuisine.name)}
             >
               {cuisine.name}
             </Checkbox>
