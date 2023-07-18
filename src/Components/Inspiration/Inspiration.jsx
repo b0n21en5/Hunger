@@ -15,6 +15,7 @@ const Inspiration = ({ setChecked }) => {
             onClick={() =>
               setChecked({ type: "ADD_CHECK_FILTER", payload: ins.title })
             }
+            style={{ cursor: "pointer" }}
           >
             <div className="d-flex flex-column">
               <img

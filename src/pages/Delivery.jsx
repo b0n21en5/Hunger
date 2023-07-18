@@ -14,6 +14,12 @@ const Delivery = () => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // method to handle filter button
+  const onFilterBtnClick = () => {
+    dispatch({ type: "LOADFILTER-YES" });
+    dispatch({ type: "LOADCUISINES-NO" });
+  };
+
   useEffect(() => {
     if (state.selectedFilter.length) {
       dispatch({
@@ -24,7 +30,7 @@ const Delivery = () => {
       if (state.checked.length) {
         let checkedArray = [];
         state.checked.map((ch) => {
-          foodsData.map((fd) => {
+          foods.map((fd) => {
             if (fd.type.includes(ch)) checkedArray.push(fd);
           });
         });
@@ -43,7 +49,6 @@ const Delivery = () => {
     const filteredArray = state.selectedFilter.filter((sf) => {
       return sf !== seleFil;
     });
-    // setSelectedFilter(filteredArray);
     dispatch({ type: "REP_FILTER_ARR", payload: filteredArray });
     const filterChecked = state.checked.filter((sc) => {
       return sc !== seleFil;
@@ -51,23 +56,21 @@ const Delivery = () => {
     dispatch({ type: "SET_CHECK_FILTER", payload: filterChecked });
   };
 
-  // method to handle filter button
-  const onFilterBtnClick = () => {
-    dispatch({ type: "LOADFILTER-YES" });
-    dispatch({ type: "LOADCUISINES-NO" });
-  };
-
-  //   method apply checked filters
+  // method to apply checked filters
   const onCheckedFilter = () => {
+    dispatch({ type: "LOADCUISINES-NO" });
+
     let checkedArray = [];
-    dispatch({ type: "REP_FILTER_ARR", payload: state.checked });
+
     state.checked.map((ch) => {
-      foodsData.map((fd) => {
+      if (!state.selectedFilter.includes(ch))
+        dispatch({ type: "ADD_FILTER_ARR", payload: ch });
+
+      foods.map((fd) => {
         if (fd.type.includes(ch)) checkedArray.push(fd);
       });
     });
     setFoodsData(checkedArray);
-    dispatch({ type: "LOADCUISINES-NO" });
   };
 
   useEffect(() => {

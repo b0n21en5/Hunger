@@ -5,20 +5,28 @@ import "./filterbox.css";
 import Cuisines from "../Cuisines/Cuisines";
 
 const FilterBox = ({
-  setLoadFilter,
-  setSelectedFilter,
+  selectedFilter,
   foods,
   onCheckedFilter,
   checked,
-  setChecked,
+  radio,
+  dispatch,
 }) => {
-  const [sortValue, setSortValue] = useState("");
+  const [sortValue, setSortValue] = useState(radio);
   const [showFilter, setShowFilter] = useState("sort");
-  const [isActive, setIsActive] = useState("");
 
   // sort by low to high price
   const handleSortBy = () => {
-    setSelectedFilter({ type: "ADD_FILTER_ARR", payload: sortValue });
+    if (radio) {
+      let all = [];
+      all = selectedFilter.filter((sf) => {
+        return sf !== radio;
+      });
+      dispatch({ type: "REP_FILTER_ARR", payload: all });
+    }
+
+    dispatch({ type: "ADD_FILTER_ARR", payload: sortValue });
+    dispatch({ type: "SET_RADIO", payload: sortValue });
 
     switch (sortValue) {
       case "Cost: Low to High":
@@ -54,28 +62,22 @@ const FilterBox = ({
   };
 
   useEffect(() => {
-    console.log(sortValue);
+    // console.log(sortValue);
   }, [sortValue]);
 
   // method to handle apply button
   const onApplyBtnClicked = () => {
     if (sortValue) handleSortBy();
     if (checked.length) onCheckedFilter();
-    setLoadFilter({ type: "LOADFILTER-NO" });
+    dispatch({ type: "LOADFILTER-NO" });
   };
 
   // clear all selected filters
   const onClearBtnClick = () => {
-    // setSelectedFilter({ type: "REP_FILTER_ARR", payload: [] });
-    setLoadFilter({ type: "LOADFILTER-NO" });
-    setChecked({ type: "SET_CHECK_FILTER", payload: [] });
+    dispatch({ type: "LOADFILTER-NO" });
+    dispatch({ type: "SET_CHECK_FILTER", payload: [] });
+    dispatch({ type: "SET_RADIO", payload: "" });
   };
-
-  // handle previous sort value
-  // const isSortChecked = (e) => {
-  //   console.log(e.target.value);
-  //   return e.target.value === sortValue;
-  // };
 
   return (
     <div className="filter-box">
@@ -85,7 +87,7 @@ const FilterBox = ({
           <FontAwesomeIcon
             style={{ cursor: "pointer" }}
             icon={faXmark}
-            onClick={() => setLoadFilter({ type: "LOADFILTER-NO" })}
+            onClick={() => dispatch({ type: "LOADFILTER-NO" })}
           />
         </div>
       </div>
@@ -121,8 +123,8 @@ const FilterBox = ({
                   <input
                     type="radio"
                     name="sort"
-                    value="popularity"
-                    checked={sortValue === "" || sortValue === "popularity"}
+                    value=""
+                    checked={sortValue === ""}
                   />
                   &nbsp;Popularity
                 </label>
@@ -166,7 +168,7 @@ const FilterBox = ({
             </form>
           ) : showFilter === "cuisines" ? (
             <div className="p-4">
-              <Cuisines checked={checked} setChecked={setChecked} />
+              <Cuisines checked={checked} setChecked={dispatch} />
             </div>
           ) : (
             ""

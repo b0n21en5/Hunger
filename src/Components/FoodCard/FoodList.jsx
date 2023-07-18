@@ -5,6 +5,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 
 const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
+  const handleCuisineClearBtn = () => {
+    dispatch({ type: "LOADCUISINES-NO" });
+    dispatch({ type: "REP_FILTER_ARR", payload: [] });
+    dispatch({ type: "SET_CHECK_FILTER", payload: [] });
+  };
+
   return (
     <div style={{ padding: "20px 82px" }}>
       <h3>Order food online in Jai Singh Road</h3>
@@ -21,14 +27,7 @@ const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
           </div>
           <Cuisines checked={state.checked} setChecked={dispatch} />
           <div className="bottom d-flex justify-content-end mt-4 gap-3">
-            <button
-              onClick={() => {
-                dispatch({ type: "LOADCUISINES-NO" });
-                dispatch({ type: "REP_FILTER_ARR", payload: [] });
-                dispatch({ type: "SET_CHECK_FILTER", payload: [] });
-              }}
-              className="btn btn-light"
-            >
+            <button onClick={handleCuisineClearBtn} className="btn btn-light">
               Clear all
             </button>
             <button className="btn btn-danger" onClick={onCheckedFilter}>
@@ -39,12 +38,12 @@ const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
       )}
       {state.loadFilter && (
         <FilterBox
-          setLoadFilter={dispatch}
           foods={foodsData}
-          setSelectedFilter={dispatch}
+          selectedFilter={state.selectedFilter}
           onCheckedFilter={onCheckedFilter}
           checked={state.checked}
-          setChecked={dispatch}
+          radio={state.radio}
+          dispatch={dispatch}
         />
       )}
       <div className="flex flex-col" role="button">

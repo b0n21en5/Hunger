@@ -4,7 +4,6 @@ import Collections from "../Components/Collections/Collections";
 import FoodCard from "../Components/FoodCard/FoodCard";
 import Layout from "../Components/Layout/Layout";
 import off from "../assets/off.avif";
-import { Link } from "react-router-dom";
 import { initialState, reducer } from "../reducer/useDeliveryReducer";
 import filter from "../assets/filter.svg";
 import FilterBox from "../Components/FilterBox/FilterBox";
@@ -26,7 +25,7 @@ const Resturants = () => {
       if (state.checked.length) {
         let checkedArray = [];
         state.checked.map((ch) => {
-          resturantsData.map((fd) => {
+          resturants.map((fd) => {
             if (fd.type.includes(ch)) checkedArray.push(fd);
           });
         });
@@ -53,17 +52,21 @@ const Resturants = () => {
     dispatch({ type: "SET_CHECK_FILTER", payload: filterChecked });
   };
 
-  //   method apply checked filters
+  // method to apply checked filters
   const onCheckedFilter = () => {
+    dispatch({ type: "LOADCUISINES-NO" });
+
     let checkedArray = [];
-    dispatch({ type: "REP_FILTER_ARR", payload: state.checked });
+
     state.checked.map((ch) => {
-      resturantsData.map((fd) => {
+      if (!state.selectedFilter.includes(ch))
+        dispatch({ type: "ADD_FILTER_ARR", payload: ch });
+
+      resturants.map((fd) => {
         if (fd.type.includes(ch)) checkedArray.push(fd);
       });
     });
     setResturantsData(checkedArray);
-    dispatch({ type: "LOADCUISINES-NO" });
   };
 
   useEffect(() => {
@@ -114,12 +117,12 @@ const Resturants = () => {
 
           {state.loadFilter && (
             <FilterBox
-              setLoadFilter={dispatch}
-              setSelectedFilter={dispatch}
+              selectedFilter={state.selectedFilter}
               foods={resturantsData}
               onCheckedFilter={onCheckedFilter}
               checked={state.checked}
-              setChecked={dispatch}
+              radio={state.radio}
+              dispatch={dispatch}
             />
           )}
 
