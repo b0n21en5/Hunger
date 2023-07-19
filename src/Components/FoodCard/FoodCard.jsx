@@ -16,7 +16,7 @@ const FoodCard = ({
   return (
     <Link
       to={slug}
-      className="card p-2 border-0 link"
+      className="link card p-2 border-0"
       style={{ height: "350px", width: "328px" }}
     >
       <img

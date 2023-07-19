@@ -1,39 +1,46 @@
 import { useEffect, useState } from "react";
-import { cuisinesOptions } from "../../../data/cuisines";
 import "./similarproducts.css";
 
-const SimilarProducts = ({ foods, selectedFoodTypes }) => {
-  const [similarFoods, setSimilarFoods] = useState([]);
-  // selectedFoodTypes?.map((fd) => console.log(fd));
+const SimilarProducts = ({ recommendedFoods }) => {
+  const [suggestFoodTypes, setSuggestFoodTypes] = useState([]);
+
+  // Method to set suggested FoodType
+  const getFoodTypeCount = () => {
+    // let id = 1;
+    recommendedFoods.forEach((fd) => {
+      const { type } = fd;
+      const foodTypeCount = {};
+      if (type === foodTypeCount.type) {
+        foodTypeCount.count++;
+      } else {
+        foodTypeCount[type] = {
+          type,
+          count: 1,
+          id: fd.id,
+        };
+      }
+      setSuggestFoodTypes((prev) => [...prev, foodTypeCount]);
+    });
+  };
 
   useEffect(() => {
-    let newArr = [];
-    const unId = [];
-    selectedFoodTypes?.map((selfdtp) => {
-      foods.map((fd) => {
-        if (fd.type?.includes(selfdtp) && !unId.includes(fd.id)) {
-          newArr.push(fd);
-          unId.push(fd.id);
-        }
-      });
-    });
-
-    setSimilarFoods(newArr);
-  }, [selectedFoodTypes]);
+    getFoodTypeCount();
+    console.log(suggestFoodTypes);
+  }, []);
 
   return (
-    <div className="d-flex">
-      <div className="d-flex flex-column br-right" style={{ width: "20%" }}>
-        <div className="btn ">Recommended ({similarFoods.length})</div>
-        {selectedFoodTypes?.map((selFood, idx) => (
-          <div className="btn " key={idx}>
-            {selFood}&nbsp;({})
+    <div className="d-flex mb-5">
+      <div className="d-flex flex-column br-left" style={{ width: "20%" }}>
+        <div className="btn ">Recommended ({recommendedFoods.length})</div>
+        {suggestFoodTypes?.map((food) => (
+          <div className="btn " key={food.id}>
+            {food.type}&nbsp;({food.count})
           </div>
         ))}
       </div>
       <div className="products" style={{ width: "80%" }}>
-        {similarFoods.map((fd) => (
-          <h5 key={fd.id}>{fd.title}</h5>
+        {recommendedFoods.map((food) => (
+          <h5 key={food.id}>{food.title}</h5>
         ))}
       </div>
     </div>

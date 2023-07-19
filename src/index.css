@@ -20,17 +20,10 @@ body {
   padding: 20px 82px;
 }
 
-/* .card {
-  color: black;
-  border-radius: 12px;
-  width: 328px;
-  height: 248px;
-} */
-
 .link {
   color: #696969;
-  font-size: 1.5rem;
-  font-weight: 500;
+  /* font-size: 1.5rem;
+  font-weight: 500; */
   text-decoration: none;
 }
 .link:hover {

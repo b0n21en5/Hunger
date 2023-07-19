@@ -1,159 +1,146 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import Brands from "../Components/Brands/Brands";
 import FoodList from "../Components/FoodCard/FoodList";
 import Inspiration from "../Components/Inspiration/Inspiration";
 import Layout from "../Components/Layout/Layout";
 import { foods } from "../../data/food";
-import { initialState, reducer } from "../reducer/useDeliveryReducer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faXmark } from "@fortawesome/free-solid-svg-icons";
-import filter from "../assets/filter.svg";
+import useProductReducer from "./../reducer/useDeliveryReducer";
+import FilterButtons from "../Components/FilterButtons";
+
+const foodsDataInitialState = foods;
 
 const Delivery = () => {
-  const [foodsData, setFoodsData] = useState(foods);
+  const [foodsData, setFoodsData] = useState(foodsDataInitialState);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [
+    { loadFilter, loadCuisines, selectedFilter, filterApplied, checked, radio },
+    dispatch,
+  ] = useProductReducer();
 
-  // method to handle filter button
+  // Method to handle filter button
   const onFilterBtnClick = () => {
-    dispatch({ type: "LOADFILTER-YES" });
-    dispatch({ type: "LOADCUISINES-NO" });
+    dispatch({ type: "SET_LOAD_FILTER", payload: true });
+    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
   };
 
-  useEffect(() => {
-    if (state.selectedFilter.length) {
-      dispatch({
-        type: "FILTER_APPLIED",
-        payload: state.selectedFilter.length,
-      });
-
-      if (state.checked.length) {
-        let checkedArray = [];
-        state.checked.map((ch) => {
-          foods.map((fd) => {
-            if (fd.type.includes(ch)) checkedArray.push(fd);
-          });
-        });
-        setFoodsData(checkedArray);
-      }
-    } else {
-      dispatch({ type: "FILTER_APPLIED", payload: 0 });
-
-      // clear all filters reset data
-      setFoodsData(foods);
-    }
-  }, [state.selectedFilter.length]);
-
-  // method to  remove selected filter
-  const onFilterRemove = (seleFil) => {
-    const filteredArray = state.selectedFilter.filter((sf) => {
-      return sf !== seleFil;
+  // Method to remove selected filter
+  const onFilterRemove = (removeFilter) => {
+    const filteredArray = selectedFilter.filter((sf) => {
+      return sf !== removeFilter;
     });
     dispatch({ type: "REP_FILTER_ARR", payload: filteredArray });
-    const filterChecked = state.checked.filter((sc) => {
-      return sc !== seleFil;
+    const filterChecked = checked.filter((sc) => {
+      return sc !== removeFilter;
     });
     dispatch({ type: "SET_CHECK_FILTER", payload: filterChecked });
   };
 
-  // method to apply checked filters
+  // Method to apply checked filters
   const onCheckedFilter = () => {
-    dispatch({ type: "LOADCUISINES-NO" });
+    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
 
     let checkedArray = [];
 
-    state.checked.map((ch) => {
-      if (!state.selectedFilter.includes(ch))
+    checked.forEach((ch) => {
+      if (!selectedFilter.includes(ch))
         dispatch({ type: "ADD_FILTER_ARR", payload: ch });
 
-      foods.map((fd) => {
+      foods.forEach((fd) => {
         if (fd.type.includes(ch)) checkedArray.push(fd);
       });
     });
     setFoodsData(checkedArray);
   };
 
+  // If selected filter changes re-render data
   useEffect(() => {
-    dispatch({ type: "REP_FILTER_ARR", payload: state.checked });
-  }, [state.checked?.length]);
+    if (selectedFilter.length) {
+      dispatch({
+        type: "SET_FILTER_APPLIED",
+        payload: selectedFilter.length,
+      });
+
+      if (checked.length) {
+        let checkedArray = [];
+        checked.forEach((ch) => {
+          foods.forEach((fd) => {
+            if (fd.type.includes(ch)) checkedArray.push(fd);
+          });
+        });
+        setFoodsData(checkedArray);
+      }
+    } else {
+      dispatch({ type: "SET_FILTER_APPLIED", payload: 0 });
+
+      // Clear all filters and reset data
+      setFoodsData(foods);
+    }
+  }, [selectedFilter.length]);
+
+  useEffect(() => {
+    dispatch({ type: "REP_FILTER_ARR", payload: checked });
+  }, [checked?.length]);
+
+  // Encapsulation of FilterButtons props
+  const filterButtonConfig = {
+    filterApplied,
+    checked,
+    selectedFilter,
+    dispatch,
+    onFilterBtnClick,
+    onFilterRemove,
+  };
+
+  // Encapsulation FoodList component props
+  const foodListConfig = {
+    foodsData,
+    loadFilter,
+    loadCuisines,
+    checked,
+    radio,
+    selectedFilter,
+    dispatch,
+    onCheckedFilter,
+  };
+
+  useEffect(() => {
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        // Page is being restored from back/forward cache
+        // Update the necessary state and data accordingly
+        // For example, you can fetch the latest data or reset the component's state
+        // In this case, we are resetting the filter and reloading the data
+        dispatch({ type: "SET_LOAD_FILTER", payload: false });
+        dispatch({ type: "SET_LOAD_CUISINES", payload: false });
+
+        // let filteredArray = foods;
+        // if (selectedFilter.length) {
+        //   filteredArray = foods.filter((fd) => {
+        //     return selectedFilter.some((sf) => fd.type.includes(sf));
+        //   });
+        // }
+        // setFoodsData(filteredArray);
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+    };
+  }, []);
 
   return (
-    <div
-      className={`${
-        state.loadFilter || state.loadCuisines ? "deactivate" : ""
-      }`}
-    >
+    <div className={`${loadFilter || loadCuisines ? "deactivate" : ""}`}>
       <Layout pathname="delivery">
-        <div
-          style={{
-            height: "90px",
-            margin: "0 82px",
-            position: "relative",
-          }}
-        >
-          <div
-            className="gap-3 d-flex flex-wrap"
-            style={{
-              padding: "26px 0",
-              position: "sticky",
-              top: "20px",
-              zIndex: "2",
-              backgroundColor: "rgb(255, 255, 255)",
-            }}
-          >
-            <button
-              onClick={onFilterBtnClick}
-              className="btn btn-info text-center"
-            >
-              {state.filterApplied ? (
-                <div className="btn btn-danger p-0 ps-1 pe-1 me-1">
-                  {state.filterApplied}
-                </div>
-              ) : (
-                <img className="me-1" src={filter} alt="filter" />
-              )}
-              Filters
-            </button>
-
-            {!state.checked.length && (
-              <div
-                className="btn btn-info text-center"
-                onClick={() => {
-                  dispatch({ type: "LOADCUISINES-YES" });
-                  dispatch({ type: "LOADFILTER-NO" });
-                }}
-              >
-                Cusines
-                <FontAwesomeIcon icon={faChevronDown} />
-              </div>
-            )}
-
-            {state.selectedFilter?.map((seleFil, ind) => (
-              <button
-                key={ind}
-                className="btn btn-danger"
-                onClick={() => onFilterRemove(seleFil)}
-              >
-                {seleFil}
-                <FontAwesomeIcon className="ms-2" icon={faXmark} />
-              </button>
-            ))}
-          </div>
-        </div>
-        {!state.filterApplied && (
+        <FilterButtons filterButtonConfig={filterButtonConfig} />
+        {!filterApplied && (
           <>
-            <Inspiration checked={state.checked} setChecked={dispatch} />
+            <Inspiration checked={checked} setChecked={dispatch} />
             <Brands />
           </>
         )}
-        <FoodList
-          onCheckedFilter={onCheckedFilter}
-          onFilterBtnClick={onFilterBtnClick}
-          onFilterRemove={onFilterRemove}
-          state={state}
-          dispatch={dispatch}
-          foodsData={foodsData}
-        />
+        <FoodList foodListConfig={foodListConfig} />
       </Layout>
     </div>
   );

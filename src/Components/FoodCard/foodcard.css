@@ -1,12 +1,14 @@
 .card:hover {
-  color: black;
+  /* color: black; */
   box-shadow: rgba(28, 28, 28, 0.12) 0 4px 18px 0;
   border-radius: 12px;
 }
 
 .fd-card .btn-success {
   font-weight: normal;
+  font-size: 13px;
   border-radius: 6px;
+  padding: 0 5px;
 }
 
 .fd-card .card-title {
@@ -20,4 +22,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.fd-card .card-text {
+  font-size: 14px;
+  font-weight: 300;
 }

@@ -1,19 +1,25 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router";
 import "./App.css";
-import Home from "./pages/Home";
-import Delivery from "./pages/Delivery";
-import Resturants from "./pages/Resturants";
-import Nightlife from "./pages/Nightlife";
-import ProductDetails from "./pages/ProductDetails/ProductDetails";
+
+const Home = lazy(() => import("./pages/Home"));
+const Delivery = lazy(() => import("./pages/Delivery"));
+const Resturants = lazy(() => import("./pages/Resturants"));
+const Nightlife = lazy(() => import("./pages/Nightlife"));
+const ProductDetails = lazy(() =>
+  import("./pages/ProductDetails/ProductDetails")
+);
+const CollectionDetail = lazy(() =>
+  import("./pages/CollectionDetail/CollectionDetail")
+);
 import { foods } from "./../data/food";
 import { resturants } from "../data/resturants";
 import { clubs } from "../data/clubs";
-import CollectionDetail from "./pages/CollectionDetail/CollectionDetail";
 import { uniqueDining } from "../data/collections";
 
 function App() {
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/order-food-online" element={<Delivery />} />
@@ -34,7 +40,7 @@ function App() {
           element={<ProductDetails foods={uniqueDining} />}
         />
       </Routes>
-    </>
+    </Suspense>
   );
 }
 

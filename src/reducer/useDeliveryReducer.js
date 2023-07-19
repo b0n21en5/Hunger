@@ -1,3 +1,6 @@
+import { useReducer } from "react";
+
+// Initial state
 export const initialState = {
   loadFilter: false,
   loadCuisines: false,
@@ -7,16 +10,13 @@ export const initialState = {
   radio: "",
 };
 
+// Reducer function
 export const reducer = (state, action) => {
   switch (action.type) {
-    case "LOADFILTER-NO":
-      return { ...state, loadFilter: false };
-    case "LOADFILTER-YES":
-      return { ...state, loadFilter: true };
-    case "LOADCUISINES-NO":
-      return { ...state, loadCuisines: false };
-    case "LOADCUISINES-YES":
-      return { ...state, loadCuisines: true };
+    case "SET_LOAD_FILTER":
+      return { ...state, loadFilter: action.payload };
+    case "SET_LOAD_CUISINES":
+      return { ...state, loadCuisines: action.payload };
 
     case "ADD_FILTER_ARR":
       return {
@@ -31,13 +31,22 @@ export const reducer = (state, action) => {
     case "SET_CHECK_FILTER":
       return { ...state, checked: action.payload };
 
-    case "FILTER_APPLIED":
+    case "SET_FILTER_APPLIED":
       return { ...state, filterApplied: action.payload };
 
     case "SET_RADIO":
       return { ...state, radio: action.payload };
 
     default:
-      state;
+      return state;
   }
 };
+
+// Custom hook
+const useProductReducer = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return [state, dispatch];
+};
+
+export default useProductReducer;

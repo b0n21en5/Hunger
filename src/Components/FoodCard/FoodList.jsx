@@ -4,9 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 
-const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
+const FoodList = ({ foodListConfig }) => {
+  // Destructuring functions and states from props
+  const {
+    foodsData,
+    loadFilter,
+    loadCuisines,
+    checked,
+    radio,
+    selectedFilter,
+    dispatch,
+    onCheckedFilter,
+  } = foodListConfig;
+
   const handleCuisineClearBtn = () => {
-    dispatch({ type: "LOADCUISINES-NO" });
+    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
     dispatch({ type: "REP_FILTER_ARR", payload: [] });
     dispatch({ type: "SET_CHECK_FILTER", payload: [] });
   };
@@ -15,7 +27,7 @@ const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
     <div style={{ padding: "20px 82px" }}>
       <h3>Order food online in Jai Singh Road</h3>
 
-      {state.loadCuisines && (
+      {loadCuisines && (
         <div className="cuisines-box mt-3">
           <div className="d-flex justify-content-between align-items-center cuisineTitle">
             <span>Cuisines</span>
@@ -25,7 +37,7 @@ const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
               onClick={() => dispatch({ type: "LOADCUISINES-NO" })}
             />
           </div>
-          <Cuisines checked={state.checked} setChecked={dispatch} />
+          <Cuisines checked={checked} setChecked={dispatch} />
           <div className="bottom d-flex justify-content-end mt-4 gap-3">
             <button onClick={handleCuisineClearBtn} className="btn btn-light">
               Clear all
@@ -36,13 +48,13 @@ const FoodList = ({ onCheckedFilter, state, dispatch, foodsData }) => {
           </div>
         </div>
       )}
-      {state.loadFilter && (
+      {loadFilter && (
         <FilterBox
           foods={foodsData}
-          selectedFilter={state.selectedFilter}
+          selectedFilter={selectedFilter}
           onCheckedFilter={onCheckedFilter}
-          checked={state.checked}
-          radio={state.radio}
+          checked={checked}
+          radio={radio}
           dispatch={dispatch}
         />
       )}

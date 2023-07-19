@@ -19,7 +19,7 @@ const Layout = ({ children, pathname }) => {
       <div className="header">
         <div className="d-flex gap-5 mt-4">
           <Link
-            className={`text-decoration-none d-flex align-items-center link ${
+            className={`d-flex align-items-center link ${
               pathname === "delivery" ? "active" : ""
             }`}
             to="/order-food-online"
@@ -30,7 +30,12 @@ const Layout = ({ children, pathname }) => {
               src={pathname === "delivery" ? deliveryActive : delivery}
               alt="delivery"
               className="p-2 mb-2"
-              style={{ backgroundColor: "#f8f8f8" }}
+              style={{
+                backgroundColor: `${
+                  pathname === "delivery" ? "#fceec0" : "#f8f8f8"
+                }`,
+                borderRadius: "25%",
+              }}
             />
             <div className="ms-2">Delivery</div>
           </Link>
@@ -46,7 +51,12 @@ const Layout = ({ children, pathname }) => {
               src={pathname === "dining" ? diningActive : dining}
               alt="dinning"
               className="p-2 mb-2"
-              style={{ backgroundColor: "#f8f8f8" }}
+              style={{
+                backgroundColor: `${
+                  pathname === "dining" ? "#e5f3f3" : "#f8f8f8"
+                }`,
+                borderRadius: "25%",
+              }}
             />
             <div className="ms-2">Dinning Out</div>
           </Link>
@@ -62,7 +72,12 @@ const Layout = ({ children, pathname }) => {
               src={pathname === "nightlife" ? nightlifeActive : nightlife}
               alt="nightlife"
               className="p-2 mb-2"
-              style={{ backgroundColor: "#f8f8f8" }}
+              style={{
+                backgroundColor: `${
+                  pathname === "nightlife" ? "#edf4ff" : "#f8f8f8"
+                }`,
+                borderRadius: "25%",
+              }}
             />{" "}
             <div className="ms-2">Nightlife</div>
           </Link>

@@ -22,7 +22,12 @@ const CollCard = ({ imgSrc, places, title }) => {
         </h5>
         <p className="card-text">
           {places}&nbsp;Places&nbsp;
-          <img width="10px" src={rightTriangle} alt="right-triangle" />
+          <img
+            width="10"
+            height="10"
+            src={rightTriangle}
+            alt="right-triangle"
+          />
         </p>
       </div>
     </div>

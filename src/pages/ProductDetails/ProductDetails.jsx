@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
 import logo from "../../assets/logo.webp";
+import { recommendedFoods } from "../../../data/recommended";
 
 const ProductDetails = ({ foods }) => {
   const { slug } = useParams();
@@ -14,7 +15,7 @@ const ProductDetails = ({ foods }) => {
   const [selectedFoodTypes, setSelectedFoodTypes] = useState([]);
 
   useEffect(() => {
-    foods.map((fd) => {
+    foods.forEach((fd) => {
       if (fd.slug === slug) return setSelectedFood(fd);
     });
   }, []);
@@ -78,10 +79,7 @@ const ProductDetails = ({ foods }) => {
           </div>
 
           {/* similar products */}
-          <SimilarProducts
-            selectedFoodTypes={selectedFoodTypes}
-            foods={foodsData}
-          />
+          <SimilarProducts recommendedFoods={recommendedFoods} />
         </div>
       </div>
     </>

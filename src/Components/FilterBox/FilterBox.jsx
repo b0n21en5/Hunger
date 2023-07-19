@@ -65,16 +65,16 @@ const FilterBox = ({
     // console.log(sortValue);
   }, [sortValue]);
 
-  // method to handle apply button
+  // Method to handle apply button
   const onApplyBtnClicked = () => {
     if (sortValue) handleSortBy();
     if (checked.length) onCheckedFilter();
-    dispatch({ type: "LOADFILTER-NO" });
+    dispatch({ type: "SET_LOAD_FILTER", payload: false });
   };
 
-  // clear all selected filters
+  // Clear all selected filters
   const onClearBtnClick = () => {
-    dispatch({ type: "LOADFILTER-NO" });
+    dispatch({ type: "SET_LOAD_FILTER", payload: false });
     dispatch({ type: "SET_CHECK_FILTER", payload: [] });
     dispatch({ type: "SET_RADIO", payload: "" });
   };
@@ -87,7 +87,9 @@ const FilterBox = ({
           <FontAwesomeIcon
             style={{ cursor: "pointer" }}
             icon={faXmark}
-            onClick={() => dispatch({ type: "LOADFILTER-NO" })}
+            onClick={() =>
+              dispatch({ type: "SET_LOAD_FILTER", payload: false })
+            }
           />
         </div>
       </div>
