@@ -34,7 +34,9 @@ const FoodList = ({ foodListConfig }) => {
             <FontAwesomeIcon
               style={{ cursor: "pointer" }}
               icon={faXmark}
-              onClick={() => dispatch({ type: "LOADCUISINES-NO" })}
+              onClick={() =>
+                dispatch({ type: "SET_LOAD_CUISINES", payload: false })
+              }
             />
           </div>
           <Cuisines checked={checked} setChecked={dispatch} />

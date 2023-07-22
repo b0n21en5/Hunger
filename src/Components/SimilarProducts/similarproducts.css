@@ -1,3 +1,26 @@
 .br-left {
   border-right: 0.5px solid rgb(234, 233, 233);
 }
+
+.search-in-menu {
+  color: rgba(179, 178, 178, 0.639);
+  font-size: 18px;
+  border-radius: 4px;
+  min-width: 248px;
+  max-height: 48px;
+  padding: 10px;
+  border: solid 1.5px rgb(9, 132, 165);
+  margin-bottom: 1rem;
+}
+
+.search-in-menu:focus {
+  border-color: gray;
+}
+.search-in-menu input {
+  border: none;
+  min-width: 216px;
+}
+
+.search-in-menu input:focus {
+  outline: none;
+}

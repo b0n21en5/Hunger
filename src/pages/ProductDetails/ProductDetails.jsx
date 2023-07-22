@@ -79,7 +79,7 @@ const ProductDetails = ({ foods }) => {
           </div>
 
           {/* similar products */}
-          <SimilarProducts recommendedFoods={recommendedFoods} />
+          <SimilarProducts foods={recommendedFoods} />
         </div>
       </div>
     </>
