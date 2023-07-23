@@ -1,9 +1,45 @@
-.br-left {
+.similar-products-container {
+  /* overflow: auto; */
+}
+
+.types-list {
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  max-height: calc(100vh - 200px);
   border-right: 0.5px solid rgb(234, 233, 233);
+  overflow-y: auto;
+}
+
+.types-list .active {
+  background: linear-gradient(90deg, rgb(255, 255, 255), rgb(255, 237, 239));
+  border-right: 3px solid rgb(239, 79, 95);
+}
+
+.types-list .active .btn {
+  color: #ef4f5f !important;
+  font-weight: 600 !important;
+}
+
+.recommended-foods-list {
+  margin-left: 0.5rem;
+  margin-top: 1rem;
+  width: 80%;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.recommended-foods-list::-webkit-scrollbar {
+  display: none;
 }
 
 .search-in-menu {
   color: rgba(179, 178, 178, 0.639);
+  display: flex;
+  align-items: center;
   font-size: 18px;
   border-radius: 4px;
   min-width: 248px;
@@ -13,9 +49,6 @@
   margin-bottom: 1rem;
 }
 
-.search-in-menu:focus {
-  border-color: gray;
-}
 .search-in-menu input {
   border: none;
   min-width: 216px;

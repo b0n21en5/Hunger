@@ -8,9 +8,13 @@ const Brands = () => {
         {brands.map((ins) => (
           <div key={ins.id} className="flex justify-content-center">
             <img
-              width="130"
-              height="130"
-              style={{ borderRadius: "50%" }}
+              style={{
+                width: "148px",
+                height: "150px",
+                background: "#f8f8f8 ",
+                borderRadius: "50%",
+                boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 12px 0px",
+              }}
               src={ins.img}
               alt={ins.title}
               className="mb-1"

@@ -13,6 +13,7 @@ const SimilarProducts = ({ foods }) => {
   const [suggestFoodTypes, setSuggestFoodTypes] = useState([]);
   const [foodsItemsByType, setFoodsItemsByType] = useState({});
   const [searchText, setSearchText] = useState("");
+  const [activeLink, setActiveLink] = useState(suggestFoodTypes[0]?.type);
 
   // Method to set suggested FoodType
   const countFoodType = (foods) => {
@@ -71,19 +72,57 @@ const SimilarProducts = ({ foods }) => {
     }
   }, [searchText, foods]);
 
+  // Callback for Intersection Observer
+  const handleIntersection = (allEntries) => {
+    allEntries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setActiveLink(entry.target.id);
+      }
+    });
+  };
+
+  //Create Intersection Observer Instance
+  useEffect(() => {
+    const Observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      threshold: 0.8,
+    });
+
+    // Observe all sections with class section
+    suggestFoodTypes.forEach((food) => {
+      const targetSection = document.getElementById(food.type);
+      if (targetSection) {
+        Observer.observe(targetSection);
+      }
+    });
+    return () => {
+      Observer.disconnect();
+    };
+  }, [suggestFoodTypes]);
+
+  useEffect(() => {
+    const targetSection = document.getElementById(activeLink);
+    if (targetSection) targetSection.scrollIntoView({ behavior: "smooth" });
+  }, [activeLink]);
+
   return (
-    <div className="d-flex mb-5">
-      <div className="d-flex flex-column br-left" style={{ width: "20%" }}>
-        <div className="btn p-0 m-2">
-          Recommended ({recommendedFoods?.length})
-        </div>
+    <div className="d-flex mb-5 similar-products-container">
+      <div className="types-list">
         {suggestFoodTypes?.map((food) => (
-          <div className="btn p-0 m-2" key={food.id}>
-            {food.type}&nbsp;({food.count})
+          <div
+            className={`${activeLink === food.type ? "active" : ""}`}
+            key={food.id}
+          >
+            <div
+              className={`btn p-0 m-2 `}
+              onClick={() => setActiveLink(food.type)}
+            >
+              {food.type}&nbsp;({food.count})
+            </div>
           </div>
         ))}
       </div>
-      <div className="products ms-4 mt-2" style={{ width: "80%" }}>
+      <div className="recommended-foods-list">
         <div className="d-flex justify-content-between">
           <div className="">
             <h2>Order Online</h2>
@@ -99,7 +138,7 @@ const SimilarProducts = ({ foods }) => {
               <FontAwesomeIcon icon={faClockRotateLeft} /> 33 min
             </div>
           </div>
-          <div className="d-flex align-items-center search-in-menu">
+          <div className="search-in-menu">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
             <input
               onChange={(e) => setSearchText(e.target.value)}
@@ -112,7 +151,7 @@ const SimilarProducts = ({ foods }) => {
           </div>
         </div>
         {suggestFoodTypes?.map((type) => (
-          <div key={type.id}>
+          <div key={type.id} id={type.type} className="section">
             <h4 className="mb-3">{type.type}</h4>
             {foodsItemsByType[type.type]?.map((food) => (
               <div className="d-flex mb-4" key={food.id}>

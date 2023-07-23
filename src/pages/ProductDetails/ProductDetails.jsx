@@ -66,7 +66,7 @@ const ProductDetails = ({ foods }) => {
             </div>
           </div>
 
-          <div className="mt-2 pb-4 foodDetails">
+          <div className="foodDetails">
             <h1 className="pd-title d-flex justify-content-between">
               {selectedFood.title}
               <div className="btn btn-success">
