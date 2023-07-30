@@ -6,14 +6,16 @@ import Cuisines from "../Cuisines/Cuisines";
 
 const FilterBox = ({
   selectedFilter,
-  foods,
-  onCheckedFilter,
+  foodsData,
+  setFoodsData,
+  onApplyCheckedFilter,
   checked,
   radio,
   dispatch,
 }) => {
   const [sortValue, setSortValue] = useState(radio);
   const [showFilter, setShowFilter] = useState("sort");
+  const [applyClicked, setApplyClicked] = useState(false);
 
   // sort by low to high price
   const handleSortBy = () => {
@@ -22,60 +24,73 @@ const FilterBox = ({
       all = selectedFilter.filter((sf) => {
         return sf !== radio;
       });
-      dispatch({ type: "REP_FILTER_ARR", payload: all });
+      dispatch({ type: "SET_SELECTED_FILTER", payload: all });
     }
 
-    dispatch({ type: "ADD_FILTER_ARR", payload: sortValue });
+    dispatch({ type: "ADD_SELECTED_FILTER", payload: sortValue });
     dispatch({ type: "SET_RADIO", payload: sortValue });
+    console.log(selectedFilter);
 
+    let sortedFoods = [...foodsData];
     switch (sortValue) {
       case "Cost: Low to High":
-        foods.sort((a, b) => {
+        sortedFoods.sort((a, b) => {
           return a.price - b.price;
         });
         break;
 
       case "Cost: High to Low":
-        foods.sort((a, b) => {
+        sortedFoods.sort((a, b) => {
           return b.price - a.price;
         });
         break;
 
       case "Rating: Low to High":
-        foods.sort((a, b) => {
+        sortedFoods.sort((a, b) => {
           return a.rating - b.rating;
         });
         break;
 
       case "Rating: High to Low":
-        foods.sort((a, b) => {
+        sortedFoods.sort((a, b) => {
           return b.rating - a.rating;
         });
         break;
 
       default:
-        foods.sort((a, b) => {
+        sortedFoods.sort((a, b) => {
           return b.rating - a.rating;
         });
         break;
     }
+    setFoodsData(sortedFoods);
   };
 
   useEffect(() => {
-    // console.log(sortValue);
+    console.log(sortValue);
   }, [sortValue]);
 
   // Method to handle apply button
   const onApplyBtnClicked = () => {
-    if (sortValue) handleSortBy();
-    if (checked.length) onCheckedFilter();
     dispatch({ type: "SET_LOAD_FILTER", payload: false });
+    if (checked.length) {
+      onApplyCheckedFilter();
+      setApplyClicked(true);
+    } else {
+      if (sortValue) handleSortBy();
+    }
   };
+
+  useEffect(() => {
+    if (applyClicked && sortValue) handleSortBy();
+    console.log(sortValue);
+  }, [sortValue, applyClicked]);
 
   // Clear all selected filters
   const onClearBtnClick = () => {
     dispatch({ type: "SET_LOAD_FILTER", payload: false });
-    dispatch({ type: "SET_CHECK_FILTER", payload: [] });
+    dispatch({ type: "SET_CHECKED_FILTER", payload: [] });
+    dispatch({ type: "SET_SELECTED_FILTER", payload: [] });
     dispatch({ type: "SET_RADIO", payload: "" });
   };
 
@@ -116,10 +131,7 @@ const FilterBox = ({
             </div>
           </div>
           {showFilter === "sort" ? (
-            <form
-              onChange={(e) => setSortValue(e.target.value)}
-              className="p-3"
-            >
+            <form className="p-3">
               <div className="p-2 d-flex flex-column">
                 <label className="mb-4">
                   <input
@@ -127,6 +139,9 @@ const FilterBox = ({
                     name="sort"
                     value=""
                     checked={sortValue === ""}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
                   />
                   &nbsp;Popularity
                 </label>
@@ -136,6 +151,9 @@ const FilterBox = ({
                     name="sort"
                     value="Rating: High to Low"
                     checked={sortValue === "Rating: High to Low"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
                   />
                   &nbsp;Rating: High to Low
                 </label>
@@ -145,6 +163,9 @@ const FilterBox = ({
                     name="sort"
                     value="Rating: Low to High"
                     checked={sortValue === "Rating: Low to High"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
                   />
                   &nbsp;Rating: Low to High
                 </label>
@@ -154,6 +175,9 @@ const FilterBox = ({
                     name="sort"
                     value="Cost: High to Low"
                     checked={sortValue === "Cost: High to Low"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
                   />
                   &nbsp;Cost: High to Low
                 </label>
@@ -163,6 +187,9 @@ const FilterBox = ({
                     name="sort"
                     value="Cost: Low to High"
                     checked={sortValue === "Cost: Low to High"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
                   />
                   &nbsp;Cost: Low to High
                 </label>

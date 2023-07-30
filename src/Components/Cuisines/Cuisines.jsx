@@ -16,7 +16,7 @@ const Cuisines = ({ checked, setChecked }) => {
     } else {
       all = all.filter((c) => c !== name);
     }
-    setChecked({ type: "SET_CHECK_FILTER", payload: all });
+    setChecked({ type: "SET_CHECKED_FILTER", payload: all });
 
     // console.log(checked);
   };

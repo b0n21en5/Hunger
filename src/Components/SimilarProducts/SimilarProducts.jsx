@@ -124,7 +124,7 @@ const SimilarProducts = ({ foods }) => {
       </div>
       <div className="recommended-foods-list">
         <div className="d-flex justify-content-between">
-          <div className="">
+          <div className="ms-3">
             <h2>Order Online</h2>
             <div
               style={{
@@ -151,7 +151,7 @@ const SimilarProducts = ({ foods }) => {
           </div>
         </div>
         {suggestFoodTypes?.map((type) => (
-          <div key={type.id} id={type.type} className="section">
+          <div key={type.id} id={type.type} className="ms-3">
             <h4 className="mb-3">{type.type}</h4>
             {foodsItemsByType[type.type]?.map((food) => (
               <div className="d-flex mb-4" key={food.id}>

@@ -8,19 +8,20 @@ const FoodList = ({ foodListConfig }) => {
   // Destructuring functions and states from props
   const {
     foodsData,
+    setFoodsData,
     loadFilter,
     loadCuisines,
     checked,
     radio,
     selectedFilter,
     dispatch,
-    onCheckedFilter,
+    onApplyCheckedFilter,
   } = foodListConfig;
 
   const handleCuisineClearBtn = () => {
     dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-    dispatch({ type: "REP_FILTER_ARR", payload: [] });
-    dispatch({ type: "SET_CHECK_FILTER", payload: [] });
+    dispatch({ type: "SET_SELECTED_FILTER", payload: [] });
+    dispatch({ type: "SET_CHECKED_FILTER", payload: [] });
   };
 
   return (
@@ -44,7 +45,7 @@ const FoodList = ({ foodListConfig }) => {
             <button onClick={handleCuisineClearBtn} className="btn btn-light">
               Clear all
             </button>
-            <button className="btn btn-danger" onClick={onCheckedFilter}>
+            <button className="btn btn-danger" onClick={onApplyCheckedFilter}>
               Apply
             </button>
           </div>
@@ -52,9 +53,10 @@ const FoodList = ({ foodListConfig }) => {
       )}
       {loadFilter && (
         <FilterBox
-          foods={foodsData}
+          foodsData={foodsData}
+          setFoodsData={setFoodsData}
           selectedFilter={selectedFilter}
-          onCheckedFilter={onCheckedFilter}
+          onApplyCheckedFilter={onApplyCheckedFilter}
           checked={checked}
           radio={radio}
           dispatch={dispatch}

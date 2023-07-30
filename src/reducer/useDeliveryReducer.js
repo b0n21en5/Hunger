@@ -18,17 +18,17 @@ export const reducer = (state, action) => {
     case "SET_LOAD_CUISINES":
       return { ...state, loadCuisines: action.payload };
 
-    case "ADD_FILTER_ARR":
+    case "ADD_SELECTED_FILTER":
       return {
         ...state,
         selectedFilter: [...state.selectedFilter, action.payload],
       };
-    case "REP_FILTER_ARR":
+    case "SET_SELECTED_FILTER":
       return { ...state, selectedFilter: action.payload };
 
-    case "ADD_CHECK_FILTER":
+    case "ADD_CHECKED_FILTER":
       return { ...state, checked: [...state.checked, action.payload] };
-    case "SET_CHECK_FILTER":
+    case "SET_CHECKED_FILTER":
       return { ...state, checked: action.payload };
 
     case "SET_FILTER_APPLIED":

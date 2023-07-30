@@ -5,14 +5,14 @@ import filter from "../assets/filter.svg";
 
 const FilterButtons = ({ filterButtonConfig }) => {
   // Destructured components props
-  const {
-    filterApplied,
-    checked,
-    selectedFilter,
-    dispatch,
-    onFilterBtnClick,
-    onFilterRemove,
-  } = filterButtonConfig;
+  const { filterApplied, checked, selectedFilter, dispatch, onFilterRemove } =
+    filterButtonConfig;
+
+  // Method to handle filter button
+  const onFilterBtnClick = () => {
+    dispatch({ type: "SET_LOAD_FILTER", payload: true });
+    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
+  };
 
   return (
     <div
@@ -43,7 +43,7 @@ const FilterButtons = ({ filterButtonConfig }) => {
           Filters
         </button>
 
-        {!checked.length && (
+        {!selectedFilter.length && (
           <div
             className="btn btn-info text-center"
             onClick={() => {
