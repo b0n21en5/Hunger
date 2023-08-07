@@ -16,13 +16,21 @@ import { foods } from "./../data/food";
 import { resturants } from "../data/resturants";
 import { clubs } from "../data/clubs";
 import { uniqueDining } from "../data/collections";
+import { DeliveryContextProvider } from "./contexts/useDeliveryContext";
 
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/order-food-online" element={<Delivery />} />
+        <Route
+          path="/order-food-online"
+          element={
+            <DeliveryContextProvider>
+              <Delivery />
+            </DeliveryContextProvider>
+          }
+        />
         <Route path="/order/:slug" element={<ProductDetails foods={foods} />} />
         <Route path="/resturants" element={<Resturants />} />
         <Route

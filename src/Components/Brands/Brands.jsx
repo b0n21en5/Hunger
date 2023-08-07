@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { brands } from "../../../data/food";
 
 const Brands = () => {
@@ -7,18 +8,20 @@ const Brands = () => {
       <div className="d-flex flex-col gap-5 mt-4">
         {brands.map((ins) => (
           <div key={ins.id} className="flex justify-content-center">
-            <img
-              style={{
-                width: "148px",
-                height: "150px",
-                background: "#f8f8f8 ",
-                borderRadius: "50%",
-                boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 12px 0px",
-              }}
-              src={ins.img}
-              alt={ins.title}
-              className="mb-1"
-            />
+            <Link to={`/resturants/${ins.slug}`}>
+              <img
+                style={{
+                  width: "148px",
+                  height: "150px",
+                  background: "#f8f8f8 ",
+                  borderRadius: "50%",
+                  boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 12px 0px",
+                }}
+                src={ins.img}
+                alt={ins.title}
+                className="mb-1"
+              />
+            </Link>
             <div className="text-center font-weight-bold">{ins.title}</div>
           </div>
         ))}

@@ -1,6 +1,16 @@
+import { useEffect, useState } from "react";
 import { inspirations } from "../../../data/food";
 
-const Inspiration = ({ setChecked }) => {
+const Inspiration = ({ onApplyCheckedFilter, dispatch }) => {
+  const [clickedInspiration, setClickedInspiration] = useState("");
+
+  useEffect(() => {
+    if (clickedInspiration) {
+      dispatch({ type: "ADD_CHECKED_FILTER", payload: clickedInspiration });
+      onApplyCheckedFilter();
+    }
+  }, [clickedInspiration]);
+
   return (
     <div
       className="flex"
@@ -12,9 +22,9 @@ const Inspiration = ({ setChecked }) => {
           <div
             key={ins.id}
             className="d-flex gap-2 justify-content-center"
-            onClick={() =>
-              setChecked({ type: "ADD_CHECK_FILTER", payload: ins.title })
-            }
+            onClick={() => {
+              setClickedInspiration(ins.title);
+            }}
             style={{ cursor: "pointer" }}
           >
             <div className="d-flex flex-column">

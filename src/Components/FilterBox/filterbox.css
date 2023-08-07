@@ -1,3 +1,15 @@
+.filter-modal-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.74);
+}
+
 .filter-box {
   margin-top: 1rem;
   width: 700px;
@@ -11,7 +23,6 @@
   box-shadow: rgba(28, 28, 28, 0.15) 0px 1.2rem 7rem;
   -webkit-box-pack: center;
   z-index: 11;
-  pointer-events: auto;
 }
 
 .top {

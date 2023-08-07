@@ -6,14 +6,28 @@ import Layout from "../Components/Layout/Layout";
 import { foods } from "../../data/food";
 import useProductReducer from "./../reducer/useDeliveryReducer";
 import FilterButtons from "../Components/FilterButtons";
+import FoodNotAvailable from "../Components/FoodNotAvailable";
+import { useDeliveryContext } from "../contexts/useDeliveryContext";
 
 const Delivery = () => {
-  const [foodsData, setFoodsData] = useState(foods);
+  // const [foodsData, setFoodsData] = useState(foods);
+  const [foodNotAvailable, setFoodNotAvailable] = useState(false);
 
-  const [
-    { loadFilter, loadCuisines, selectedFilter, filterApplied, checked, radio },
-    dispatch,
-  ] = useProductReducer();
+  const { state, dispatch } = useDeliveryContext();
+  const {
+    foodsData,
+    loadFilter,
+    loadCuisines,
+    selectedFilter,
+    filterApplied,
+    checked,
+    radio,
+  } = state;
+
+  useEffect(() => {
+    // Set Foods Data on initial render
+    dispatch({ type: "SET_FOODS_DATA", payload: foods });
+  }, []);
 
   // Method to remove selected filter
   const onFilterRemove = (removeFilter) => {
@@ -28,25 +42,31 @@ const Delivery = () => {
 
     // filter foods data based on removed filters
     if (filterChecked.length) {
-      let checkedArray = new Set();
+      let checkedArraySet = new Set();
       filterChecked.forEach((ch) => {
         foodsData.forEach((fd) => {
-          if (fd.type.includes(ch)) checkedArray.add(fd);
+          if (fd.type.includes(ch)) checkedArraySet.add(fd);
         });
       });
-      setFoodsData(Array.from(checkedArray));
-      console.log("foods length: " + foodsData.length);
+      let checkedArray = Array.from(checkedArraySet);
+      if (checkedArray.length) {
+        dispatch({ type: "SET_FOODS_DATA", payload: checkedArray });
+        setFoodNotAvailable(false);
+      } else {
+        dispatch({ type: "SET_FOODS_DATA", payload: foods });
+        setFoodNotAvailable(true);
+      }
     } else {
       // Clear all filters and reset data
-      setFoodsData(foods);
-      console.log("foods length: " + foodsData.length);
+      dispatch({ type: "SET_FOODS_DATA", payload: foods });
+
+      setFoodNotAvailable(false);
     }
   };
 
   // Method to apply checked filters
   const onApplyCheckedFilter = () => {
-    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-
+    console.log("Checked filter applied");
     let uniqueSetFoods = new Set();
 
     checked.forEach((ch) => {
@@ -60,8 +80,13 @@ const Delivery = () => {
       });
     });
     const checkedArray = Array.from(uniqueSetFoods);
-    setFoodsData(checkedArray);
-    console.log("foods length: " + foodsData.length);
+    if (checkedArray.length) {
+      dispatch({ type: "SET_FOODS_DATA", payload: checkedArray });
+      setFoodNotAvailable(false);
+    } else {
+      dispatch({ type: "SET_FOODS_DATA", payload: foods });
+      setFoodNotAvailable(true);
+    }
   };
 
   // If selected filter changes re-render data
@@ -76,28 +101,6 @@ const Delivery = () => {
     }
   }, [selectedFilter?.length]);
 
-  // Encapsulation of FilterButtons props
-  const filterButtonConfig = {
-    filterApplied,
-    checked,
-    selectedFilter,
-    dispatch,
-    onFilterRemove,
-  };
-
-  // Encapsulation FoodList component props
-  const foodListConfig = {
-    foodsData,
-    setFoodsData,
-    loadFilter,
-    loadCuisines,
-    checked,
-    radio,
-    selectedFilter,
-    dispatch,
-    onApplyCheckedFilter,
-  };
-
   useEffect(() => {
     const handlePageShow = (event) => {
       if (event.persisted) {
@@ -107,14 +110,6 @@ const Delivery = () => {
         // In this case, we are resetting the filter and reloading the data
         dispatch({ type: "SET_LOAD_FILTER", payload: false });
         dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-
-        // let filteredArray = foods;
-        // if (selectedFilter.length) {
-        //   filteredArray = foods.filter((fd) => {
-        //     return selectedFilter.some((sf) => fd.type.includes(sf));
-        //   });
-        // }
-        // setFoodsData(filteredArray);
       }
     };
 
@@ -128,14 +123,18 @@ const Delivery = () => {
   return (
     <div className={`${loadFilter || loadCuisines ? "deactivate" : ""}`}>
       <Layout pathname="delivery">
-        <FilterButtons filterButtonConfig={filterButtonConfig} />
+        <FilterButtons onFilterRemove={onFilterRemove} />
+        {foodNotAvailable && <FoodNotAvailable />}
         {!filterApplied && (
           <>
-            <Inspiration checked={checked} setChecked={dispatch} />
+            <Inspiration
+              onApplyCheckedFilter={onApplyCheckedFilter}
+              dispatch={dispatch}
+            />
             <Brands />
           </>
         )}
-        <FoodList foodListConfig={foodListConfig} />
+        <FoodList onApplyCheckedFilter={onApplyCheckedFilter} />
       </Layout>
     </div>
   );

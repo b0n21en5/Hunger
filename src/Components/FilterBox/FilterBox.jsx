@@ -3,19 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./filterbox.css";
 import Cuisines from "../Cuisines/Cuisines";
+import ReactDOM from "react-dom";
+import { useDeliveryContext } from "../../contexts/useDeliveryContext";
 
-const FilterBox = ({
-  selectedFilter,
-  foodsData,
-  setFoodsData,
-  onApplyCheckedFilter,
-  checked,
-  radio,
-  dispatch,
-}) => {
+const FilterBox = ({ onApplyCheckedFilter }) => {
+  // Destructuring delivery contexts
+  const { state, dispatch } = useDeliveryContext();
+  const { selectedFilter, foodsData, checked, radio } = state;
+
   const [sortValue, setSortValue] = useState(radio);
   const [showFilter, setShowFilter] = useState("sort");
-  const [applyClicked, setApplyClicked] = useState(false);
 
   // sort by low to high price
   const handleSortBy = () => {
@@ -29,7 +26,7 @@ const FilterBox = ({
 
     dispatch({ type: "ADD_SELECTED_FILTER", payload: sortValue });
     dispatch({ type: "SET_RADIO", payload: sortValue });
-    console.log(selectedFilter);
+    console.log("handle sort by clicked\n", selectedFilter);
 
     let sortedFoods = [...foodsData];
     switch (sortValue) {
@@ -63,7 +60,7 @@ const FilterBox = ({
         });
         break;
     }
-    setFoodsData(sortedFoods);
+    dispatch({ type: "SET_FOODS_DATA", payload: sortedFoods });
   };
 
   useEffect(() => {
@@ -73,18 +70,12 @@ const FilterBox = ({
   // Method to handle apply button
   const onApplyBtnClicked = () => {
     dispatch({ type: "SET_LOAD_FILTER", payload: false });
+    if (sortValue) handleSortBy();
+
     if (checked.length) {
       onApplyCheckedFilter();
-      setApplyClicked(true);
-    } else {
-      if (sortValue) handleSortBy();
     }
   };
-
-  useEffect(() => {
-    if (applyClicked && sortValue) handleSortBy();
-    console.log(sortValue);
-  }, [sortValue, applyClicked]);
 
   // Clear all selected filters
   const onClearBtnClick = () => {
@@ -92,127 +83,134 @@ const FilterBox = ({
     dispatch({ type: "SET_CHECKED_FILTER", payload: [] });
     dispatch({ type: "SET_SELECTED_FILTER", payload: [] });
     dispatch({ type: "SET_RADIO", payload: "" });
+    onApplyCheckedFilter();
   };
 
-  return (
-    <div className="filter-box">
-      <div className="top">
-        <div className="d-flex align-items-center justify-content-between">
-          <div className="title">Filters</div>
-          <FontAwesomeIcon
-            style={{ cursor: "pointer" }}
-            icon={faXmark}
-            onClick={() =>
-              dispatch({ type: "SET_LOAD_FILTER", payload: false })
-            }
-          />
-        </div>
-      </div>
-      <div className="content">
-        <div className="d-flex">
-          <div className="filter-by">
-            <div
-              id={`${showFilter === "sort" ? "active" : ""}`}
-              className="p-4 btn-light"
-              onClick={() => {
-                setShowFilter("sort");
-              }}
-            >
-              Sort By
-            </div>
-            <div
-              id={`${showFilter === "cuisines" ? "active" : ""}`}
-              className="p-4 btn-light"
-              onClick={() => {
-                setShowFilter("cuisines");
-              }}
-            >
-              Cuisines
-            </div>
+  return ReactDOM.createPortal(
+    <div
+      className="filter-modal-overlay"
+      onClick={() => dispatch({ type: "SET_LOAD_FILTER", payload: false })}
+    >
+      <div className="filter-box" onClick={(e) => e.stopPropagation()}>
+        <div className="top">
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="title">Filters</div>
+            <FontAwesomeIcon
+              style={{ cursor: "pointer" }}
+              icon={faXmark}
+              onClick={() =>
+                dispatch({ type: "SET_LOAD_FILTER", payload: false })
+              }
+            />
           </div>
-          {showFilter === "sort" ? (
-            <form className="p-3">
-              <div className="p-2 d-flex flex-column">
-                <label className="mb-4">
-                  <input
-                    type="radio"
-                    name="sort"
-                    value=""
-                    checked={sortValue === ""}
-                    onChange={(e) => {
-                      setSortValue(e.target.value);
-                    }}
-                  />
-                  &nbsp;Popularity
-                </label>
-                <label className="mb-4">
-                  <input
-                    type="radio"
-                    name="sort"
-                    value="Rating: High to Low"
-                    checked={sortValue === "Rating: High to Low"}
-                    onChange={(e) => {
-                      setSortValue(e.target.value);
-                    }}
-                  />
-                  &nbsp;Rating: High to Low
-                </label>
-                <label className="mb-4">
-                  <input
-                    type="radio"
-                    name="sort"
-                    value="Rating: Low to High"
-                    checked={sortValue === "Rating: Low to High"}
-                    onChange={(e) => {
-                      setSortValue(e.target.value);
-                    }}
-                  />
-                  &nbsp;Rating: Low to High
-                </label>
-                <label className="mb-4">
-                  <input
-                    type="radio"
-                    name="sort"
-                    value="Cost: High to Low"
-                    checked={sortValue === "Cost: High to Low"}
-                    onChange={(e) => {
-                      setSortValue(e.target.value);
-                    }}
-                  />
-                  &nbsp;Cost: High to Low
-                </label>
-                <label className="mb-4">
-                  <input
-                    type="radio"
-                    name="sort"
-                    value="Cost: Low to High"
-                    checked={sortValue === "Cost: Low to High"}
-                    onChange={(e) => {
-                      setSortValue(e.target.value);
-                    }}
-                  />
-                  &nbsp;Cost: Low to High
-                </label>
+        </div>
+        <div className="content">
+          <div className="d-flex">
+            <div className="filter-by">
+              <div
+                id={`${showFilter === "sort" ? "active" : ""}`}
+                className="p-4 btn-light"
+                onClick={() => {
+                  setShowFilter("sort");
+                }}
+              >
+                Sort By
               </div>
-            </form>
-          ) : showFilter === "cuisines" ? (
-            <div className="p-4">
-              <Cuisines checked={checked} setChecked={dispatch} />
+              <div
+                id={`${showFilter === "cuisines" ? "active" : ""}`}
+                className="p-4 btn-light"
+                onClick={() => {
+                  setShowFilter("cuisines");
+                }}
+              >
+                Cuisines
+              </div>
             </div>
-          ) : (
-            ""
-          )}
+            {showFilter === "sort" ? (
+              <form className="p-3">
+                <div className="p-2 d-flex flex-column">
+                  <label className="mb-4">
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="popularity"
+                      checked={sortValue === ""}
+                      onChange={(e) => {
+                        setSortValue(e.target.value);
+                      }}
+                    />
+                    &nbsp;Popularity
+                  </label>
+                  <label className="mb-4">
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="Rating: High to Low"
+                      checked={sortValue === "Rating: High to Low"}
+                      onChange={(e) => {
+                        setSortValue(e.target.value);
+                      }}
+                    />
+                    &nbsp;Rating: High to Low
+                  </label>
+                  <label className="mb-4">
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="Rating: Low to High"
+                      checked={sortValue === "Rating: Low to High"}
+                      onChange={(e) => {
+                        setSortValue(e.target.value);
+                      }}
+                    />
+                    &nbsp;Rating: Low to High
+                  </label>
+                  <label className="mb-4">
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="Cost: High to Low"
+                      checked={sortValue === "Cost: High to Low"}
+                      onChange={(e) => {
+                        setSortValue(e.target.value);
+                      }}
+                    />
+                    &nbsp;Cost: High to Low
+                  </label>
+                  <label className="mb-4">
+                    <input
+                      type="radio"
+                      name="sort"
+                      value="Cost: Low to High"
+                      checked={sortValue === "Cost: Low to High"}
+                      onChange={(e) => {
+                        setSortValue(e.target.value);
+                      }}
+                    />
+                    &nbsp;Cost: Low to High
+                  </label>
+                </div>
+              </form>
+            ) : showFilter === "cuisines" ? (
+              <div className="p-4">
+                <Cuisines checked={checked} dispatch={dispatch} />
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+        <div className="bottom d-flex justify-content-end mt-2 gap-3 p-3">
+          <button onClick={onClearBtnClick} className="btn btn-light">
+            Clear all
+          </button>
+          <button onClick={onApplyBtnClicked} className="btn btn-danger">
+            Apply
+          </button>
         </div>
       </div>
-      <div className="bottom d-flex justify-content-end mt-2 gap-3 p-3">
-        <button onClick={onClearBtnClick} className="btn btn-light">
-          Clear all
-        </button>
-        <button onClick={() => onApplyBtnClicked()} className="btn btn-danger">
-          Apply
-        </button>
-      </div>
-    </div>
+    </div>,
+    document.getElementById("modal-root")
   );
 };
 

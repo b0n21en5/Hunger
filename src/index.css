@@ -22,8 +22,6 @@ body {
 
 .link {
   color: #696969;
-  /* font-size: 1.5rem;
-  font-weight: 500; */
   text-decoration: none;
 }
 .link:hover {
@@ -32,19 +30,4 @@ body {
 
 .active {
   color: #ef4f5f;
-}
-
-.deactivate {
-  pointer-events: none;
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: -1;
-}
-
-.deactivate img {
-  opacity: 0.3;
 }

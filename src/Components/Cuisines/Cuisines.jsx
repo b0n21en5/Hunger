@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { cuisinesOptions } from "../../../data/cuisines";
 import { Checkbox } from "antd";
 import "./cuisines.css";
 
-const Cuisines = ({ checked, setChecked }) => {
+const Cuisines = ({ checked, dispatch }) => {
   const [searchCuisine, setSearchCuisine] = useState("");
 
   //   handle checked cuisines
   const handleCheckedCuisine = (value, name) => {
-    let all = [...checked];
+    let allChecked = [...checked];
     if (value) {
-      all.push(name);
+      allChecked.push(name);
     } else {
-      all = all.filter((c) => c !== name);
+      allChecked = allChecked.filter((c) => c !== name);
     }
-    setChecked({ type: "SET_CHECKED_FILTER", payload: all });
+    dispatch({ type: "SET_CHECKED_FILTER", payload: allChecked });
 
     // console.log(checked);
   };
