@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-// import { foods } from "../../../data/food";
 import { useEffect, useState } from "react";
 import "./productdetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,28 +6,29 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
 import logo from "../../assets/logo.webp";
 import { recommendedFoods } from "../../../data/recommended";
+import { useFilterContext } from "../../contexts/useFilterContext";
+import { resturants } from "../../../data/resturants";
 
-const ProductDetails = ({ foods }) => {
-  const { slug } = useParams();
-  const [foodsData, updateFoodsData] = useState([]);
+const ProductDetails = ({ pathname }) => {
   const [selectedFood, setSelectedFood] = useState({});
-  const [selectedFoodTypes, setSelectedFoodTypes] = useState([]);
+
+  const { state } = useFilterContext();
+  const { fetchedData } = state;
+  console.log(fetchedData);
+
+  const { slug } = useParams();
 
   useEffect(() => {
-    foods.forEach((fd) => {
-      if (fd.slug === slug) return setSelectedFood(fd);
-    });
+    if (pathname === "resturants") {
+      resturants.forEach((res) => {
+        if (res.slug === slug) return setSelectedFood(res);
+      });
+    } else {
+      fetchedData.forEach((fd) => {
+        if (fd.slug === slug) return setSelectedFood(fd);
+      });
+    }
   }, []);
-
-  useEffect(() => {
-    setSelectedFoodTypes(selectedFood.type?.split(", "));
-
-    updateFoodsData(
-      foods.filter((fd) => {
-        return fd.title !== selectedFood.title;
-      })
-    );
-  }, [selectedFood]);
 
   return (
     <>

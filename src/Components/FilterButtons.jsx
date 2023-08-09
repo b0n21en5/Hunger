@@ -2,11 +2,11 @@ import { faChevronDown, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import filter from "../assets/filter.svg";
-import { useDeliveryContext } from "../contexts/useDeliveryContext";
+import { useFilterContext } from "../contexts/useFilterContext";
 
-const FilterButtons = ({ onFilterRemove }) => {
-  // Destructuring delivery contexts
-  const { state, dispatch } = useDeliveryContext();
+const FilterButtons = ({ resetData }) => {
+  // Destructuring Filter contexts
+  const { state, dispatch, onFilterRemove } = useFilterContext();
   const { loadFilter, loadCuisines, filterApplied, selectedFilter } = state;
 
   // Method to handle filter button
@@ -21,7 +21,7 @@ const FilterButtons = ({ onFilterRemove }) => {
       style={{
         position: "sticky",
         top: "0",
-        margin: "0 82px",
+        padding: "0 82px",
         background: "white",
         zIndex: `${loadFilter || loadCuisines ? "0" : "1"}`,
         borderBottom: " 0.2px solid rgba(207, 207, 207, 0.486)",
@@ -66,7 +66,7 @@ const FilterButtons = ({ onFilterRemove }) => {
           <button
             key={ind}
             className="btn btn-danger"
-            onClick={() => onFilterRemove(seleFil)}
+            onClick={() => onFilterRemove(seleFil, resetData)}
           >
             {seleFil}
             <FontAwesomeIcon className="ms-2" icon={faXmark} />

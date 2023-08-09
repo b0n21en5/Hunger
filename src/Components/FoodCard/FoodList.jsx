@@ -5,14 +5,13 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 import ReactDOM from "react-dom";
 import "./foodlist.css";
-import { useDeliveryContext } from "../../contexts/useDeliveryContext";
+import { useFilterContext } from "../../contexts/useFilterContext";
 
-const FoodList = ({ onApplyCheckedFilter }) => {
-  const { state, dispatch } = useDeliveryContext();
+const FoodList = ({ resetData, subHead }) => {
+  const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
 
-  // Destructuring functions and states from props
-  const { foodsData, loadFilter, loadCuisines, checked, selectedFilter } =
-    state;
+  // Destructuring functions and states from filter context
+  const { fetchedData, loadFilter, loadCuisines, checked } = state;
 
   const handleCuisineClearBtn = () => {
     dispatch({ type: "SET_LOAD_CUISINES", payload: false });
@@ -22,12 +21,12 @@ const FoodList = ({ onApplyCheckedFilter }) => {
 
   const handleCuisineApplyBtn = () => {
     dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-    if (checked.length) onApplyCheckedFilter(checked);
+    if (checked.length) onApplyCheckedFilter(resetData);
   };
 
   return (
     <div style={{ padding: "20px 82px" }}>
-      <h3>Order food online in Jai Singh Road</h3>
+      <h3 className="mt-4 mb-4">{subHead}</h3>
 
       {loadCuisines &&
         ReactDOM.createPortal(
@@ -70,10 +69,15 @@ const FoodList = ({ onApplyCheckedFilter }) => {
           </div>,
           document.getElementById("modal-root")
         )}
-      {loadFilter && <FilterBox onApplyCheckedFilter={onApplyCheckedFilter} />}
+      {loadFilter && (
+        <FilterBox
+          resetData={resetData}
+          onApplyCheckedFilter={onApplyCheckedFilter}
+        />
+      )}
       <div className="flex flex-col" role="button">
         <div className="d-flex flex-col flex-wrap gap-5 mt-3">
-          {foodsData.map((fd) => (
+          {fetchedData.map((fd) => (
             <FoodCard
               key={fd.id}
               title={fd.title}

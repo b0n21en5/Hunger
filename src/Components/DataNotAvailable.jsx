@@ -1,4 +1,3 @@
-import React from "react";
 import NoResults from "../assets/no-results.avif";
 
 const ouyterContainer = {
@@ -8,7 +7,7 @@ const ouyterContainer = {
   margin: "30px 300px 50px",
 };
 
-const FoodNotAvailable = () => {
+const DataNotAvailable = () => {
   return (
     <div style={{ margin: "0 82px" }}>
       <div style={ouyterContainer}>
@@ -24,4 +23,4 @@ const FoodNotAvailable = () => {
   );
 };
 
-export default FoodNotAvailable;
+export default DataNotAvailable;

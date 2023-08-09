@@ -1,140 +1,126 @@
 import { useEffect, useState } from "react";
-import Brands from "../Components/Brands/Brands";
 import FoodList from "../Components/FoodCard/FoodList";
-import Inspiration from "../Components/Inspiration/Inspiration";
 import Layout from "../Components/Layout/Layout";
-import { foods } from "../../data/food";
-import useProductReducer from "./../reducer/useDeliveryReducer";
-import FilterButtons from "../Components/FilterButtons";
-import FoodNotAvailable from "../Components/FoodNotAvailable";
-import { useDeliveryContext } from "../contexts/useDeliveryContext";
+import { brands, foods, inspirations } from "../../data/food";
+import DataNotAvailable from "../Components/DataNotAvailable";
+import { useFilterContext } from "../contexts/useFilterContext";
+import { Link } from "react-router-dom";
 
 const Delivery = () => {
-  // const [foodsData, setFoodsData] = useState(foods);
-  const [foodNotAvailable, setFoodNotAvailable] = useState(false);
+  const [foodsData, setFoodsData] = useState([]);
 
-  const { state, dispatch } = useDeliveryContext();
-  const {
-    foodsData,
-    loadFilter,
-    loadCuisines,
-    selectedFilter,
-    filterApplied,
-    checked,
-    radio,
-  } = state;
+  const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
+  const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
 
+  // Apply inspiration click
+  // const handleInspirationClick = () => {
+  //   dispatch({ type: "ADD_CHECKED_FILTER", payload: clickedInspiration });
+  //   if (checked.length) onApplyCheckedFilter(foodsData);
+  // };
+
+  // Set Foods Data on initial render
   useEffect(() => {
-    // Set Foods Data on initial render
-    dispatch({ type: "SET_FOODS_DATA", payload: foods });
-  }, []);
+    setFoodsData(foods);
+    dispatch({ type: "SET_FETCHED_DATA", payload: foods });
 
-  // Method to remove selected filter
-  const onFilterRemove = (removeFilter) => {
-    const filteredArray = selectedFilter.filter((sf) => {
-      return sf !== removeFilter;
-    });
-    dispatch({ type: "SET_SELECTED_FILTER", payload: filteredArray });
-    const filterChecked = checked.filter((sc) => {
-      return sc !== removeFilter;
-    });
-    dispatch({ type: "SET_CHECKED_FILTER", payload: filterChecked });
-
-    // filter foods data based on removed filters
-    if (filterChecked.length) {
-      let checkedArraySet = new Set();
-      filterChecked.forEach((ch) => {
-        foodsData.forEach((fd) => {
-          if (fd.type.includes(ch)) checkedArraySet.add(fd);
-        });
-      });
-      let checkedArray = Array.from(checkedArraySet);
-      if (checkedArray.length) {
-        dispatch({ type: "SET_FOODS_DATA", payload: checkedArray });
-        setFoodNotAvailable(false);
-      } else {
-        dispatch({ type: "SET_FOODS_DATA", payload: foods });
-        setFoodNotAvailable(true);
-      }
-    } else {
-      // Clear all filters and reset data
-      dispatch({ type: "SET_FOODS_DATA", payload: foods });
-
-      setFoodNotAvailable(false);
-    }
-  };
-
-  // Method to apply checked filters
-  const onApplyCheckedFilter = () => {
-    console.log("Checked filter applied");
-    let uniqueSetFoods = new Set();
-
-    checked.forEach((ch) => {
-      if (!selectedFilter.includes(ch))
-        dispatch({ type: "ADD_SELECTED_FILTER", payload: ch });
-
-      foods.forEach((fd) => {
-        if (fd.type.includes(ch)) {
-          uniqueSetFoods.add(fd);
-        }
-      });
-    });
-    const checkedArray = Array.from(uniqueSetFoods);
-    if (checkedArray.length) {
-      dispatch({ type: "SET_FOODS_DATA", payload: checkedArray });
-      setFoodNotAvailable(false);
-    } else {
-      dispatch({ type: "SET_FOODS_DATA", payload: foods });
-      setFoodNotAvailable(true);
-    }
-  };
-
-  // If selected filter changes re-render data
-  useEffect(() => {
-    if (selectedFilter.length) {
-      dispatch({
-        type: "SET_FILTER_APPLIED",
-        payload: selectedFilter.length,
-      });
-    } else {
-      dispatch({ type: "SET_FILTER_APPLIED", payload: 0 });
-    }
-  }, [selectedFilter?.length]);
-
-  useEffect(() => {
-    const handlePageShow = (event) => {
-      if (event.persisted) {
-        // Page is being restored from back/forward cache
-        // Update the necessary state and data accordingly
-        // For example, you can fetch the latest data or reset the component's state
-        // In this case, we are resetting the filter and reloading the data
-        dispatch({ type: "SET_LOAD_FILTER", payload: false });
-        dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-      }
-    };
-
-    window.addEventListener("pageshow", handlePageShow);
-
+    // When navigating away from the component, update the visited flag
     return () => {
-      window.removeEventListener("pageshow", handlePageShow);
+      dispatch({ type: "SET_VISITED", payload: true });
     };
   }, []);
+
+  // Applying filter on navigating back to the page
+  useEffect(() => {
+    if (state.visited && checked.length) {
+      if (checked.length) onApplyCheckedFilter(foodsData);
+      dispatch({ type: "SET_VISITED", payload: false });
+    }
+  }, [fetchedData]);
 
   return (
-    <div className={`${loadFilter || loadCuisines ? "deactivate" : ""}`}>
-      <Layout pathname="delivery">
-        <FilterButtons onFilterRemove={onFilterRemove} />
-        {foodNotAvailable && <FoodNotAvailable />}
+    <div>
+      <Layout pathname="delivery" resetData={foodsData}>
+        {/* <FilterButtons resetData={foodsData} /> */}
+        {dataNotAvailable && <DataNotAvailable />}
         {!filterApplied && (
           <>
-            <Inspiration
-              onApplyCheckedFilter={onApplyCheckedFilter}
-              dispatch={dispatch}
-            />
-            <Brands />
+            <div
+              className="flex"
+              style={{ backgroundColor: "#f8f8f8", padding: "40px 82px" }}
+            >
+              <h3>Inspiration for your first order</h3>
+              <div className="d-flex flex-col gap-5 mt-4">
+                {inspirations.map((ins) => (
+                  <div key={ins.id}>
+                    <div
+                      className="d-flex gap-2 justify-content-center"
+                      onClick={() => {
+                        dispatch({
+                          type: "ADD_CHECKED_FILTER",
+                          payload: ins.title,
+                        });
+                        onApplyCheckedFilter(foodsData);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="d-flex flex-column">
+                        <img
+                          width="150"
+                          height="150"
+                          style={{ borderRadius: "50%" }}
+                          src={ins.img}
+                          alt={ins.title}
+                          className="mb-1"
+                        />
+                        <div
+                          className="text-center"
+                          style={{
+                            fontSize: "20px",
+                            lineHeight: "32px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {ins.title}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex" style={{ padding: "20px 82px" }}>
+              <h3>Top brands for you</h3>
+              <div className="d-flex flex-col gap-5 mt-4">
+                {brands.map((ins) => (
+                  <div key={ins.id} className="flex justify-content-center">
+                    <Link to={`/resturants/${ins.slug}`}>
+                      <img
+                        style={{
+                          width: "148px",
+                          height: "150px",
+                          background: "#f8f8f8 ",
+                          borderRadius: "50%",
+                          boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 12px 0px",
+                        }}
+                        src={ins.img}
+                        alt={ins.title}
+                        className="mb-1"
+                      />
+                    </Link>
+                    <div className="text-center font-weight-bold">
+                      {ins.title}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </>
         )}
-        <FoodList onApplyCheckedFilter={onApplyCheckedFilter} />
+        <FoodList
+          subHead="Order food online in Jai Singh Road"
+          resetData={foodsData}
+        />
       </Layout>
     </div>
   );

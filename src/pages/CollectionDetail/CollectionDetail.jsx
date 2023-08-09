@@ -1,11 +1,12 @@
 import { useParams } from "react-router";
 import "./collectiondetail.css";
 import { useEffect, useState } from "react";
-import { collections, uniqueDining } from "../../../data/collections";
+import { collections } from "../../../data/collections";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/logo.webp";
+import { resturants } from "../../../data/resturants";
 
 const CollectionDetail = () => {
   const [selectedCollection, setSelectedCollection] = useState({});
@@ -42,12 +43,12 @@ const CollectionDetail = () => {
         </div>
       </div>
 
-      <div className="d-flex gap-4" style={{ margin: "50px 80px" }}>
-        {uniqueDining.map((un) => (
+      <div className="d-flex flex-wrap gap-4" style={{ margin: "55px 80px" }}>
+        {resturants.map((un) => (
           <Link
             key={un.id}
             to={`/coll-details/${un.slug}`}
-            className="text-decoration-none"
+            className="text-decoration-none mb-2"
           >
             <div className="card border-0" style={{ width: "16rem" }}>
               <img
@@ -57,11 +58,24 @@ const CollectionDetail = () => {
                 className="card-img-top rounded"
                 alt={un.title}
               />
-              <div className=" pt-4">
-                <div className="card-title">
-                  {un.title.length > 29
-                    ? un.title.substring(0, 26).concat(" ...")
-                    : un.title}
+              <div
+                className="pt-4"
+                style={{
+                  fontSize: "14px",
+                  color: "#4f4f4f",
+                  fontWeight: "100",
+                }}
+              >
+                <div
+                  className="card-title"
+                  style={{
+                    color: "black",
+                    fontSize: "18px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {un.title.substr(0, 29) +
+                    (un.title.length >= 29 ? " ..." : "")}
                 </div>
                 <div className="d-flex ">
                   <div className="btn-success">
@@ -79,15 +93,12 @@ const CollectionDetail = () => {
                 </div>
                 <div className="d-flex justify-content-between mt-1">
                   <div className="card-text">
-                    {un.type.substr(0, 39) +
-                      (un.type.length >= 24 ? "..." : "")}
+                    {un.type.substr(0, 33) +
+                      (un.type.length >= 33 ? " ..." : "")}
                   </div>
-                  {/* <div className="card-text">₹{price}&nbsp;for one</div> */}
                 </div>
-                {/* {location && dist && ( */}
                 <div className="d-flex justify-content-between">
-                  <div className="card-text">{un.loca}</div>
-                  {/* <div className="card-text">{dist}&nbsp;km</div> */}
+                  <div className="card-text">{un.location}</div>
                 </div>
               </div>
             </div>

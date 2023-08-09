@@ -1,6 +1,20 @@
 import r1 from "../src/assets/r-1.avif";
 import r2 from "../src/assets/r-2.avif";
 import r3 from "../src/assets/r-3.avif";
+import r4 from "../src/assets/r-4.avif";
+import r5 from "../src/assets/r-5.avif";
+import r6 from "../src/assets/r-6.avif";
+import r7 from "../src/assets/r-7.avif";
+import r8 from "../src/assets/r-8.avif";
+import r9 from "../src/assets/r-9.avif";
+
+import r10 from "../src/assets/r-10.avif";
+import r11 from "../src/assets/r-11.avif";
+import r12 from "../src/assets/r-12.avif";
+import r13 from "../src/assets/r-13.avif";
+import r14 from "../src/assets/r-14.avif";
+import r15 from "../src/assets/r-15.avif";
+import r16 from "../src/assets/r-16.avif";
 
 export const resturants = [
   {
@@ -34,6 +48,149 @@ export const resturants = [
     price: 400,
     imgSrc: r3,
     location: "Roseate House, Aerocity, New Delhi",
+    dist: 14.3,
+  },
+  {
+    id: 4,
+    title: "Pind Balluchi",
+    slug: "pind-balluchi",
+    type: "North Indian, Mughlai, Kebab, Biryani",
+    rating: 4.1,
+    price: 1400,
+    imgSrc: r4,
+    location: "Connaught Place, New Delhi",
     dist: 12.1,
+  },
+  {
+    id: 5,
+    title: "McDonald's",
+    slug: "mcdonald's",
+    type: "Burger, Wraps, Fast Food, Desserts, Beverages",
+    rating: 4.3,
+    price: 1800,
+    imgSrc: r5,
+    location: "Connaught Place, New Delhi",
+    dist: 12.1,
+  },
+  {
+    id: 6,
+    title: "Domino's Pizza",
+    slug: "domino's-pizza",
+    type: "Pizza, Fast Food",
+    rating: 4.3,
+    price: 1750,
+    imgSrc: r6,
+    location: "Connaught Place, New Delhi",
+    dist: 12.1,
+  },
+  {
+    id: 7,
+    title: "Burger King",
+    slug: "burger-king",
+    type: "Burger, Fast Food, Desserts, Shake",
+    rating: 4.2,
+    price: 1600,
+    imgSrc: r7,
+    location: "Connaught Place, New Delhi",
+    dist: 12.9,
+  },
+  {
+    id: 8,
+    title: "Subway",
+    slug: "subway",
+    type: "Healthy Food, Sandwich, Fast Food, Wraps, Salad, Beverages",
+    rating: 3.8,
+    price: 1200,
+    imgSrc: r8,
+    location: "Connaught Place, New Delhi",
+    dist: 11.9,
+  },
+  {
+    id: 9,
+    title: "KFC",
+    slug: "kfc",
+    type: "Burger, Fast Food, Biryani, Desserts, Beverages",
+    rating: 4.3,
+    price: 1700,
+    imgSrc: r9,
+    location: "Connaught Place, New Delhi",
+    dist: 12.3,
+  },
+  {
+    id: 10,
+    title: "Ten Twenty Two - 1022",
+    slug: "ten-twenty-two-1022",
+    type: "European, Asian, Japanese, Pasta, Beverages, Desserts",
+    rating: 4.1,
+    price: 1500,
+    imgSrc: r10,
+    location: "DDA Market, New Delhi",
+    dist: 9.4,
+  },
+  {
+    id: 11,
+    title: "Kiyan - The Roseate",
+    slug: "kiyan-the-roseate",
+    type: "Thai, European, North Indian, Pizza, Salad",
+    rating: 4.6,
+    price: 5000,
+    imgSrc: r11,
+    location: "The Roseate, Kapashera, New Delhi",
+    dist: 14.6,
+  },
+  {
+    id: 12,
+    title: "Nowhere Terrace Brewpub Cafe",
+    slug: "nowhereterrace-brewpub-cafe",
+    type: "North Indian, Asian, Continental, Sushi, Fast Food, Italian, Sandwich",
+    rating: 4.2,
+    price: 2000,
+    imgSrc: r12,
+    location: "Chanakya Mall, Chanakyapuri, New Delhi",
+    dist: 5,
+  },
+  {
+    id: 13,
+    title: "MIE Robolucious The Family Restaurant",
+    slug: "mie-robolucious-the-family-restaurant",
+    rating: 3.6,
+    type: "North Indian, Chinese, Mexican, Italian, Coffee, Desserts, Beverages",
+    location: "Hajipur, Noida",
+    imgSrc: r13,
+    price: 1350,
+    dist: 5.5,
+  },
+  {
+    id: 14,
+    title: "I Sacked Newton",
+    slug: "i-sacked-newton",
+    rating: 4.1,
+    type: "North Indian, Chinese, Continental, Mediterranean, Biryani, Oriental, Thai, Fast Food",
+    location: "Advant Navis Business Park, Noida",
+    imgSrc: r14,
+    price: 1200,
+    dist: 9,
+  },
+  {
+    id: 15,
+    title: "Orient Express - Taj Palace",
+    slug: "orient-express-taj-palace",
+    rating: 4.7,
+    type: "European, Seafood, Desserts",
+    location: "Taj Palace, Chanakyapuri, New Delhi",
+    imgSrc: r15,
+    price: 1400,
+    dist: 3,
+  },
+  {
+    id: 16,
+    title: "Parikrama - The Revolving Restaurant",
+    slug: "parikrama-the-revolving-restaurant",
+    rating: 3.9,
+    type: "North Indian, Chinese, Italian, Continental, Beverages, Desserts",
+    location: "Connaught Place, New Delhi",
+    imgSrc: r16,
+    price: 1000,
+    dist: 16,
   },
 ];

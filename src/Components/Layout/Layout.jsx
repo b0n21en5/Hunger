@@ -7,8 +7,9 @@ import nightlife from "../../assets/nightlife.webp";
 import nightlifeActive from "../../assets/nt-active.webp";
 import logo from "../../assets/logo.webp";
 import "./layout.css";
+import FilterButtons from "../FilterButtons";
 
-const Layout = ({ children, pathname }) => {
+const Layout = ({ children, resetData, pathname }) => {
   return (
     <>
       <div className="nav">
@@ -22,7 +23,7 @@ const Layout = ({ children, pathname }) => {
             className={`d-flex align-items-center link ${
               pathname === "delivery" ? "active" : ""
             }`}
-            to="/order-food-online"
+            to="/order"
           >
             <img
               width="60"
@@ -83,6 +84,7 @@ const Layout = ({ children, pathname }) => {
           </Link>
         </div>
       </div>
+      <FilterButtons resetData={resetData} />
       {children}
     </>
   );

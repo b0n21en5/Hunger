@@ -4,12 +4,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./filterbox.css";
 import Cuisines from "../Cuisines/Cuisines";
 import ReactDOM from "react-dom";
-import { useDeliveryContext } from "../../contexts/useDeliveryContext";
+import { useFilterContext } from "../../contexts/useFilterContext";
 
-const FilterBox = ({ onApplyCheckedFilter }) => {
-  // Destructuring delivery contexts
-  const { state, dispatch } = useDeliveryContext();
-  const { selectedFilter, foodsData, checked, radio } = state;
+const FilterBox = ({ resetData }) => {
+  // Destructuring Filter contexts
+  const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
+  const { fetchedData, selectedFilter, checked, radio } = state;
 
   const [sortValue, setSortValue] = useState(radio);
   const [showFilter, setShowFilter] = useState("sort");
@@ -26,9 +26,8 @@ const FilterBox = ({ onApplyCheckedFilter }) => {
 
     dispatch({ type: "ADD_SELECTED_FILTER", payload: sortValue });
     dispatch({ type: "SET_RADIO", payload: sortValue });
-    console.log("handle sort by clicked\n", selectedFilter);
 
-    let sortedFoods = [...foodsData];
+    let sortedFoods = [...fetchedData];
     switch (sortValue) {
       case "Cost: Low to High":
         sortedFoods.sort((a, b) => {
@@ -63,17 +62,13 @@ const FilterBox = ({ onApplyCheckedFilter }) => {
     dispatch({ type: "SET_FOODS_DATA", payload: sortedFoods });
   };
 
-  useEffect(() => {
-    console.log(sortValue);
-  }, [sortValue]);
-
   // Method to handle apply button
   const onApplyBtnClicked = () => {
     dispatch({ type: "SET_LOAD_FILTER", payload: false });
     if (sortValue) handleSortBy();
 
     if (checked.length) {
-      onApplyCheckedFilter();
+      onApplyCheckedFilter(resetData);
     }
   };
 
@@ -83,7 +78,7 @@ const FilterBox = ({ onApplyCheckedFilter }) => {
     dispatch({ type: "SET_CHECKED_FILTER", payload: [] });
     dispatch({ type: "SET_SELECTED_FILTER", payload: [] });
     dispatch({ type: "SET_RADIO", payload: "" });
-    onApplyCheckedFilter();
+    onApplyCheckedFilter(resetData);
   };
 
   return ReactDOM.createPortal(

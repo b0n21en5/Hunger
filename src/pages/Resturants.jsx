@@ -1,83 +1,67 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { resturants } from "../../data/resturants";
-import Collections from "../Components/Collections/Collections";
-import FoodCard from "../Components/FoodCard/FoodCard";
 import Layout from "../Components/Layout/Layout";
 import off from "../assets/off.avif";
-import { initialState, reducer } from "../reducer/useDeliveryReducer";
-import filter from "../assets/filter.svg";
-import FilterBox from "../Components/FilterBox/FilterBox";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import FoodList from "../Components/FoodCard/FoodList";
+import { useFilterContext } from "../contexts/useFilterContext";
+import DataNotAvailable from "../Components/DataNotAvailable";
+import { Link } from "react-router-dom";
+import { collections } from "../../data/collections";
+import CollCard from "../Components/Collections/CollCard";
 
 const Resturants = () => {
-  const [resturantsData, setResturantsData] = useState(resturants);
+  const [resturantsData, setResturantsData] = useState([]);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
+  const { fetchedData, filterApplied, checked, dataNotAvailable, visited } =
+    state;
 
+  // Set Resturantss Data on initial render
   useEffect(() => {
-    if (state.selectedFilter.length) {
-      dispatch({
-        type: "FILTER_APPLIED",
-        payload: state.selectedFilter.length,
-      });
+    setResturantsData(resturants);
+    dispatch({ type: "SET_FETCHED_DATA", payload: resturants });
 
-      if (state.checked.length) {
-        let checkedArray = [];
-        state.checked.map((ch) => {
-          resturants.map((fd) => {
-            if (fd.type.includes(ch)) checkedArray.push(fd);
-          });
-        });
-        setResturantsData(checkedArray);
-      }
-    } else {
-      dispatch({ type: "FILTER_APPLIED", payload: 0 });
+    // When navigating away update visited flag
+    return () => {
+      dispatch({ type: "SET_VISITED", payload: true });
+    };
+  }, []);
 
-      // clear all filters reset data
-      setResturantsData(resturants);
+  // Applying filter on navigating back to the page
+  useEffect(() => {
+    if (checked.length && visited) {
+      onApplyCheckedFilter(resturantsData);
+      dispatch({ type: "SET_VISITED", payload: false });
     }
-  }, [state.selectedFilter?.length]);
-
-  // method to  remove selected filter
-  const onFilterRemove = (seleFil) => {
-    const filteredArray = state.selectedFilter.filter((sf) => {
-      return sf !== seleFil;
-    });
-    // setSelectedFilter(filteredArray);
-    dispatch({ type: "REP_FILTER_ARR", payload: filteredArray });
-    const filterChecked = state.checked.filter((sc) => {
-      return sc !== seleFil;
-    });
-    dispatch({ type: "SET_CHECK_FILTER", payload: filterChecked });
-  };
-
-  // method to apply checked filters
-  const onCheckedFilter = () => {
-    dispatch({ type: "LOADCUISINES-NO" });
-
-    let checkedArray = [];
-
-    state.checked.map((ch) => {
-      if (!state.selectedFilter.includes(ch))
-        dispatch({ type: "ADD_FILTER_ARR", payload: ch });
-
-      resturants.map((fd) => {
-        if (fd.type.includes(ch)) checkedArray.push(fd);
-      });
-    });
-    setResturantsData(checkedArray);
-  };
-
-  useEffect(() => {
-    dispatch({ type: "REP_FILTER_ARR", payload: state.checked });
-  }, [state.checked?.length]);
+  }, [fetchedData]);
 
   return (
-    <div className={`${state.loadFilter ? "deactivate" : ""}`}>
-      <Layout pathname="dining">
+    <div>
+      <Layout pathname="dining" resetData={resturantsData}>
         <div className="main-cnt">
-          {!state.filterApplied && <Collections />}
+          {!filterApplied && (
+            <>
+              <div className="col-title">Collections</div>
+              <p className="col-text">
+                Explore curated lists of top restaurants, cafes, pubs, and bars
+                in, based on trends
+              </p>
+              <div className="d-flex justify-content-between">
+                {collections.map(
+                  (col) =>
+                    col.id < 5 && (
+                      <Link key={col.id} to={`/collections/${col.slug}`}>
+                        <CollCard
+                          imgSrc={col.img}
+                          title={col.title}
+                          places={col.places}
+                        />
+                      </Link>
+                    )
+                )}
+              </div>
+            </>
+          )}
           <img
             className="mt-5"
             height="250"
@@ -85,64 +69,23 @@ const Resturants = () => {
             src={off}
             alt="discount 50%"
           />
-
-          <div className="d-flex gap-3 mt-3 ">
-            {/* filter button */}
-            <button
-              className="btn btn-info"
-              onClick={() => dispatch({ type: "LOADFILTER-YES" })}
-            >
-              {state.filterApplied ? (
-                <div className="btn btn-danger p-0 ps-1 pe-1 me-1">
-                  {state.filterApplied}
-                </div>
-              ) : (
-                <img className="me-1" src={filter} alt="filter" />
-              )}
-              Filter
-            </button>
-
-            {/* buuton for added filters */}
-            {state.selectedFilter?.map((seleFil, ind) => (
-              <button
-                key={ind}
-                className="btn btn-danger"
-                onClick={() => onFilterRemove(seleFil)}
-              >
-                {seleFil}
-                <FontAwesomeIcon className="ms-2" icon={faXmark} />
-              </button>
-            ))}
-          </div>
-
-          {state.loadFilter && (
-            <FilterBox
-              selectedFilter={state.selectedFilter}
-              foods={resturantsData}
-              onCheckedFilter={onCheckedFilter}
-              checked={state.checked}
-              radio={state.radio}
-              dispatch={dispatch}
-            />
-          )}
-
-          <h3 className="mt-3">Trending dining restaurants in Delhi NCR</h3>
-          <div className="d-flex flex-col flex-wrap gap-5 mt-5">
-            {resturantsData.map((res) => (
-              <FoodCard
-                key={res.id}
-                title={res.title}
-                slug={`/resturants/${res.slug}`}
-                price={res.price}
-                rating={res.rating}
-                type={res.type}
-                imgSrc={res.imgSrc}
-                location={res.location}
-                dist={res.dist}
-              />
-            ))}
-          </div>
         </div>
+        {dataNotAvailable ? (
+          <div className="mb-5">
+            <DataNotAvailable />
+            <Link
+              to="/"
+              className="d-flex justify-content-center text-decoration-none"
+            >
+              <button className="btn btn-danger">Back to home</button>
+            </Link>
+          </div>
+        ) : (
+          <FoodList
+            subHead="Trending dining restaurants"
+            resetData={resturantsData}
+          />
+        )}
       </Layout>
     </div>
   );
