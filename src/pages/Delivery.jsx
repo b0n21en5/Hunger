@@ -8,39 +8,43 @@ import { Link } from "react-router-dom";
 
 const Delivery = () => {
   const [foodsData, setFoodsData] = useState([]);
+  const [isVisited, setIsVisited] = useState(true);
+  const [insClick, setInsClick] = useState(false);
 
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
   const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
-
-  // Apply inspiration click
-  // const handleInspirationClick = () => {
-  //   dispatch({ type: "ADD_CHECKED_FILTER", payload: clickedInspiration });
-  //   if (checked.length) onApplyCheckedFilter(foodsData);
-  // };
 
   // Set Foods Data on initial render
   useEffect(() => {
     setFoodsData(foods);
     dispatch({ type: "SET_FETCHED_DATA", payload: foods });
-
-    // When navigating away from the component, update the visited flag
-    return () => {
-      dispatch({ type: "SET_VISITED", payload: true });
-    };
   }, []);
 
   // Applying filter on navigating back to the page
   useEffect(() => {
-    if (state.visited && checked.length) {
-      if (checked.length) onApplyCheckedFilter(foodsData);
-      dispatch({ type: "SET_VISITED", payload: false });
+    if (!isVisited && state.checked.length) {
+      onApplyCheckedFilter(foodsData);
+      setIsVisited(true);
     }
   }, [fetchedData]);
+
+  useEffect(() => {
+    if (insClick && checked.length) {
+      onApplyCheckedFilter(foodsData);
+      setInsClick(false);
+    }
+  }, [insClick]);
+
+  useEffect(() => {
+    // When navigating away from the component, update the visited flag
+    return () => {
+      setIsVisited(false);
+    };
+  }, []);
 
   return (
     <div>
       <Layout pathname="delivery" resetData={foodsData}>
-        {/* <FilterButtons resetData={foodsData} /> */}
         {dataNotAvailable && <DataNotAvailable />}
         {!filterApplied && (
           <>
@@ -59,7 +63,7 @@ const Delivery = () => {
                           type: "ADD_CHECKED_FILTER",
                           payload: ins.title,
                         });
-                        onApplyCheckedFilter(foodsData);
+                        setInsClick(true);
                       }}
                       style={{ cursor: "pointer" }}
                     >

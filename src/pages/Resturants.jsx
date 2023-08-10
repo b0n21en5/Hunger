@@ -11,29 +11,31 @@ import CollCard from "../Components/Collections/CollCard";
 
 const Resturants = () => {
   const [resturantsData, setResturantsData] = useState([]);
+  const [isVisited, setIsVisited] = useState(true);
 
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
-  const { fetchedData, filterApplied, checked, dataNotAvailable, visited } =
-    state;
+  const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
 
   // Set Resturantss Data on initial render
   useEffect(() => {
     setResturantsData(resturants);
     dispatch({ type: "SET_FETCHED_DATA", payload: resturants });
-
-    // When navigating away update visited flag
-    return () => {
-      dispatch({ type: "SET_VISITED", payload: true });
-    };
   }, []);
 
   // Applying filter on navigating back to the page
   useEffect(() => {
-    if (checked.length && visited) {
+    if (checked.length && !isVisited) {
       onApplyCheckedFilter(resturantsData);
-      dispatch({ type: "SET_VISITED", payload: false });
+      setIsVisited(true);
     }
   }, [fetchedData]);
+
+  useEffect(() => {
+    // When navigating away update visited flag
+    return () => {
+      setIsVisited(false);
+    };
+  }, []);
 
   return (
     <div>

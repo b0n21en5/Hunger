@@ -10,7 +10,7 @@ const initialState = {
   checked: [],
   radio: "",
   dataNotAvailable: false,
-  visited: false,
+  endSearchResults: false,
 };
 
 // Reducer function
@@ -46,8 +46,8 @@ const deliveryReducer = (state, action) => {
     case "SET_DATA_NOT_AVAILABLE":
       return { ...state, dataNotAvailable: action.payload };
 
-    case "SET_VISITED":
-      return { ...state, visited: action.payload };
+    case "SET_END_SEARCH_RESULTS":
+      return { ...state, endSearchResults: action.payload };
 
     case "RESET_STATE":
       return initialState;
@@ -72,6 +72,7 @@ export const FilterContextProvider = ({ children }) => {
         dispatch({ type: "ADD_SELECTED_FILTER", payload: ch });
 
       resetData.forEach((fd) => {
+        console.log(fd);
         if (fd.type.includes(ch)) {
           uniqueSetFoods.add(fd);
         }
@@ -81,9 +82,11 @@ export const FilterContextProvider = ({ children }) => {
     if (checkedArray.length) {
       dispatch({ type: "SET_FETCHED_DATA", payload: checkedArray });
       dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
+      dispatch({ type: "SET_END_SEARCH_RESULTS", payload: true });
     } else {
       dispatch({ type: "SET_FETCHED_DATA", payload: resetData });
       dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: true });
+      dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
     }
   };
 
@@ -110,15 +113,18 @@ export const FilterContextProvider = ({ children }) => {
       if (checkedArray.length) {
         dispatch({ type: "SET_FETCHED_DATA", payload: checkedArray });
         dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
+        dispatch({ type: "SET_END_SEARCH_RESULTS", payload: true });
       } else {
         dispatch({ type: "SET_FETCHED_DATA", payload: resetData });
         dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: true });
+        dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
       }
     } else {
       // Clear all filters and reset data
       dispatch({ type: "SET_FETCHED_DATA", payload: resetData });
 
       dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
+      dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
     }
   };
 

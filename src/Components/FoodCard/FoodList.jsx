@@ -6,12 +6,14 @@ import Cuisines from "../Cuisines/Cuisines";
 import ReactDOM from "react-dom";
 import "./foodlist.css";
 import { useFilterContext } from "../../contexts/useFilterContext";
+import endResults from "../../assets/end-results.avif";
 
 const FoodList = ({ resetData, subHead }) => {
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
 
   // Destructuring functions and states from filter context
-  const { fetchedData, loadFilter, loadCuisines, checked } = state;
+  const { fetchedData, loadFilter, loadCuisines, checked, endSearchResults } =
+    state;
 
   const handleCuisineClearBtn = () => {
     dispatch({ type: "SET_LOAD_CUISINES", payload: false });
@@ -25,7 +27,7 @@ const FoodList = ({ resetData, subHead }) => {
   };
 
   return (
-    <div style={{ padding: "20px 82px" }}>
+    <div style={{ padding: "20px 82px", marginBottom: "60px" }}>
       <h3 className="mt-4 mb-4">{subHead}</h3>
 
       {loadCuisines &&
@@ -90,6 +92,19 @@ const FoodList = ({ resetData, subHead }) => {
           ))}
         </div>
       </div>
+      {endSearchResults && (
+        <div className="d-flex justify-content-center align-items-center gap-5 mt-5">
+          <div className="d-flex flex-column">
+            <div style={{ fontSize: "25px", fontWeight: "600" }}>
+              End of search results
+            </div>
+            <div style={{ color: "#828282" }}>
+              Explore more popular restaurants below
+            </div>
+          </div>
+          <img width="125" height="114" src={endResults} alt="end-of-results" />
+        </div>
+      )}
     </div>
   );
 };

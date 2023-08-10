@@ -12,6 +12,7 @@ import FoodList from "../Components/FoodCard/FoodList";
 
 const Nightlife = () => {
   const [resturantsData, setResturantsData] = useState([]);
+  const [isVisited, setIsVisited] = useState(true);
 
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
   const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
@@ -20,20 +21,22 @@ const Nightlife = () => {
   useEffect(() => {
     setResturantsData(resturants);
     dispatch({ type: "SET_FETCHED_DATA", payload: resturants });
-
-    // When navigating away update visited flag
-    return () => {
-      dispatch({ type: "SET_VISITED", payload: true });
-    };
   }, []);
 
   // Applying filter on navigating back to the page
   useEffect(() => {
-    if (checked.length && state.visited) {
+    if (checked.length && !isVisited) {
       onApplyCheckedFilter(resturantsData);
-      dispatch({ type: "SET_VISITED", payload: false });
+      setIsVisited(true);
     }
   }, [fetchedData]);
+
+  useEffect(() => {
+    // When navigating away update visited flag
+    return () => {
+      setIsVisited(false);
+    };
+  }, []);
 
   return (
     <Layout pathname="nightlife" resetData={resturantsData}>
@@ -75,22 +78,6 @@ const Nightlife = () => {
       ) : (
         <FoodList subHead="Nightlife Restaurants" resetData={resturantsData} />
       )}
-      {/* <h3 className="mt-3"> </h3>
-        <div className="d-flex flex-col flex-wrap gap-5 mt-5">
-          {resturantsData.map((cb) => (
-            <FoodCard
-              key={cb.id}
-              title={cb.title}
-              slug={`/nightlife/${cb.slug}`}
-              price={cb.price}
-              rating={cb.rating}
-              imgSrc={cb.imgSrc}
-              type={cb.type}
-              location={cb.location}
-              dist={cb.dist}
-            />
-          ))}
-        </div> */}
     </Layout>
   );
 };
