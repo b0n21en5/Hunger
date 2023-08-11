@@ -19,8 +19,8 @@ const Home = () => {
   }, [state.filterApplied]);
 
   return (
-    <div>
-      <div className="mb-4 position-relative">
+    <div className="home">
+      <div className="banner ">
         <img
           height="380px"
           width="100%"
@@ -29,64 +29,58 @@ const Home = () => {
           style={{ objectFit: "cover", border: "none" }}
         />
       </div>
-      <div className="main-cnt">
-        <div className="d-flex justify-content-between mb-5">
-          <Link to="/order" className="link cats">
-            <div className="card" style={{ width: "353px" }}>
-              <img
-                height="170"
-                width="353"
-                src={cd1}
-                className="card-img-top"
-                alt="card"
-              />
-              <div className="card-body">
-                <p id="card-title">Order Online</p>
-                <p id="card-text">Stay home and order to your doorstep.</p>
+      <div className="home-main-cnt">
+        <div className="cards-cnt">
+          <Link to="/order" className="link card">
+            <img
+              height="170"
+              width="353"
+              src={cd1}
+              className="card-img-top"
+              alt="card"
+            />
+            <div className="card-body">
+              <div id="card-title">Order Online</div>
+              <div id="card-text">Stay home and order to your doorstep.</div>
+            </div>
+          </Link>
+          <Link to="/resturants" className="link card">
+            <img
+              height="170"
+              width="353"
+              src={cd2}
+              className="card-img-top"
+              alt="card"
+            />
+            <div className="card-body">
+              <div id="card-title">Dining</div>
+              <div id="card-text">
+                View the city&apos;s favourite dining venues
               </div>
             </div>
           </Link>
-          <Link to="/resturants" className="link cats">
-            <div className="card" style={{ width: "353px" }}>
-              <img
-                height="170"
-                width="353"
-                src={cd2}
-                className="card-img-top"
-                alt="card"
-              />
-              <div className="card-body">
-                <p id="card-title">Dining</p>
-                <p id="card-text">
-                  View the city&apos;s favourite dining venues
-                </p>
-              </div>
-            </div>
-          </Link>
-          <Link to="/nightlife" className="link cats">
-            <div className="card" style={{ width: "353px" }}>
-              <img
-                height="170"
-                width="353"
-                src={cd3}
-                className="card-img-top"
-                alt="card"
-              />
-              <div className="card-body">
-                <p id="card-title">Nightlife and Clubs</p>
-                <p id="card-text">
-                  Explore the city&apos;s top nightlife outlets
-                </p>
+          <Link to="/nightlife" className="link card">
+            <img
+              height="170"
+              width="353"
+              src={cd3}
+              className="card-img-top"
+              alt="card"
+            />
+            <div className="card-body">
+              <div id="card-title">Nightlife and Clubs</div>
+              <div id="card-text">
+                Explore the city&apos;s top nightlife outlets
               </div>
             </div>
           </Link>
         </div>
         <div className="col-title">Collections</div>
-        <p className="col-text">
+        <div className="col-text">
           Explore curated lists of top restaurants, cafes, pubs, and bars in,
           based on trends
-        </p>
-        <div className="d-flex justify-content-between">
+        </div>
+        <div className="collections">
           {collections.map(
             (col) =>
               col.id < 5 && (

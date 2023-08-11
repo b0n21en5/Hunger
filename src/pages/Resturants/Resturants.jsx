@@ -1,18 +1,17 @@
-import { Link } from "react-router-dom";
-import Layout from "../Components/Layout/Layout";
-import off from "../assets/off.avif";
-import CollCard from "../Components/Collections/CollCard";
-import col5 from "../assets/col-5.avif";
-import col6 from "../assets/col-6.avif";
-import { resturants } from "../../data/resturants";
 import { useEffect, useState } from "react";
-import { useFilterContext } from "../contexts/useFilterContext";
-import DataNotAvailable from "../Components/DataNotAvailable";
-import FoodList from "../Components/FoodCard/FoodList";
+import { resturants } from "../../../data/resturants";
+import Layout from "../../Components/Layout/Layout";
+import off from "../../assets/off.avif";
+import FoodList from "../../Components/FoodCard/FoodList";
+import { useFilterContext } from "../../contexts/useFilterContext";
+import DataNotAvailable from "../../Components/DataNotAvailable";
+import { Link } from "react-router-dom";
+import { collections } from "../../../data/collections";
+import CollCard from "../../Components/Collections/CollCard";
 
-import "./Resturants/resturants.css";
+import "./resturants.css";
 
-const Nightlife = () => {
+const Resturants = () => {
   const [resturantsData, setResturantsData] = useState([]);
   const [isVisited, setIsVisited] = useState(true);
 
@@ -40,7 +39,7 @@ const Nightlife = () => {
     };
   }, []);
 
-  const path = "nightlife";
+  const path = "dining";
 
   return (
     <Layout pathname={path} resetData={resturantsData}>
@@ -52,7 +51,6 @@ const Nightlife = () => {
           src={off}
           alt="discount 50%"
         />
-
         <div className="switch-links">
           <Link
             to="/resturants"
@@ -75,16 +73,15 @@ const Nightlife = () => {
               based on trends
             </div>
             <div className="dine-coll-cards">
-              <Link to={"/collections/lit-party-place"}>
-                <CollCard imgSrc={col5} title="Lit Party Place" places="21" />
-              </Link>
-              <Link to={"/collections/finest-microbrewaries"}>
-                <CollCard
-                  imgSrc={col6}
-                  title="Finest Microbrewaries"
-                  places="18"
-                />
-              </Link>
+              {collections.slice(0, 4).map((col) => (
+                <Link key={col.id} to={`/collections/${col.slug}`}>
+                  <CollCard
+                    imgSrc={col.img}
+                    title={col.title}
+                    places={col.places}
+                  />
+                </Link>
+              ))}
             </div>
           </div>
         )}
@@ -96,7 +93,6 @@ const Nightlife = () => {
           alt="discount 50%"
         />
       </div>
-
       {dataNotAvailable ? (
         <div className="mb-5">
           <DataNotAvailable />
@@ -108,10 +104,13 @@ const Nightlife = () => {
           </Link>
         </div>
       ) : (
-        <FoodList subHead="Nightlife Restaurants" resetData={resturantsData} />
+        <FoodList
+          subHead="Trending dining restaurants"
+          resetData={resturantsData}
+        />
       )}
     </Layout>
   );
 };
 
-export default Nightlife;
+export default Resturants;

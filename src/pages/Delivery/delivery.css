@@ -1,0 +1,65 @@
+.inspirations {
+  /* display: flex; */
+  /* flex-direction: column; */
+  background-color: #f8f8f8;
+  padding: 40px 82px;
+}
+
+.ins-cards {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 1rem;
+
+  /* take care of it later */
+  overflow: hidden;
+}
+
+.ins-cards .ins-card-body {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.brands {
+  padding: 40px 82px;
+}
+
+.brand-body {
+  display: flex;
+  gap: 2.7rem;
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 412px) {
+  .inspirations {
+    padding: 15px;
+    background-color: white;
+  }
+
+  .ins-cards {
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: 0.5rem;
+  }
+
+  .inspirations img {
+    width: 74px;
+    height: 74px;
+  }
+
+  .brands {
+    padding: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .brand-body {
+    gap: 1.5rem;
+  }
+
+  .brand-body img {
+    width: 74px;
+    height: 74px;
+  }
+}

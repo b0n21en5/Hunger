@@ -5,19 +5,13 @@ body {
   box-sizing: border-box;
 }
 
-.nav {
-  padding: 20px 82px;
-  border-bottom: 0.5px solid rgba(205, 205, 205, 0.553);
-  box-shadow: rgba(28, 28, 28, 0.15) 0px 0.4rem 0.5rem;
-}
-
 .main {
   padding: 10px 130px;
   margin-bottom: 2rem;
 }
 
 .main-cnt {
-  padding: 20px 82px;
+  padding: 40px 82px;
 }
 
 .link {
@@ -30,4 +24,12 @@ body {
 
 .active {
   color: #ef4f5f;
+}
+
+/* Mobile Responsiveness */
+
+@media screen and (max-width: 412px) {
+  .main-cnt {
+    padding: 24px;
+  }
 }

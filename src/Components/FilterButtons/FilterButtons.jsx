@@ -1,8 +1,9 @@
 import { faChevronDown, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import filter from "../assets/filter.svg";
-import { useFilterContext } from "../contexts/useFilterContext";
+import filter from "../../assets/filter.svg";
+import { useFilterContext } from "../../contexts/useFilterContext";
+import "./filterbuttons.css";
 
 const FilterButtons = ({ resetData }) => {
   // Destructuring Filter contexts
@@ -17,49 +18,37 @@ const FilterButtons = ({ resetData }) => {
 
   return (
     <div
-      className="filter-buttons"
+      className="filter-buttons-cnt"
       style={{
-        position: "sticky",
-        top: "0",
-        padding: "0 82px",
-        background: "white",
         zIndex: `${loadFilter || loadCuisines ? "0" : "1"}`,
-        borderBottom: " 0.2px solid rgba(207, 207, 207, 0.486)",
       }}
     >
-      <div
-        className="gap-3 d-flex flex-wrap"
-        style={{
-          padding: "26px 0",
-        }}
-      >
-        <button
-          onClick={onFilterBtnClick}
-          className="btn text-center"
-          style={{ border: "0.5px solid #bebebe9f" }}
-        >
+      <div className="filter-buttons">
+        <button onClick={onFilterBtnClick}>
           {filterApplied ? (
-            <div className="btn btn-danger p-0 ps-1 pe-1 me-1">
-              {filterApplied}
-            </div>
+            <div className="btn-dngr">{filterApplied}</div>
           ) : (
-            <img className="me-1" src={filter} alt="filter" />
+            <img
+              height="18"
+              width="18"
+              className="me-1"
+              src={filter}
+              alt="filter"
+            />
           )}
           Filters
         </button>
 
         {!selectedFilter.length && (
-          <div
-            className="btn text-center"
+          <button
             onClick={() => {
               dispatch({ type: "SET_LOAD_CUISINES", payload: true });
               dispatch({ type: "SET_LOAD_FILTER", payload: false });
             }}
-            style={{ border: "0.5px solid #bebebe9f" }}
           >
             Cusines
             <FontAwesomeIcon icon={faChevronDown} />
-          </div>
+          </button>
         )}
 
         {selectedFilter?.map((seleFil, ind) => (

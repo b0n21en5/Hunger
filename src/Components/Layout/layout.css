@@ -1,4 +1,4 @@
-.header {
+.top-links {
   font-size: 1.5rem;
   padding: 0 82px;
   border-bottom: 0.5px solid rgba(207, 207, 207, 0.486);
@@ -17,4 +17,41 @@
 .active {
   color: red;
   border-bottom: 2px solid red;
+}
+
+.bottom {
+  display: none;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .top-links {
+    display: none;
+  }
+
+  .bottom {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    height: 58px;
+    width: 100%;
+    background-color: white;
+  }
+
+  .bottom .bottom-link {
+    color: rgb(156, 156, 156);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+  }
+
+  .bottom .active {
+    color: black;
+    border: none;
+    border-top: 2px solid red;
+  }
 }

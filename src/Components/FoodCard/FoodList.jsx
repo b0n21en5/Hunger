@@ -27,7 +27,7 @@ const FoodList = ({ resetData, subHead }) => {
   };
 
   return (
-    <div style={{ padding: "20px 82px", marginBottom: "60px" }}>
+    <div className="foodList">
       <h3 className="mt-4 mb-4">{subHead}</h3>
 
       {loadCuisines &&
@@ -79,16 +79,8 @@ const FoodList = ({ resetData, subHead }) => {
       )}
       <div className="flex flex-col" role="button">
         <div className="d-flex flex-col flex-wrap gap-5 mt-3">
-          {fetchedData.map((fd) => (
-            <FoodCard
-              key={fd.id}
-              title={fd.title}
-              slug={`/order/${fd.slug}`}
-              price={fd.price}
-              type={fd.type}
-              rating={fd.rating}
-              imgSrc={fd.imgSrc}
-            />
+          {fetchedData.map((product) => (
+            <FoodCard key={product.id} product={product} />
           ))}
         </div>
       </div>

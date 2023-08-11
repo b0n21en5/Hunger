@@ -1,23 +1,29 @@
-.col-title {
-  font-weight: 600;
-  font-size: 36px;
+.card {
+  width: 260px;
+  border: none;
 }
 
-.col-text {
-  font-weight: 400;
-  font-size: 20px;
-  margin-top: 1rem;
-}
-
-.card-img {
+.card .card-img {
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
-.card-title {
+.card .card-img-overlay .card-title {
+  color: white;
   font-size: medium;
 }
 
-.card-text {
+.card .card-img-overlay .card-text {
+  color: white;
   font-size: small;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .card .card-img-overlay .card-title {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

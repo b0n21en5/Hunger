@@ -5,19 +5,18 @@ import dining from "../../assets/dining.avif";
 import diningActive from "../../assets/dn-active.avif";
 import nightlife from "../../assets/nightlife.webp";
 import nightlifeActive from "../../assets/nt-active.webp";
-import logo from "../../assets/logo.webp";
+import FilterButtons from "../FilterButtons/FilterButtons";
+import NavBar from "../NavBar/NavBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping, faShoePrints } from "@fortawesome/free-solid-svg-icons";
+
 import "./layout.css";
-import FilterButtons from "../FilterButtons";
 
 const Layout = ({ children, resetData, pathname }) => {
   return (
-    <>
-      <div className="nav">
-        <Link to="/">
-          <img width="126" height="27" src={logo} alt="logo" />
-        </Link>
-      </div>
-      <div className="header">
+    <div>
+      <NavBar />
+      <div className="top-links">
         <div className="d-flex gap-5 mt-4">
           <Link
             className={`d-flex align-items-center link ${
@@ -86,7 +85,27 @@ const Layout = ({ children, resetData, pathname }) => {
       </div>
       <FilterButtons resetData={resetData} />
       {children}
-    </>
+      <div className="bottom">
+        <Link
+          className={`bottom-link link ${
+            pathname === "delivery" ? "active" : ""
+          }`}
+          to="/order"
+        >
+          <FontAwesomeIcon icon={faBagShopping} />
+          <div className="ms-2">Delivery</div>
+        </Link>
+        <Link
+          className={`bottom-link link ${
+            pathname === "dining" || pathname == "nightlife" ? "active" : ""
+          }`}
+          to="/resturants"
+        >
+          <FontAwesomeIcon icon={faShoePrints} />
+          <div className="ms-2">Dinning Out</div>
+        </Link>
+      </div>
+    </div>
   );
 };
 
