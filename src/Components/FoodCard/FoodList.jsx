@@ -7,8 +7,11 @@ import ReactDOM from "react-dom";
 import "./foodlist.css";
 import { useFilterContext } from "../../contexts/useFilterContext";
 import endResults from "../../assets/end-results.avif";
+import { useEffect, useState } from "react";
 
 const FoodList = ({ resetData, subHead }) => {
+  const [showFilter, setShowFilter] = useState("sort");
+
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
 
   // Destructuring functions and states from filter context
@@ -25,6 +28,13 @@ const FoodList = ({ resetData, subHead }) => {
     dispatch({ type: "SET_LOAD_CUISINES", payload: false });
     if (checked.length) onApplyCheckedFilter(resetData);
   };
+
+  useEffect(() => {
+    if (window.innerWidth <= 412 && loadCuisines) {
+      setShowFilter("cuisines");
+      dispatch({ type: "SET_LOAD_FILTER", payload: true });
+    }
+  }, [loadCuisines]);
 
   return (
     <div className="foodList">
@@ -71,12 +81,7 @@ const FoodList = ({ resetData, subHead }) => {
           </div>,
           document.getElementById("modal-root")
         )}
-      {loadFilter && (
-        <FilterBox
-          resetData={resetData}
-          onApplyCheckedFilter={onApplyCheckedFilter}
-        />
-      )}
+      {loadFilter && <FilterBox resetData={resetData} show={showFilter} />}
       <div className="flex flex-col" role="button">
         <div className="d-flex flex-col flex-wrap gap-5 mt-3">
           {fetchedData.map((product) => (

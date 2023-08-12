@@ -12,7 +12,8 @@
 
 .filter-box {
   margin-top: 1rem;
-  width: 700px;
+  width: 100%;
+  max-width: 700px;
   background: white;
   border-radius: 6px;
 
@@ -25,28 +26,96 @@
   z-index: 11;
 }
 
-.top {
+.filter-modal-overlay .filter-box .top {
   font-size: 1.6rem;
   padding: 20px;
   border-bottom: 0.5px solid rgba(201, 199, 199, 0.671);
 }
 
-.content {
+.filter-modal-overlay .filter-box .content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
   min-height: 420px;
   border-bottom: 0.5px solid rgba(201, 199, 199, 0.671);
 }
 
-.content .filter-by {
+.filter-modal-overlay .filter-box .content .filter-by {
   min-width: 20%;
   font-size: 1.2rem;
   cursor: pointer;
+  background-color: rgb(248, 248, 248);
+}
+
+.filter-modal-overlay .filter-box .content .cuisine-cnt {
+  padding: 1rem;
+}
+
+.filter-modal-overlay .filter-box .bottom {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  gap: 12px;
+  padding: 12px;
+}
+
+.apply-svg {
+  display: none;
 }
 
 label {
   cursor: pointer;
 }
 
-#active {
+.filter-modal-overlay .filter-box .content .filter-by #active {
   border-left: 4px solid red;
   background-color: white;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .filter-modal-overlay .filter-box {
+    height: 100vh;
+    max-width: 412px;
+    top: 40px;
+    left: 0;
+  }
+
+  .filter-modal-overlay .filter-box .content {
+    min-height: 70vh;
+    border: none;
+  }
+
+  .filter-modal-overlay .filter-box .content .filter-by {
+    min-width: 35%;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  .filter-modal-overlay .filter-box .content .cuisine-cnt {
+    padding: 12px;
+  }
+
+  .filter-modal-overlay .filter-box .bottom {
+    bottom: 100px;
+  }
+
+  .filter-modal-overlay .filter-box .bottom .btn {
+    height: 44px;
+  }
+
+  .filter-modal-overlay .filter-box .bottom .btn:nth-child(1) {
+    background-color: white;
+    width: 35%;
+  }
+
+  .filter-modal-overlay .filter-box .bottom .btn:nth-child(2) {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .apply-svg {
+    display: block;
+  }
 }

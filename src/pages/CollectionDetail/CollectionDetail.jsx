@@ -1,12 +1,13 @@
 import { useParams } from "react-router";
-import "./collectiondetail.css";
 import { useEffect, useState } from "react";
 import { collections } from "../../../data/collections";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import logo from "../../assets/logo.webp";
+import NavBar from "../../Components/NavBar/NavBar";
 import { resturants } from "../../../data/resturants";
+
+import "./collectiondetail.css";
 
 const CollectionDetail = () => {
   const [selectedCollection, setSelectedCollection] = useState({});
@@ -20,11 +21,7 @@ const CollectionDetail = () => {
 
   return (
     <>
-      <div className="nav">
-        <Link to="/">
-          <img width="126" height="27" src={logo} alt="logo" />
-        </Link>
-      </div>
+      <NavBar />
       <div className="coll-card">
         <div className="jumbotron jumbotron-fluid">
           <img
@@ -37,35 +34,28 @@ const CollectionDetail = () => {
             <h1 className="display-4">
               {selectedCollection.places + " " + selectedCollection.title}
             </h1>
-            <p className="lead">{selectedCollection.desc}</p>
-            <p className="mt-4">{selectedCollection.places + " Places"}</p>
+            <h6 className="lead">{selectedCollection.desc}</h6>
+            <p>{selectedCollection.places + " Places"}</p>
           </div>
         </div>
       </div>
 
-      <div className="d-flex flex-wrap gap-4" style={{ margin: "55px 80px" }}>
+      <div className="coll-data">
         {resturants.map((un) => (
           <Link
             key={un.id}
             to={`/coll-details/${un.slug}`}
             className="text-decoration-none mb-2"
           >
-            <div className="card border-0" style={{ width: "16rem" }}>
+            <div className="card">
               <img
                 src={un.imgSrc}
                 width="288"
                 height="192"
-                className="card-img-top rounded"
+                className="card-img-top"
                 alt={un.title}
               />
-              <div
-                className="pt-4"
-                style={{
-                  fontSize: "14px",
-                  color: "#4f4f4f",
-                  fontWeight: "100",
-                }}
-              >
+              <div className="coll-card-detail">
                 <div
                   className="card-title"
                   style={{

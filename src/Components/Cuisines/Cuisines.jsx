@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { cuisinesOptions } from "../../../data/cuisines";
@@ -7,6 +7,8 @@ import "./cuisines.css";
 
 const Cuisines = ({ checked, dispatch }) => {
   const [searchCuisine, setSearchCuisine] = useState("");
+
+  const inputRef = useRef(null);
 
   //   handle checked cuisines
   const handleCheckedCuisine = (value, name) => {
@@ -21,11 +23,16 @@ const Cuisines = ({ checked, dispatch }) => {
     // console.log(checked);
   };
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <>
       <div className="search-bar">
         <FontAwesomeIcon icon={faMagnifyingGlass} className="me-2" />
         <input
+          ref={inputRef}
           onChange={(e) => setSearchCuisine(e.target.value)}
           type="text"
           placeholder="Search here"

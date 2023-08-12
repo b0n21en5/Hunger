@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./similarproducts.css";
 import {
   faClockRotateLeft,
   faCompass,
@@ -7,6 +6,8 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import "./similarproducts.css";
 
 const SimilarProducts = ({ foods }) => {
   const [recommendedFoods, setRecommendedFoods] = useState(foods);
@@ -83,21 +84,23 @@ const SimilarProducts = ({ foods }) => {
 
   //Create Intersection Observer Instance
   useEffect(() => {
-    const Observer = new IntersectionObserver(handleIntersection, {
-      root: null,
-      threshold: 0.8,
-    });
+    if (window.innerWidth > 412) {
+      const Observer = new IntersectionObserver(handleIntersection, {
+        root: null,
+        threshold: 0.8,
+      });
 
-    // Observe all sections with class section
-    suggestFoodTypes.forEach((food) => {
-      const targetSection = document.getElementById(food.type);
-      if (targetSection) {
-        Observer.observe(targetSection);
-      }
-    });
-    return () => {
-      Observer.disconnect();
-    };
+      // Observe all sections with class section
+      suggestFoodTypes.forEach((food) => {
+        const targetSection = document.getElementById(food.type);
+        if (targetSection) {
+          Observer.observe(targetSection);
+        }
+      });
+      return () => {
+        Observer.disconnect();
+      };
+    }
   }, [suggestFoodTypes]);
 
   useEffect(() => {
@@ -123,7 +126,7 @@ const SimilarProducts = ({ foods }) => {
         ))}
       </div>
       <div className="recommended-foods-list">
-        <div className="d-flex justify-content-between">
+        <div className="search-cnt">
           <div className="ms-3">
             <h2>Order Online</h2>
             <div
@@ -160,14 +163,14 @@ const SimilarProducts = ({ foods }) => {
                   alt={food.type}
                   style={{ borderRadius: "8px", border: "none" }}
                 />
-                <div className="d-flex flex-column ms-4 mt-1">
+                <div className="pd-dt">
                   <h5 key={food.id}>{food.title}</h5>
-                  <p style={{ fontSize: "14px", color: "#4f4f4f" }}>
+                  <div style={{ fontSize: "14px", color: "#4f4f4f" }}>
                     ₹{food.price}
-                  </p>
-                  <p style={{ fontSize: "14px", color: "#4f4f4f" }}>
+                  </div>
+                  <div style={{ fontSize: "14px", color: "#4f4f4f" }}>
                     {food.desc}
-                  </p>
+                  </div>
                 </div>
               </div>
             ))}

@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import "./filterbox.css";
+import { faCaretRight, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 import ReactDOM from "react-dom";
 import { useFilterContext } from "../../contexts/useFilterContext";
 
-const FilterBox = ({ resetData }) => {
+import "./filterbox.css";
+
+const FilterBox = ({ resetData, show }) => {
   // Destructuring Filter contexts
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
   const { fetchedData, selectedFilter, checked, radio } = state;
 
   const [sortValue, setSortValue] = useState(radio);
-  const [showFilter, setShowFilter] = useState("sort");
+  const [showFilter, setShowFilter] = useState(show);
 
   // sort by low to high price
   const handleSortBy = () => {
@@ -84,7 +85,10 @@ const FilterBox = ({ resetData }) => {
   return ReactDOM.createPortal(
     <div
       className="filter-modal-overlay"
-      onClick={() => dispatch({ type: "SET_LOAD_FILTER", payload: false })}
+      onClick={() => {
+        dispatch({ type: "SET_LOAD_FILTER", payload: false });
+        dispatch({ type: "SET_LOAD_CUISINES", payload: false });
+      }}
     >
       <div className="filter-box" onClick={(e) => e.stopPropagation()}>
         <div className="top">
@@ -100,107 +104,106 @@ const FilterBox = ({ resetData }) => {
           </div>
         </div>
         <div className="content">
-          <div className="d-flex">
-            <div className="filter-by">
-              <div
-                id={`${showFilter === "sort" ? "active" : ""}`}
-                className="p-4 btn-light"
-                onClick={() => {
-                  setShowFilter("sort");
-                }}
-              >
-                Sort By
-              </div>
-              <div
-                id={`${showFilter === "cuisines" ? "active" : ""}`}
-                className="p-4 btn-light"
-                onClick={() => {
-                  setShowFilter("cuisines");
-                }}
-              >
-                Cuisines
-              </div>
+          <div className="filter-by">
+            <div
+              id={`${showFilter === "sort" ? "active" : ""}`}
+              className="p-4"
+              onClick={() => {
+                setShowFilter("sort");
+              }}
+            >
+              Sort By
             </div>
-            {showFilter === "sort" ? (
-              <form className="p-3">
-                <div className="p-2 d-flex flex-column">
-                  <label className="mb-4">
-                    <input
-                      type="radio"
-                      name="sort"
-                      value="popularity"
-                      checked={sortValue === ""}
-                      onChange={(e) => {
-                        setSortValue(e.target.value);
-                      }}
-                    />
-                    &nbsp;Popularity
-                  </label>
-                  <label className="mb-4">
-                    <input
-                      type="radio"
-                      name="sort"
-                      value="Rating: High to Low"
-                      checked={sortValue === "Rating: High to Low"}
-                      onChange={(e) => {
-                        setSortValue(e.target.value);
-                      }}
-                    />
-                    &nbsp;Rating: High to Low
-                  </label>
-                  <label className="mb-4">
-                    <input
-                      type="radio"
-                      name="sort"
-                      value="Rating: Low to High"
-                      checked={sortValue === "Rating: Low to High"}
-                      onChange={(e) => {
-                        setSortValue(e.target.value);
-                      }}
-                    />
-                    &nbsp;Rating: Low to High
-                  </label>
-                  <label className="mb-4">
-                    <input
-                      type="radio"
-                      name="sort"
-                      value="Cost: High to Low"
-                      checked={sortValue === "Cost: High to Low"}
-                      onChange={(e) => {
-                        setSortValue(e.target.value);
-                      }}
-                    />
-                    &nbsp;Cost: High to Low
-                  </label>
-                  <label className="mb-4">
-                    <input
-                      type="radio"
-                      name="sort"
-                      value="Cost: Low to High"
-                      checked={sortValue === "Cost: Low to High"}
-                      onChange={(e) => {
-                        setSortValue(e.target.value);
-                      }}
-                    />
-                    &nbsp;Cost: Low to High
-                  </label>
-                </div>
-              </form>
-            ) : showFilter === "cuisines" ? (
-              <div className="p-4">
-                <Cuisines checked={checked} dispatch={dispatch} />
-              </div>
-            ) : (
-              ""
-            )}
+            <div
+              id={`${showFilter === "cuisines" ? "active" : ""}`}
+              className="p-4"
+              onClick={() => {
+                setShowFilter("cuisines");
+              }}
+            >
+              Cuisines
+            </div>
           </div>
+          {showFilter === "sort" ? (
+            <form className="p-3">
+              <div className="p-2 d-flex flex-column">
+                <label className="mb-4">
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="popularity"
+                    checked={sortValue === ""}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
+                  />
+                  &nbsp;Popularity
+                </label>
+                <label className="mb-4">
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Rating: High to Low"
+                    checked={sortValue === "Rating: High to Low"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
+                  />
+                  &nbsp;Rating: High to Low
+                </label>
+                <label className="mb-4">
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Rating: Low to High"
+                    checked={sortValue === "Rating: Low to High"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
+                  />
+                  &nbsp;Rating: Low to High
+                </label>
+                <label className="mb-4">
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Cost: High to Low"
+                    checked={sortValue === "Cost: High to Low"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
+                  />
+                  &nbsp;Cost: High to Low
+                </label>
+                <label className="mb-4">
+                  <input
+                    type="radio"
+                    name="sort"
+                    value="Cost: Low to High"
+                    checked={sortValue === "Cost: Low to High"}
+                    onChange={(e) => {
+                      setSortValue(e.target.value);
+                    }}
+                  />
+                  &nbsp;Cost: Low to High
+                </label>
+              </div>
+            </form>
+          ) : showFilter === "cuisines" ? (
+            <div className="cuisine-cnt">
+              <Cuisines checked={checked} dispatch={dispatch} />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
-        <div className="bottom d-flex justify-content-end mt-2 gap-3 p-3">
+        <div className="bottom">
           <button onClick={onClearBtnClick} className="btn btn-light">
             Clear all
           </button>
           <button onClick={onApplyBtnClicked} className="btn btn-danger">
-            Apply
+            Apply&nbsp;
+            <FontAwesomeIcon className="apply-svg" icon={faCaretRight} />
           </button>
         </div>
       </div>

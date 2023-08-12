@@ -3,7 +3,7 @@ import { collections } from "../../../data/collections";
 import banner from "../../assets/banner.avif";
 import CollCard from "../../Components/Collections/CollCard";
 
-import "./home.css";
+import logoTrans from "../../assets/logo-trans.png";
 
 import cd1 from "../../assets/cd-1.avif";
 import cd2 from "../../assets/cd-2.avif";
@@ -11,7 +11,14 @@ import cd3 from "../../assets/cd-3.avif";
 import { useEffect, useState } from "react";
 import { useFilterContext } from "../../contexts/useFilterContext";
 
+import "./home.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import SearchResult from "../../Components/SearchResult/SearchResult";
+
 const Home = () => {
+  const [searchText, setSearchText] = useState("");
+
   const { state, dispatch } = useFilterContext();
 
   useEffect(() => {
@@ -21,13 +28,21 @@ const Home = () => {
   return (
     <div className="home">
       <div className="banner ">
-        <img
-          height="380px"
-          width="100%"
-          src={banner}
-          alt="banner"
-          style={{ objectFit: "cover", border: "none" }}
-        />
+        <img height="420px" width="100%" src={banner} alt="banner" />
+        <div className="contents-wrapper">
+          <img width="300" height="70" src={logoTrans} alt="logo" />
+          <h1 style={{ color: "white" }}>Discover the best foods & drinks</h1>
+          <div className="search-bar">
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="me-2" />
+            <input
+              // ref={inputRef}
+              onChange={(e) => setSearchText(e.target.value)}
+              type="text"
+              placeholder="Search for resturant, cuisine or dish"
+            />
+            {searchText && <SearchResult text={searchText} />}
+          </div>
+        </div>
       </div>
       <div className="home-main-cnt">
         <div className="cards-cnt">

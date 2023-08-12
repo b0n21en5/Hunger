@@ -1,5 +1,42 @@
+.home .banner img {
+  object-fit: cover;
+}
+
+.home .banner .contents-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+
+  position: absolute;
+  top: 100px;
+  left: 345px;
+}
+
+.home .banner .contents-wrapper .search-bar {
+  color: rgba(167, 167, 167, 0.628);
+  background-color: white;
+  width: 565px;
+  height: 50px;
+  padding: 15px;
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.home .banner .contents-wrapper .search-bar input {
+  width: 465px;
+  border: none;
+}
+
+.home .banner .contents-wrapper .search-bar input:focus {
+  outline: none;
+}
+
 .home-main-cnt {
-  padding: 0 82px;
+  padding: 40px 82px;
 }
 
 .cards-cnt {
@@ -55,6 +92,7 @@
 .col-title {
   font-size: 36px;
   font-weight: 500;
+  margin-top: 2rem;
 }
 
 .col-text {
@@ -67,6 +105,25 @@
 /* Mobile Responsiveness */
 
 @media screen and (max-width: 412px) {
+  .home .banner .contents-wrapper img {
+    width: 160px;
+    height: 30px;
+  }
+
+  .home .banner .contents-wrapper {
+    top: 144px;
+    left: 26px;
+  }
+
+  .home .banner .contents-wrapper h1 {
+    font-size: 24px;
+  }
+
+  .home .banner .contents-wrapper .search-bar {
+    width: 358px;
+    height: 50px;
+  }
+
   .home-main-cnt {
     padding: 15px 24px;
   }

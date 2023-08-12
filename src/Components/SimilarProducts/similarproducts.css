@@ -29,6 +29,18 @@
   overflow-y: auto;
 }
 
+.recommended-foods-list .search-cnt {
+  display: flex;
+  justify-content: space-between;
+}
+
+.recommended-foods-list .pd-dt {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  margin-top: 4px;
+}
+
 .recommended-foods-list::-webkit-scrollbar {
   display: none;
 }
@@ -53,4 +65,24 @@
 
 .search-in-menu input:focus {
   outline: none;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .types-list {
+    display: none;
+  }
+
+  .recommended-foods-list .search-cnt {
+    display: none;
+  }
+
+  .recommended-foods-list img {
+    width: 85px;
+    height: 85px;
+  }
+
+  .recommended-foods-list .pd-dt {
+    /* margin-top: 0; */
+  }
 }

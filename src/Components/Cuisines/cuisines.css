@@ -1,9 +1,13 @@
 .search-bar {
+  color: rgba(167, 167, 167, 0.628);
   max-width: 457px;
   padding: 10px;
-  border: solid 0.5px;
+  border: solid 0.5px rgba(167, 167, 167, 0.628);
   border-radius: 4px;
-  margin-bottom: 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .search-bar input {
@@ -16,6 +20,21 @@
 }
 
 .checkitems {
-  height: 240px;
   max-height: 240px;
+  margin-top: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .search-bar input {
+    width: 179px;
+  }
+
+  .checkitems {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    max-height: 65%;
+    margin-top: 0;
+  }
 }

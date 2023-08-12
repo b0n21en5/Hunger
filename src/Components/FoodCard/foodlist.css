@@ -35,4 +35,12 @@
   .foodList {
     padding: 15px;
   }
+
+  .foodList .card {
+    width: 378px;
+  }
+
+  .cuisine-modal-overlay {
+    display: none;
+  }
 }

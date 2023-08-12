@@ -1,13 +1,14 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import "./productdetails.css";
+import NavBar from "../../Components/NavBar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
-import logo from "../../assets/logo.webp";
 import { recommendedFoods } from "../../../data/recommended";
 import { useFilterContext } from "../../contexts/useFilterContext";
 import { resturants } from "../../../data/resturants";
+
+import "./productdetails.css";
 
 const ProductDetails = ({ pathname }) => {
   const [selectedFood, setSelectedFood] = useState({});
@@ -32,12 +33,8 @@ const ProductDetails = ({ pathname }) => {
 
   return (
     <>
-      <div className="nav">
-        <Link to="/">
-          <img width="126" height="27" src={logo} alt="logo" />
-        </Link>
-      </div>
-      <div style={{ padding: "0 82px" }}>
+      <NavBar />
+      <div className="prod-detail">
         <div className="mt-4">
           <div className="grid-container">
             <div className="grid-item">
@@ -66,7 +63,7 @@ const ProductDetails = ({ pathname }) => {
             </div>
           </div>
 
-          <div className="foodDetails">
+          <div className="prodDetails-body">
             <h1 className="pd-title d-flex justify-content-between">
               {selectedFood.title}
               <div className="btn btn-success">
