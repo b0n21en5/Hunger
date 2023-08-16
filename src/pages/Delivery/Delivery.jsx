@@ -6,6 +6,7 @@ import DataNotAvailable from "../../Components/DataNotAvailable";
 import { useFilterContext } from "../../contexts/useFilterContext";
 import { Link } from "react-router-dom";
 import "./delivery.css";
+import axios from "axios";
 
 const Delivery = () => {
   const [foodsData, setFoodsData] = useState([]);
@@ -15,10 +16,23 @@ const Delivery = () => {
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
   const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
 
+  // Get all foods data
+  const getAllFoods = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/foods/get-all-foods"
+      );
+
+      setFoodsData(data);
+      dispatch({ type: "SET_FETCHED_DATA", payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Set Foods Data on initial render
   useEffect(() => {
-    setFoodsData(foods);
-    dispatch({ type: "SET_FETCHED_DATA", payload: foods });
+    getAllFoods();
   }, []);
 
   // Applying filter on navigating back to the page

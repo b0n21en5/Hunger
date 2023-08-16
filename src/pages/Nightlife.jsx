@@ -11,6 +11,7 @@ import DataNotAvailable from "../Components/DataNotAvailable";
 import FoodList from "../Components/FoodCard/FoodList";
 
 import "./Resturants/resturants.css";
+import axios from "axios";
 
 const Nightlife = () => {
   const [resturantsData, setResturantsData] = useState([]);
@@ -19,10 +20,22 @@ const Nightlife = () => {
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
   const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
 
+  // Fetch All Restaurants from Database
+  const getAllRestaurants = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/restaurants/get-all-restaurants"
+      );
+      setResturantsData(data);
+      dispatch({ type: "SET_FETCHED_DATA", payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Set Resturantss Data on initial render
   useEffect(() => {
-    setResturantsData(resturants);
-    dispatch({ type: "SET_FETCHED_DATA", payload: resturants });
+    getAllRestaurants();
   }, []);
 
   // Applying filter on navigating back to the page
@@ -74,7 +87,7 @@ const Nightlife = () => {
               Explore curated lists of top restaurants, cafes, pubs, and bars
               based on trends
             </div>
-            <div className="dine-coll-cards">
+            <div className="dine-coll-cards" id="ntlf-coll-cards">
               <Link to={"/collections/lit-party-place"}>
                 <CollCard imgSrc={col5} title="Lit Party Place" places="21" />
               </Link>

@@ -5,30 +5,32 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
 import { recommendedFoods } from "../../../data/recommended";
-import { useFilterContext } from "../../contexts/useFilterContext";
-import { resturants } from "../../../data/resturants";
 
 import "./productdetails.css";
+import axios from "axios";
 
 const ProductDetails = ({ pathname }) => {
   const [selectedFood, setSelectedFood] = useState({});
 
-  const { state } = useFilterContext();
-  const { fetchedData } = state;
-  console.log(fetchedData);
-
   const { slug } = useParams();
 
-  useEffect(() => {
+  // Get Single product from db
+  const getSingleProduct = async () => {
+    let url = "http://localhost:4000/api/foods/get-single-food";
     if (pathname === "resturants") {
-      resturants.forEach((res) => {
-        if (res.slug === slug) return setSelectedFood(res);
-      });
-    } else {
-      fetchedData.forEach((fd) => {
-        if (fd.slug === slug) return setSelectedFood(fd);
-      });
+      url = "http://localhost:4000/api/restaurants/get-single-restaurant";
     }
+
+    try {
+      const { data } = await axios.get(`${url}/${slug}`);
+      setSelectedFood(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSingleProduct();
   }, []);
 
   return (

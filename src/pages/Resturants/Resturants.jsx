@@ -10,6 +10,7 @@ import { collections } from "../../../data/collections";
 import CollCard from "../../Components/Collections/CollCard";
 
 import "./resturants.css";
+import axios from "axios";
 
 const Resturants = () => {
   const [resturantsData, setResturantsData] = useState([]);
@@ -18,10 +19,22 @@ const Resturants = () => {
   const { state, dispatch, onApplyCheckedFilter } = useFilterContext();
   const { fetchedData, filterApplied, checked, dataNotAvailable } = state;
 
+  // Fetch All Restaurants from Database
+  const getAllRestaurants = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/restaurants/get-all-restaurants"
+      );
+      setResturantsData(data);
+      dispatch({ type: "SET_FETCHED_DATA", payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Set Resturantss Data on initial render
   useEffect(() => {
-    setResturantsData(resturants);
-    dispatch({ type: "SET_FETCHED_DATA", payload: resturants });
+    getAllRestaurants();
   }, []);
 
   // Applying filter on navigating back to the page

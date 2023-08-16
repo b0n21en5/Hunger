@@ -24,6 +24,11 @@
   justify-content: space-between;
 }
 
+.dine-cnt #ntlf-coll-cards {
+  justify-content: flex-start;
+  gap: 20px;
+}
+
 /* Mobile Responsiveness */
 
 @media screen and (max-width: 412px) {
@@ -70,5 +75,9 @@
     width: 200px;
     height: 240px;
     padding: 10px 5px;
+  }
+
+  .dine-cnt #ntlf-coll-cards {
+    gap: 10px;
   }
 }
