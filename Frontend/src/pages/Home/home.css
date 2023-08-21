@@ -1,0 +1,268 @@
+.home .banner img {
+  object-fit: cover;
+}
+
+.home .banner .user-auth {
+  font-size: 18px;
+  position: absolute;
+  right: 80px;
+  top: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.home .banner .user-auth .mb-user-login {
+  display: none;
+}
+
+.home .banner .user-auth a {
+  display: inline;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 8px;
+  /* margin-right: 20px; */
+}
+
+.user-info {
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.user-auth .user-info .mb-user-img {
+  display: none;
+}
+
+.user-auth .user-info .user-det {
+  display: inline-block;
+}
+
+.home .banner .contents-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+
+  position: absolute;
+  top: 100px;
+  left: 345px;
+}
+
+.home .banner .contents-wrapper .search-bar {
+  color: rgba(167, 167, 167, 0.628);
+  background-color: white;
+  max-width: 565px;
+  width: 565px;
+  height: 50px;
+  padding: 15px;
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home .banner .contents-wrapper .search-bar input {
+  width: 500px;
+  height: 50px;
+  border: none;
+}
+
+.home .banner .contents-wrapper .search-bar input:focus {
+  outline: none;
+}
+
+.home-main-cnt {
+  padding: 40px 82px;
+}
+
+.cards-cnt {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 80px;
+}
+
+.cards-cnt .card {
+  border: none;
+  border-radius: 12px;
+  width: 353px;
+}
+
+.cards-cnt .card:hover {
+  transform: scale(1.05);
+}
+
+.card-img-top {
+  border-radius: 12px 12px 0 0;
+  object-fit: cover;
+}
+
+.card-body {
+  border: 0.3px solid rgba(189, 189, 189, 0.498);
+  border-radius: 0 0 12px 12px;
+}
+
+.card-body p {
+  padding: 0;
+  margin: 0;
+}
+
+#card-title {
+  text-align: left;
+  font-weight: 500;
+  font-size: 1.4rem;
+  line-height: 32px;
+  margin: 0px;
+  color: rgb(54, 54, 54);
+}
+
+#card-text {
+  font-size: 1rem;
+}
+
+.collections {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.col-title {
+  font-size: 36px;
+  font-weight: 500;
+  margin-top: 2rem;
+}
+
+.col-text {
+  color: #363636;
+  font-size: 18px;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+/* Mobile Responsiveness */
+
+@media screen and (max-width: 412px) {
+  .home .banner .user-auth {
+    top: 5px;
+    right: 5px;
+  }
+
+  .home .banner .user-auth .mb-user-login {
+    display: inline-block;
+    color: rgb(249, 86, 86);
+    height: 18px;
+    width: 18px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 50%;
+    border: 1px solid white;
+  }
+
+  .home .banner .user-auth a {
+    display: none;
+  }
+
+  .user-auth .user-info .mb-user-img {
+    display: block;
+    height: 30px;
+  }
+
+  .user-auth .user-info .user-det {
+    display: none;
+  }
+
+  .home .banner .contents-wrapper {
+    top: 174px;
+    left: 10px;
+  }
+
+  .home .banner .contents-wrapper img {
+    width: 160px;
+    height: 30px;
+  }
+
+  .home .banner .contents-wrapper h1 {
+    font-size: 22px;
+  }
+
+  .home .banner .contents-wrapper .search-bar {
+    width: 388px;
+    height: 50px;
+  }
+
+  .home .banner .contents-wrapper .search-bar input {
+    width: 100%;
+    border: none;
+  }
+
+  .hm-inp {
+    display: none;
+  }
+
+  .home-main-cnt {
+    padding: 15px 24px;
+  }
+
+  .banner img {
+    height: 420px;
+  }
+
+  .cards-cnt {
+    display: grid;
+    grid-template-columns: repeat(2, 180px);
+    gap: 15px;
+  }
+
+  .cards-cnt .card {
+    width: 100%;
+  }
+
+  .home .card img {
+    width: 172px;
+    height: 100px;
+  }
+
+  .card-body {
+    padding: 10px;
+    width: 172px;
+  }
+
+  .home .card-body #card-title {
+    line-height: 14px;
+    font-size: 14px;
+  }
+
+  .home .card-body #card-text {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 14px;
+  }
+
+  .col-title {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .col-text {
+    font-size: 12px;
+  }
+
+  .collections {
+    display: grid;
+    grid-template-columns: repeat(2, 180px);
+    gap: 10px;
+  }
+
+  .collections .card {
+    width: 177px;
+  }
+
+  .collections .card img {
+    width: 177px;
+    height: 177px;
+  }
+}

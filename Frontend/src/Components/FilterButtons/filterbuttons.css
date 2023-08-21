@@ -1,0 +1,46 @@
+.filter-buttons-cnt {
+  position: sticky;
+  top: 0;
+  padding: 0 82px;
+  background: white;
+  border-bottom: 0.2px solid rgba(207, 207, 207, 0.486);
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 26px 0;
+}
+
+.filter-buttons-cnt button {
+  border: 1px solid rgb(207, 207, 207);
+  color: rgb(156, 156, 156);
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(54, 54, 54, 0.06) 0px 1px 2px;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  height: 100%;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.filter-buttons-cnt .btn-dngr {
+  color: white;
+  background-color: #ef4f5f;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .filter-buttons-cnt {
+    padding: 0 20px;
+  }
+
+  .filter-buttons-cnt button {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+}

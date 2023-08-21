@@ -1,0 +1,36 @@
+.profile-main {
+  padding: 0 80px;
+}
+
+.profile-main .profile-ovr {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 35px 15px 25px;
+  height: 220px;
+  width: 100%;
+  background: url("../../assets/profile-bg.jpg") no-repeat #000;
+  background-size: cover;
+}
+
+.profile-main .profile-ovr .profile-user {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .profile-main {
+    padding: 0;
+  }
+  .profile-main .profile-ovr {
+    height: 412px;
+    flex-direction: column;
+  }
+
+  .profile-main .profile-ovr img {
+    width: 112px;
+    height: 112px;
+  }
+}

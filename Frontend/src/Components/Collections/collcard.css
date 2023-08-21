@@ -1,0 +1,36 @@
+.card {
+  border: none;
+}
+
+.card .card-img {
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card .card-img-overlay .card-title {
+  color: white;
+  font-size: medium;
+}
+
+.card .card-img-overlay .card-text {
+  color: white;
+  font-size: small;
+}
+
+.w-260 {
+  width: 260px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 412px) {
+  .card .card-img-overlay .card-title {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .w-260 {
+    width: 100%;
+  }
+}
