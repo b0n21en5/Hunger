@@ -31,18 +31,20 @@ export const addNewRestaurant = async (req, res) => {
   ]);
   return res
     .status(200)
-    .send({ message: `Rows Affected ${newRestaurant.affectedRows}` });
+    .send({ message: `${title} Added ${newRestaurant.affectedRows}` });
 };
 
-export const getRestaurantsByType = async (req, res) => {
-  const { checkedFilter, sort, slug, limit } = req.query;
-  const page = req.query.page || 1;
-
-  const offset = (page - 1) * limit;
+export const getRestaurantsController = async (req, res) => {
+  const { checkedFilter, sort, slug, limit, page } = req.query;
 
   let getQry = `SELECT * FROM restaurants`;
+  let countDataQry = `SELECT COUNT(*) as count FROM restaurants`;
 
-  if (!checkedFilter?.length && !slug) {
+  if (page && !checkedFilter?.length && !slug) {
+    let offset = (page - 1) * 9;
+    if (limit) {
+      offset = (page - 1) * limit;
+    }
     getQry += ` LIMIT ${limit} OFFSET ${offset}`;
   }
 
@@ -53,9 +55,11 @@ export const getRestaurantsByType = async (req, res) => {
   if (checkedFilter) {
     const checked = checkedFilter.split(",");
     const likeClauses = checked
-      .map((type) => ` type LIKE '%${type}%'`)
+      .map((type) => ` type LIKE "%${type}%"`)
       .join(" OR ");
+    console.log(likeClauses);
     getQry += ` WHERE (${likeClauses})`;
+    countDataQry += ` WHERE (${likeClauses})`;
   }
 
   if (sort) {
@@ -63,8 +67,14 @@ export const getRestaurantsByType = async (req, res) => {
   }
 
   try {
-    const filteredRestaurants = await queryPromise(getQry);
-    return res.status(200).send(filteredRestaurants);
+    const restaurantsData = await queryPromise(getQry);
+    let count = null;
+
+    if (!slug) {
+      const result = await queryPromise(countDataQry);
+      count = result[0].count;
+    }
+    return res.status(200).send({ data: restaurantsData, count: count });
   } catch (error) {
     res.status(500).send("Internal Server Error!");
   }

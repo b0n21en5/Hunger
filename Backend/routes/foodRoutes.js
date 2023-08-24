@@ -1,5 +1,8 @@
 import express from "express";
-import { addNewFood, getFoodsByType } from "../controller/foodsController.js";
+import {
+  addNewFood,
+  getFoodsController,
+} from "../controller/foodsController.js";
 
 const router = express.Router();
 
@@ -7,6 +10,6 @@ const router = express.Router();
 router.post("/add-new-food", addNewFood);
 
 // Get filtered foods route by query
-router.get("", getFoodsByType);
+router.get("", getFoodsController);
 
 export default router;

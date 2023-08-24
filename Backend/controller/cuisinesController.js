@@ -3,6 +3,13 @@ import { queryPromise } from "./../helper/queryPromise.js";
 export const addNewCuisine = async (req, res) => {
   const { name, imgSrc, rating } = req.body;
 
+  if (!name) {
+    return res.status(500).send("Cuisine name required!");
+  }
+  if (!rating) {
+    return res.status(500).send("Cuisine rating required!");
+  }
+
   // Check if existing cuisine
   const existQury = `SELECT * FROM cuisines WHERE name="${name}"`;
 
@@ -27,15 +34,15 @@ export const getAllCuisines = async (req, res) => {
   let getCuisinesQry = `SELECT * FROM cuisines `;
   let countQuery = `SELECT COUNT(*) as count FROM cuisines`;
 
-  const { page, rating } = req.query;
+  let { page, rating, limit } = req.query;
 
   if (rating) {
-    getCuisinesQry += ` WHERE rating >= ${rating}`;
-    countQuery += ` WHERE rating >= ${rating}`;
+    getCuisinesQry += ` WHERE rating > ${rating - 0.1}`;
+    countQuery += ` WHERE rating > ${rating - 0.1}`;
   }
 
   if (page) {
-    const limit = 6;
+    if (!limit) limit = 6;
     const offset = page - 1;
     getCuisinesQry += ` LIMIT ${limit} OFFSET ${offset}`;
   }
@@ -47,8 +54,8 @@ export const getAllCuisines = async (req, res) => {
     let count = null;
 
     if (rating) {
-      result = await queryPromise(countQuery);
-      count = result[0].count;
+      let countResult = await queryPromise(countQuery);
+      count = countResult[0].count;
     }
 
     return res.status(200).send({ cuisines: result, count: count });

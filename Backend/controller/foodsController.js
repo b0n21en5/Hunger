@@ -2,7 +2,7 @@ import slugify from "slugify";
 import { queryPromise } from "../helper/queryPromise.js";
 
 export const addNewFood = async (req, res) => {
-  const { title, rating, price, type, imgSrc } = req.body;
+  const { title, rating, price, type, imgSrc, category } = req.body;
   const slug = slugify(title);
 
   if (!title) return res.status(500).send({ message: "Name is required" });
@@ -11,7 +11,7 @@ export const addNewFood = async (req, res) => {
   if (!type) return res.status(500).send({ message: "Food Type is required" });
 
   // checking if food already added
-  const qry = "SELECT * FROM foodsdata WHERE title= ?";
+  const qry = "SELECT * FROM foods WHERE title= ?";
   const existingFood = await queryPromise(qry, [title]);
 
   if (existingFood.length > 0) {
@@ -20,7 +20,7 @@ export const addNewFood = async (req, res) => {
 
   // Adding new food
   const newFoodQry =
-    "INSERT INTO foodsdata (title,slug,type,price,rating,imgSrc) VALUES ( ?, ?, ?, ?, ?, ? )";
+    "INSERT INTO foods (title,slug,type,price,rating,imgSrc,category) VALUES ( ?, ?, ?, ?, ?, ?, ? )";
   const newFood = await queryPromise(newFoodQry, [
     title,
     slug,
@@ -28,22 +28,25 @@ export const addNewFood = async (req, res) => {
     price,
     rating,
     imgSrc,
+    category,
   ]);
   return res.status(200).send({
-    message: `Rows Affected ${newFood.affectedRows}`,
+    message: `${title} Added ${newFood.affectedRows}`,
   });
 };
 
-export const getFoodsByType = async (req, res) => {
-  const { checkedFilter, sort, slug, limit } = req.query;
-  const page = req.query.page || 1;
-
-  const offset = (page - 1) * limit;
+export const getFoodsController = async (req, res) => {
+  const { checkedFilter, sort, slug, limit, page } = req.query;
 
   // Query to get all foods
-  let getQry = `SELECT * FROM foodsdata`;
+  let getQry = `SELECT * FROM foods`;
+  let countDataQry = `SELECT COUNT(*) as count FROM foods`;
 
-  if (!checkedFilter?.length && !slug) {
+  if (page && !checkedFilter?.length && !slug) {
+    let offset = (page - 1) * 9;
+    if (limit) {
+      offset = (page - 1) * limit;
+    }
     getQry += ` LIMIT ${limit} OFFSET ${offset}`;
   }
 
@@ -54,9 +57,11 @@ export const getFoodsByType = async (req, res) => {
   if (checkedFilter) {
     const checked = checkedFilter.split(",");
     const likeClauses = checked
-      .map((type) => ` type LIKE '%${type}%'`)
+      .map((type) => ` type LIKE "%${type}%"`)
       .join(" OR ");
+    console.log("foods", likeClauses);
     getQry += ` WHERE (${likeClauses})`;
+    countDataQry += ` WHERE (${likeClauses})`;
   }
 
   if (sort) {
@@ -64,8 +69,14 @@ export const getFoodsByType = async (req, res) => {
   }
 
   try {
-    const filteredFoods = await queryPromise(getQry);
-    return res.status(200).send(filteredFoods);
+    const foodsData = await queryPromise(getQry);
+    let count = null;
+
+    if (!slug) {
+      const result = await queryPromise(countDataQry);
+      count = result[0].count;
+    }
+    return res.status(200).send({ data: foodsData, count: count });
   } catch (error) {
     return res.status(500).send("Internal Server Error!");
   }

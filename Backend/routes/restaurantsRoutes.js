@@ -1,7 +1,7 @@
 import express from "express";
 import {
   addNewRestaurant,
-  getRestaurantsByType,
+  getRestaurantsController,
 } from "../controller/restaurantsController.js";
 
 const router = express.Router();
@@ -10,6 +10,6 @@ const router = express.Router();
 router.post("/add-new-restaurant", addNewRestaurant);
 
 // Get filtered restaurants by type
-router.get("", getRestaurantsByType);
+router.get("", getRestaurantsController);
 
 export default router;
