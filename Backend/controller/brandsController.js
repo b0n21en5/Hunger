@@ -15,12 +15,12 @@ export const addNewBrand = async (req, res) => {
   }
 
   // Check if existing cuisine
-  const existQury = `SELECT * FROM brands WHERE name="${name}"`;
+  const existQury = `SELECT * FROM brands WHERE name=?`;
 
   const newBrandQry = `INSERT INTO brands (name,slug,imgSrc,rating,delivery) VALUES (?,?,?,?,?)`;
 
   try {
-    const existingBrand = await queryPromise(existQury);
+    const existingBrand = await queryPromise(existQury, [name]);
     if (existingBrand.length) {
       return res.status(404).send("Brand is already added! Try adding New");
     }

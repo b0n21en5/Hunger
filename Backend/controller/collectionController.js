@@ -12,9 +12,9 @@ export const addNewCollection = async (req, res) => {
   }
 
   // Check if already added
-  const existCollQry = `SELECT * FROM collections WHERE title= '${title}'`;
+  const existCollQry = `SELECT * FROM collections WHERE title= ?`;
   try {
-    const existingColl = await queryPromise(existCollQry);
+    const existingColl = await queryPromise(existCollQry, [title]);
     if (existingColl.length) {
       return res.status(200).send("Collection is already added");
     }
@@ -44,7 +44,7 @@ export const getCollection = async (req, res) => {
 
   const slug = req.query.slug;
   if (slug) {
-    getQry += ` WHERE slug= '${slug}'`;
+    getQry += ` WHERE slug= ?`;
   }
 
   try {

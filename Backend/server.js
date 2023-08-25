@@ -1,5 +1,5 @@
 import express from "express";
-import { connectDB } from "./helper/connectDB.js";
+import { pool } from "./helper/connectDB.js";
 import cors from "cors";
 import compression from "compression";
 import dotenv from "dotenv";
@@ -22,9 +22,16 @@ const app = express();
 const __pathname = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__pathname);
 
-connectDB.connect((error) => {
+pool.getConnection((error, connection) => {
   if (error) console.log(error);
   else console.log("Database Connected!");
+
+  // release the connection back to the pool after connection setup
+  if (connection) connection.release();
+});
+
+pool.on("disconnected", () => {
+  console.log("disconnected");
 });
 
 // Middlewares
