@@ -75,7 +75,7 @@
   }
 
   .nav .nav-left .search-bar {
-    width: 220px;
+    width: 200px;
   }
 
   .nav .nav-left .search-bar input {
@@ -87,7 +87,7 @@
   }
 }
 
-@media screen and (max-width: 390px) {
+@media screen and (max-width: 396px) {
   .nav .nav-left .search-bar {
     width: 180px;
   }
