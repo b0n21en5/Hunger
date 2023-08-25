@@ -5,7 +5,7 @@ export const searchData = async (req, res) => {
 
   if (searchTerm) {
     try {
-      const foodsQuery = `SELECT * FROM foodsdata WHERE title LIKE '%${searchTerm}%' OR type LIKE '%${searchTerm}%'`;
+      const foodsQuery = `SELECT * FROM foods WHERE title LIKE '%${searchTerm}%' OR type LIKE '%${searchTerm}%'`;
       const restaurantsQuery = `SELECT * FROM restaurants WHERE title LIKE '%${searchTerm}%' OR type LIKE '%${searchTerm}%'`;
 
       const foodsData = await queryPromise(foodsQuery);
@@ -13,11 +13,11 @@ export const searchData = async (req, res) => {
 
       const searchedResults = [...foodsData, ...restaurantsData];
 
-      res.status(200).send(searchedResults);
+      return res.status(200).send(searchedResults);
     } catch (error) {
-      res.status(500).send("Internal Server Error!");
+      return res.status(500).send("Internal Server Error!");
     }
   } else {
-    res.status(200).send([]);
+    return res.status(200).send([]);
   }
 };

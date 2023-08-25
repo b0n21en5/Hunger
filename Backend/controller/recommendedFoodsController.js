@@ -13,8 +13,14 @@ export const addRecommendedFoods = async (req, res) => {
   }
 
   try {
+    const existQry = `SELECT * FROM recommendedFoods WHERE title=?`;
+    const existingFood = await queryPromise(existQry, [title]);
+    if (existingFood?.length) {
+      return res.status(404).send("Already Added! Try Something else");
+    }
+
     const newQry =
-      "INSERT INTO recommendedfoods (title,price,type,description,imgSrc) VALUES (?,?,?,?,?)";
+      "INSERT INTO recommendedFoods (title,price,type,description,imgSrc) VALUES (?,?,?,?,?)";
     const result = await queryPromise(newQry, [
       title,
       price,
@@ -29,7 +35,7 @@ export const addRecommendedFoods = async (req, res) => {
 };
 
 export const getRecommendedFoods = async (req, res) => {
-  let getQry = "SELECT * FROM recommendedfoods";
+  let getQry = "SELECT * FROM recommendedFoods";
   const { search } = req.query;
   if (search) {
     getQry += ` WHERE title LIKE "%${search}%"`;
@@ -43,7 +49,7 @@ export const getRecommendedFoods = async (req, res) => {
 };
 
 export const getAllTypes = async (req, res) => {
-  let getTypesQry = "SELECT type, Count(*) as count FROM recommendedfoods";
+  let getTypesQry = "SELECT type, Count(*) as count FROM recommendedFoods";
 
   const { search } = req.query;
   if (search) {

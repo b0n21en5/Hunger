@@ -2,37 +2,39 @@ import slugify from "slugify";
 import { queryPromise } from "../helper/queryPromise.js";
 
 export const addNewFood = async (req, res) => {
-  const { title, rating, price, type, imgSrc, category } = req.body;
+  const { title, rating, price, type, imgSrc } = req.body;
   const slug = slugify(title);
 
-  if (!title) return res.status(500).send({ message: "Name is required" });
-  if (!rating) return res.status(500).send({ message: "Rating is required" });
-  if (!price) return res.status(500).send({ message: "Price is required" });
-  if (!type) return res.status(500).send({ message: "Food Type is required" });
+  if (!title) return res.status(500).send("Name is required");
+  if (!rating) return res.status(500).send("Rating is required");
+  if (!price) return res.status(500).send("Price is required");
+  if (!type) return res.status(500).send("Food Type is required");
+  if (!imgSrc) return res.status(500).send("imgSrc required");
 
   // checking if food already added
   const qry = "SELECT * FROM foods WHERE title= ?";
   const existingFood = await queryPromise(qry, [title]);
 
   if (existingFood.length > 0) {
-    return res.status(404).send({ message: "Food is already added" });
+    return res.status(404).send("Food is already added");
   }
 
   // Adding new food
-  const newFoodQry =
-    "INSERT INTO foods (title,slug,type,price,rating,imgSrc,category) VALUES ( ?, ?, ?, ?, ?, ?, ? )";
-  const newFood = await queryPromise(newFoodQry, [
-    title,
-    slug,
-    type,
-    price,
-    rating,
-    imgSrc,
-    category,
-  ]);
-  return res.status(200).send({
-    message: `${title} Added ${newFood.affectedRows}`,
-  });
+  try {
+    const newFoodQry =
+      "INSERT INTO foods (title,slug,type,price,rating,imgSrc) VALUES ( ?, ?, ?, ?, ?, ? )";
+    const newFood = await queryPromise(newFoodQry, [
+      title,
+      slug,
+      type,
+      price,
+      rating,
+      imgSrc,
+    ]);
+    return res.status(200).send(`${title} Added ${newFood.affectedRows}`);
+  } catch (error) {
+    return res.status(500).send("Internal server error!");
+  }
 };
 
 export const getFoodsController = async (req, res) => {
@@ -59,7 +61,6 @@ export const getFoodsController = async (req, res) => {
     const likeClauses = checked
       .map((type) => ` type LIKE "%${type}%"`)
       .join(" OR ");
-    console.log("foods", likeClauses);
     getQry += ` WHERE (${likeClauses})`;
     countDataQry += ` WHERE (${likeClauses})`;
   }
@@ -79,5 +80,60 @@ export const getFoodsController = async (req, res) => {
     return res.status(200).send({ data: foodsData, count: count });
   } catch (error) {
     return res.status(500).send("Internal Server Error!");
+  }
+};
+
+export const updateFood = async (req, res) => {
+  const { id } = req.params;
+
+  if (id) {
+    const { title, type, price, rating, imgSrc } = req.body;
+
+    if (!title) {
+      return res.status(404).send("Title required");
+    }
+    if (!type) {
+      return res.status(404).send("type required");
+    }
+    if (!price) {
+      return res.status(404).send("price required");
+    }
+    if (!rating) {
+      return res.status(404).send("rating required");
+    }
+    if (!imgSrc) {
+      return res.status(404).send("image source required");
+    }
+
+    const slug = slugify(title);
+    const updateQry = `UPDATE foods SET title=?, slug=?, type=?, price=?, rating=?, imgSrc=? WHERE id=?`;
+
+    try {
+      const updateResult = await queryPromise(updateQry, [
+        title,
+        slug,
+        type,
+        price,
+        rating,
+        imgSrc,
+        id,
+      ]);
+      return res.status(200).send(updateResult.message);
+    } catch (error) {
+      return res.status(500).send("Internal server error!");
+    }
+  }
+};
+
+export const deleteFood = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    const deleteQry = `DELETE FROM foods WHERE id=?`;
+    try {
+      const delResult = await queryPromise(deleteQry, [id]);
+      return res.status(200).send(`DELETED ${delResult.affectedRows}`);
+    } catch (error) {
+      return res.status(500).send("Internal server error!");
+    }
   }
 };

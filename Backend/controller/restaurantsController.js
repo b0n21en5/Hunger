@@ -3,35 +3,37 @@ import { queryPromise } from "../helper/queryPromise.js";
 
 export const addNewRestaurant = async (req, res) => {
   const { title, type, price, rating, imgSrc, location, distance } = req.body;
-  if (!title) res.status(404).send({ message: "Title is Required" });
-  if (!type) res.status(404).send({ message: "Type is Required" });
-  if (!price) res.status(404).send({ message: "Price is Required" });
-  if (!location) res.status(404).send({ message: "Location is Required" });
-  if (!distance) res.status(404).send({ message: "Distance is Required" });
+  if (!title) res.status(404).send("Title is Required");
+  if (!type) res.status(404).send("Type is Required");
+  if (!price) res.status(404).send("Price is Required");
+  if (!location) res.status(404).send("Location is Required");
+  if (!distance) res.status(404).send("Distance is Required");
 
   const existQry = "SELECT * FROM restaurants WHERE title= ?";
   const existingRestaurant = await queryPromise(existQry, [title]);
 
   if (existingRestaurant.length > 0) {
-    return res.status(404).send({ message: "Restaurant is Already added" });
+    return res.status(404).send("Restaurant is Already added");
   }
 
   const slug = slugify(title);
   const newAddQry =
     "INSERT INTO restaurants (title,slug,type,price,rating,imgSrc,location,distance) VALUES (?,?,?,?,?,?,?,?)";
-  const newRestaurant = await queryPromise(newAddQry, [
-    title,
-    slug,
-    type,
-    price,
-    rating,
-    imgSrc,
-    location,
-    distance,
-  ]);
-  return res
-    .status(200)
-    .send({ message: `${title} Added ${newRestaurant.affectedRows}` });
+  try {
+    const newRestaurant = await queryPromise(newAddQry, [
+      title,
+      slug,
+      type,
+      price,
+      rating,
+      imgSrc,
+      location,
+      distance,
+    ]);
+    return res.status(200).send(`${title} Added ${newRestaurant.affectedRows}`);
+  } catch (error) {
+    return res.status(500).send("Internal server error!");
+  }
 };
 
 export const getRestaurantsController = async (req, res) => {
@@ -57,7 +59,6 @@ export const getRestaurantsController = async (req, res) => {
     const likeClauses = checked
       .map((type) => ` type LIKE "%${type}%"`)
       .join(" OR ");
-    console.log(likeClauses);
     getQry += ` WHERE (${likeClauses})`;
     countDataQry += ` WHERE (${likeClauses})`;
   }
@@ -77,5 +78,68 @@ export const getRestaurantsController = async (req, res) => {
     return res.status(200).send({ data: restaurantsData, count: count });
   } catch (error) {
     res.status(500).send("Internal Server Error!");
+  }
+};
+
+export const updateRestaurants = async (req, res) => {
+  const { id } = req.params;
+
+  if (id) {
+    const { title, type, price, rating, imgSrc, location, distance } = req.body;
+
+    if (!title) {
+      return res.status(404).send("Title required");
+    }
+    if (!type) {
+      return res.status(404).send("type required");
+    }
+    if (!price) {
+      return res.status(404).send("price required");
+    }
+    if (!rating) {
+      return res.status(404).send("rating required");
+    }
+    if (!imgSrc) {
+      return res.status(404).send("image source required");
+    }
+    if (!location) {
+      return res.status(404).send("location required");
+    }
+    if (!distance) {
+      return res.status(404).send("distance required");
+    }
+
+    const slug = slugify(title);
+    const updateQry = `UPDATE restaurants SET title=?, slug=?, type=?, price=?, rating=?, imgSrc=?, location=?, distance=? WHERE id=?`;
+
+    try {
+      const updateResult = await queryPromise(updateQry, [
+        title,
+        slug,
+        type,
+        price,
+        rating,
+        imgSrc,
+        location,
+        distance,
+        id,
+      ]);
+      return res.status(200).send(updateResult.message);
+    } catch (error) {
+      return res.status(500).send("Internal server error!");
+    }
+  }
+};
+
+export const deleteRestaurants = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    const deleteQry = `DELETE FROM restaurants WHERE id=?`;
+    try {
+      const delResult = await queryPromise(deleteQry, [id]);
+      return res.status(200).send(`DELETED ${delResult.affectedRows}`);
+    } catch (error) {
+      return res.status(500).send("Internal server error!");
+    }
   }
 };

@@ -52,7 +52,6 @@ export const loginController = async (req, res) => {
     return res.status(404).send("User not registered!");
   }
 
-  //   return res.status(200).send(registeredUser);
   // Check Password with hashed Password
   const matchPass = await bcrypt.compare(password, user[0].password);
   if (!matchPass) {
@@ -82,7 +81,9 @@ export const resetPasswordController = async (req, res) => {
       hashedPassword,
       email,
     ]);
-    return res.status(200).send(`Password Reset Successfull: ${changedRows}`);
+    return res
+      .status(200)
+      .send({ message: `Password Reset Successfull: ${changedRows}` });
   } catch (error) {
     return res.status(501).send("Internal server error!");
   }
