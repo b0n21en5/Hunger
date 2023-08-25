@@ -22,7 +22,7 @@ import axios from "axios";
 import UserModal from "../../Components/UserModal/UserModal";
 import Reset from "../../Components/Auth/Reset";
 import toast, { Toaster } from "react-hot-toast";
-
+import Footer from "../../Components/Layout/Footer";
 import "./home.css";
 
 const Home = () => {
@@ -217,6 +217,7 @@ const Home = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

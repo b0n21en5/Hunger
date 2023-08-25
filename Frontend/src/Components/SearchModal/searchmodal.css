@@ -59,7 +59,7 @@
 }
 
 /* Mobile Responsiveness */
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 440px) {
   .search-modal-overlay {
     overflow-x: hidden;
     background-color: rgba(0, 0, 0, 0.74);

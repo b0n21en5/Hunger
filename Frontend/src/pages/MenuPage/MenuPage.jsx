@@ -45,7 +45,7 @@ const MenuPage = () => {
   // Get all foods data
   const fetchDataDB = async () => {
     let limit = 3;
-    if (window.innerWidth > 420) {
+    if (window.innerWidth > 440) {
       limit = 9;
     }
     try {
@@ -84,7 +84,7 @@ const MenuPage = () => {
   // Set Cuisines data
   const getLimitedCuisines = async () => {
     let limit = 6;
-    if (window.innerWidth <= 420) {
+    if (window.innerWidth <= 440) {
       limit = 8;
     }
     try {
@@ -104,7 +104,7 @@ const MenuPage = () => {
   // Set Brands data
   const getLimitedBrands = async () => {
     let limit = 6;
-    if (window.innerWidth <= 420) {
+    if (window.innerWidth <= 440) {
       limit = 12;
     }
     try {

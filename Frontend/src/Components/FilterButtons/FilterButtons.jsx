@@ -18,7 +18,7 @@ const FilterButtons = ({ onFilterRemove }) => {
 
   // Handle cuisine button click
   const onCuisineBtnClick = () => {
-    if (window.innerWidth <= 412) {
+    if (window.innerWidth <= 440) {
       dispatch({ type: "SET_LOAD_CUISINES", payload: false });
       dispatch({ type: "SET_LOAD_FILTER", payload: true });
     } else {

@@ -106,7 +106,8 @@
   display: block;
 }
 
-@media screen and (max-width: 420px) {
+/* Mobile Responsiveness */
+@media screen and (max-width: 440px) {
   .cuisines {
     padding: 12px;
     background-color: white;

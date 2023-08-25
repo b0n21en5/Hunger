@@ -25,7 +25,7 @@
 }
 
 /* Mobile Responsiveness */
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 440px) {
   .search-bar input {
     width: 179px;
   }

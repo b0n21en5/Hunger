@@ -25,7 +25,7 @@
 }
 
 /* Mobile Responsiveness */
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 440px) {
   .no-data-cnt {
     margin: 0 15px;
   }

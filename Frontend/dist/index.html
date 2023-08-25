@@ -17,8 +17,8 @@
       content="hunger - online food ordering application"
     />
     <title>Hunger</title>
-    <script type="module" crossorigin src="/assets/index-8eecc5b8.js"></script>
-    <link rel="stylesheet" href="/assets/index-737beaae.css">
+    <script type="module" crossorigin src="/assets/index-b7eb906e.js"></script>
+    <link rel="stylesheet" href="/assets/index-c418da6a.css">
   </head>
   <body>
     <div id="root"></div>

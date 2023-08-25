@@ -1,7 +1,12 @@
 .similar-products-container {
-  /* overflow: auto; */
   display: flex;
   margin-bottom: 1.2rem;
+  height: max-content;
+  overflow-y: auto;
+}
+
+.similar-products-container::-webkit-scrollbar {
+  display: none;
 }
 
 .types-list {
@@ -10,7 +15,9 @@
   width: 20%;
   max-height: calc(100vh - 200px);
   border-right: 0.5px solid rgb(234, 233, 233);
-  overflow-y: auto;
+
+  position: sticky;
+  top: 0px;
 }
 
 .types-list .active {
@@ -28,7 +35,6 @@
   margin-top: 1rem;
   width: 80%;
   max-height: calc(100vh - 200px);
-  overflow-y: auto;
 }
 
 .recommended-foods-list .search-cnt {
@@ -77,7 +83,7 @@
 }
 
 /* Mobile Responsiveness */
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 440px) {
   .types-list {
     display: none;
   }
@@ -89,9 +95,5 @@
   .recommended-foods-list img {
     width: 85px;
     height: 85px;
-  }
-
-  .recommended-foods-list .pd-dt {
-    /* margin-top: 0; */
   }
 }

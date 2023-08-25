@@ -21,7 +21,6 @@
   text-decoration: none;
   border-radius: 6px;
   padding: 8px;
-  /* margin-right: 20px; */
 }
 
 .user-info {
@@ -143,7 +142,7 @@
 
 /* Mobile Responsiveness */
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 440px) {
   .home .banner .user-auth {
     top: 5px;
     right: 5px;
@@ -180,7 +179,7 @@
 
   .home .banner .contents-wrapper img {
     width: 160px;
-    height: 30px;
+    height: 40px;
   }
 
   .home .banner .contents-wrapper h1 {

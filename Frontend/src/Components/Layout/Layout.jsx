@@ -6,10 +6,10 @@ import diningActive from "../../assets/dn-active.avif";
 import nightlife from "../../assets/nightlife.webp";
 import nightlifeActive from "../../assets/nt-active.webp";
 import FilterButtons from "../FilterButtons/FilterButtons";
-import NavBar from "../NavBar/NavBar";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBagShopping, faShoePrints } from "@fortawesome/free-solid-svg-icons";
-
 import "./layout.css";
 
 const Layout = ({ children, pathname, onFilterRemove }) => {
@@ -89,6 +89,7 @@ const Layout = ({ children, pathname, onFilterRemove }) => {
         </>
       )}
       {children}
+      <Footer />
       {pathname && (
         <div className="bottom">
           <Link

@@ -29,7 +29,7 @@ const FoodList = ({ data, subHead, onApplyCheckedFilter, path }) => {
   };
 
   useEffect(() => {
-    if (window.innerWidth <= 412 && loadCuisines) {
+    if (window.innerWidth <= 440 && loadCuisines) {
       setShowFilter("cuisines");
       dispatch({ type: "SET_LOAD_FILTER", payload: true });
     }
