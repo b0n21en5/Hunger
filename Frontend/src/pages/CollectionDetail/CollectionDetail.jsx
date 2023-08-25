@@ -6,7 +6,6 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import CollCard from "../../Components/Collections/CollCard";
 import Layout from "../../Components/Layout/Layout";
-
 import "./collectiondetail.css";
 import { toast } from "react-hot-toast";
 

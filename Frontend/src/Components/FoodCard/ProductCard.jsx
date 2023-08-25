@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import "./foodcard.css";
+import "./productcard.css";
 
-const FoodCard = ({ product }) => {
+const ProductCard = ({ product }) => {
   return (
     <Link to={product.slug} className="link card product">
       <img
@@ -39,4 +39,4 @@ const FoodCard = ({ product }) => {
   );
 };
 
-export default FoodCard;
+export default ProductCard;

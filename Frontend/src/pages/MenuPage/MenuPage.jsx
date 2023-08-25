@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import FoodList from "../../Components/FoodCard/FoodList";
+import ProductList from "../../Components/FoodCard/ProductList";
 import Layout from "../../Components/Layout/Layout";
 import NoData from "../../Components/NoData/NoData";
 import { useFilterContext } from "../../contexts/useFilterContext";
@@ -10,7 +10,6 @@ import off from "../../assets/off.avif";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
-
 import "./menupage.css";
 
 const MenuPage = () => {
@@ -409,7 +408,7 @@ const MenuPage = () => {
           />
         </div>
       )}
-      <FoodList
+      <ProductList
         subHead="Order food online in Jai Singh Road"
         data={currPage.fetchedData}
         path={path}

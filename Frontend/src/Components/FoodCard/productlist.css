@@ -44,3 +44,9 @@
     display: none;
   }
 }
+
+@media screen and (max-width: 380px) {
+  .foodList .card {
+    width: 320px;
+  }
+}

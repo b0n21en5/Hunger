@@ -222,12 +222,28 @@
   }
 }
 
-@media screen and (max-width: 390px) {
+@media screen and (max-width: 405px) {
+  .dine-cnt img {
+    width: 95vw;
+  }
+
   .cui-cards {
     gap: 5px;
   }
 
   .cui-cards .cui-card-body {
     margin: 0;
+  }
+}
+
+@media screen and (max-width: 378px) {
+  .cuisines img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .brand-body img {
+    width: 78px;
+    height: 80px;
   }
 }

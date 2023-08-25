@@ -92,3 +92,9 @@
     width: 180px;
   }
 }
+
+@media screen and (max-width: 378px) {
+  .nav .nav-left .search-bar {
+    width: 150px;
+  }
+}

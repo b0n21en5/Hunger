@@ -1,4 +1,4 @@
-import FoodCard from "./FoodCard";
+import ProductCard from "./ProductCard";
 import FilterBox from "../FilterBox/FilterBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -7,9 +7,9 @@ import ReactDOM from "react-dom";
 import { useFilterContext } from "../../contexts/useFilterContext";
 import endResults from "../../assets/end-results.avif";
 import { useEffect, useState } from "react";
-import "./foodlist.css";
+import "./productlist.css";
 
-const FoodList = ({ data, subHead, onApplyCheckedFilter, path }) => {
+const ProductList = ({ data, subHead, onApplyCheckedFilter, path }) => {
   const [showFilter, setShowFilter] = useState("sort");
 
   const { state, dispatch } = useFilterContext();
@@ -90,7 +90,7 @@ const FoodList = ({ data, subHead, onApplyCheckedFilter, path }) => {
       <div className="flex flex-col" role="button">
         <div className="d-flex flex-col flex-wrap gap-4 mt-3">
           {data.map((product) => (
-            <FoodCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>
@@ -113,4 +113,4 @@ const FoodList = ({ data, subHead, onApplyCheckedFilter, path }) => {
   );
 };
 
-export default FoodList;
+export default ProductList;
