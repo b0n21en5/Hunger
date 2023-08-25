@@ -1,14 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { cuisinesOptions } from "../../../data/cuisines";
 import { Checkbox } from "antd";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 import "./cuisines.css";
 
 const Cuisines = ({ checked, dispatch }) => {
+  const [cuisinesOptions, setCuisinesOptions] = useState([]);
   const [searchCuisine, setSearchCuisine] = useState("");
 
   const inputRef = useRef(null);
+
+  // Fetch all cuisines from db
+  const getAllCuisines = async () => {
+    try {
+      const { data } = await axios.get(`/api/cuisines/get-all`);
+      setCuisinesOptions(data.cuisines);
+    } catch (error) {
+      toast.error("Error in Cuisines API");
+    }
+  };
 
   //   handle checked cuisines
   const handleCheckedCuisine = (value, name) => {
@@ -19,11 +31,10 @@ const Cuisines = ({ checked, dispatch }) => {
       allChecked = allChecked.filter((c) => c !== name);
     }
     dispatch({ type: "SET_CHECKED_FILTER", payload: allChecked });
-
-    // console.log(checked);
   };
 
   useEffect(() => {
+    getAllCuisines();
     inputRef.current.focus();
   }, []);
 
@@ -46,7 +57,7 @@ const Cuisines = ({ checked, dispatch }) => {
       </div>
       <div className="checkitems" style={{ overflow: "auto" }}>
         {cuisinesOptions
-          .filter((item) => {
+          ?.filter((item) => {
             return searchCuisine.toLowerCase() === ""
               ? item
               : item.name.toLowerCase().includes(searchCuisine);

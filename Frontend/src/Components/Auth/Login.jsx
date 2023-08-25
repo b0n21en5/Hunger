@@ -4,6 +4,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { useAuthContext } from "../../contexts/useAuthContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import "./auth.css";
 
@@ -16,15 +17,14 @@ const Login = ({ setForPassVis, setIsLoginVisible, setIsSignupVisible }) => {
   // Login
   const handleLoginPost = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/auth/login",
-        { username, password }
-      );
+      const { data } = await axios.post("/api/auth/login", {
+        username,
+        password,
+      });
       setUser(data.username);
-      alert("user logged in");
-      console.log(data);
+      toast.success(`${data.username} logged in`);
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   };
 

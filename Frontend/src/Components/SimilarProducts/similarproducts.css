@@ -1,5 +1,7 @@
 .similar-products-container {
   /* overflow: auto; */
+  display: flex;
+  margin-bottom: 1.2rem;
 }
 
 .types-list {
@@ -32,6 +34,13 @@
 .recommended-foods-list .search-cnt {
   display: flex;
   justify-content: space-between;
+}
+
+.recommended-foods-list .search-cnt .search-head {
+  font-size: 14px;
+  color: #828282;
+  margin-bottom: 1.5rem;
+  font-weight: 100;
 }
 
 .recommended-foods-list .pd-dt {

@@ -20,9 +20,10 @@ import Login from "../../Components/Auth/Login";
 import SignUp from "../../Components/Auth/SignUp";
 import axios from "axios";
 import UserModal from "../../Components/UserModal/UserModal";
+import Reset from "../../Components/Auth/Reset";
+import toast, { Toaster } from "react-hot-toast";
 
 import "./home.css";
-import Reset from "../../Components/Auth/Reset";
 
 const Home = () => {
   const [searchText, setSearchText] = useState("");
@@ -34,15 +35,15 @@ const Home = () => {
   const [collectionsData, setCollectionsData] = useState([]);
 
   const { state, dispatch } = useFilterContext();
-  const { user, setUser } = useAuthContext();
+  const { user } = useAuthContext();
 
   // Get all collections
   const getAllCollections = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/collections");
+      const { data } = await axios.get("/api/collections");
       setCollectionsData(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Error in Collections API");
     }
   };
 
@@ -57,6 +58,7 @@ const Home = () => {
   return (
     <div className="home">
       <div className="banner">
+        <Toaster position="top-right" />
         <div className="user-auth">
           {!user ? (
             <>
@@ -65,8 +67,12 @@ const Home = () => {
                 icon={faUser}
                 onClick={() => setIsLoginVisible(true)}
               />
-              <Link onClick={() => setIsLoginVisible(true)}>Log in</Link>
-              <Link onClick={() => setIsSignupVisible(true)}>Sign Up</Link>
+              <Link className="link" onClick={() => setIsLoginVisible(true)}>
+                Log in
+              </Link>
+              <Link className="link" onClick={() => setIsSignupVisible(true)}>
+                Sign Up
+              </Link>
             </>
           ) : (
             <div

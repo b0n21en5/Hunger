@@ -30,6 +30,9 @@ body {
 /* Mobile Responsiveness */
 
 @media screen and (max-width: 412px) {
+  * {
+    scroll-behavior: auto !important;
+  }
   .main-cnt {
     padding: 24px;
   }

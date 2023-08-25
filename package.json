@@ -1,0 +1,7 @@
+{
+    "name":"hunger",
+    "version":"1.0.0",
+    "scripts":{
+        "start":"cd Backend && npm start"
+    }
+}

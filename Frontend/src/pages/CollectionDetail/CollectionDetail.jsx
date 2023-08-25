@@ -8,6 +8,7 @@ import CollCard from "../../Components/Collections/CollCard";
 import Layout from "../../Components/Layout/Layout";
 
 import "./collectiondetail.css";
+import { toast } from "react-hot-toast";
 
 const CollectionDetail = () => {
   const [restaurantsData, setRestaurantsData] = useState([]);
@@ -21,15 +22,15 @@ const CollectionDetail = () => {
       try {
         const [collectionResponse, allCollections, allRestaurants] =
           await Promise.all([
-            axios.get(`http://localhost:4000/api/collections?slug=${slug}`),
-            axios.get("http://localhost:4000/api/collections"),
-            axios.get(`http://localhost:4000/api/restaurants?limit=16`),
+            axios.get(`/api/collections?slug=${slug}`),
+            axios.get("/api/collections"),
+            axios.get(`/api/restaurants?limit=16`),
           ]);
         setSelectedCollection(collectionResponse.data[0]);
         setCollectionsData(allCollections.data);
-        setRestaurantsData(allRestaurants.data);
+        setRestaurantsData(allRestaurants.data.data);
       } catch (error) {
-        console.log(error);
+        toast.error("Error while fetching");
       }
     };
 

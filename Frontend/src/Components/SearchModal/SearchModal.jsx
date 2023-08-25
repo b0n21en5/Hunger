@@ -1,10 +1,11 @@
 import ReactDOM from "react-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faStar } from "@fortawesome/free-solid-svg-icons";
 
 import "./searchmodal.css";
+import { toast } from "react-hot-toast";
 
 const SearchModal = ({
   searchText,
@@ -18,12 +19,10 @@ const SearchModal = ({
   // Handle Search in Foods and Restaurants
   const handleSearch = async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:4000/api/search?searchTerm=${searchText}`
-      );
+      const { data } = await axios.get(`/api/search?searchTerm=${searchText}`);
       setProductList(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Error While Searching!");
     }
   };
 
@@ -86,4 +85,4 @@ const SearchModal = ({
   );
 };
 
-export default React.memo(SearchModal);
+export default SearchModal;

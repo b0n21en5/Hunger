@@ -2,7 +2,7 @@ import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import { useAuthContext } from "../../contexts/useAuthContext";
+import toast from "react-hot-toast";
 import axios from "axios";
 
 import "./auth.css";
@@ -14,18 +14,15 @@ const Reset = ({ setForPassVis, setIsLoginVisible }) => {
   // Login
   const handleResetPassword = async () => {
     try {
-      alert(
-        await axios.put("http://localhost:4000/api/auth/reset-password", {
-          email,
-          newPassword,
-        })
-      );
+      const { data } = await axios.put("/api/auth/reset-password", {
+        email,
+        newPassword,
+      });
       setForPassVis(false);
       setIsLoginVisible(true);
-      //   alert(data);
-      //   console.log(data);
+      toast.success(data.message);
     } catch (error) {
-      console.log(error);
+      toast.error("Error in Password Reset!");
     }
   };
 

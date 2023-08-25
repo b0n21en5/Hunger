@@ -1,33 +1,26 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NavBar from "../../Components/NavBar/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import SimilarProducts from "../../Components/SimilarProducts/SimilarProducts";
-import { recommendedFoods } from "../../../data/recommended";
 
 import "./productdetails.css";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
-const ProductDetails = ({ pathname = "foods" }) => {
+const ProductDetails = ({ pathname = "restaurants" }) => {
   const [selectedFood, setSelectedFood] = useState({});
 
   const { slug } = useParams();
 
   // Get Single product from db
   const getSingleProduct = async () => {
-    // let url = "http://localhost:4000/api/foods";
-    // if (pathname === "restaurants") {
-    //   url = "restaurants";
-    // }
-
     try {
-      const { data } = await axios.get(
-        `http://localhost:4000/api/${pathname}?slug=${slug}`
-      );
-      setSelectedFood(data[0]);
+      const { data } = await axios.get(`/api/${pathname}?slug=${slug}`);
+      setSelectedFood(data.data[0]);
     } catch (error) {
-      console.log(error);
+      toast.error("Error while fetching data");
     }
   };
 
@@ -80,7 +73,7 @@ const ProductDetails = ({ pathname = "foods" }) => {
           </div>
 
           {/* similar products */}
-          <SimilarProducts foods={recommendedFoods} />
+          <SimilarProducts />
         </div>
       </div>
     </>

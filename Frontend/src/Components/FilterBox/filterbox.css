@@ -72,7 +72,7 @@ label {
 }
 
 /* Mobile Responsiveness */
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 420px) {
   .filter-modal-overlay .filter-box {
     height: 100vh;
     max-width: 412px;

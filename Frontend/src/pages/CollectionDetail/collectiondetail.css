@@ -64,19 +64,19 @@
 }
 
 /* Mobile Responsiveness */
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 420px) {
   .coll-card {
     margin: 0;
   }
 
   .coll-card .jumbotron img {
-    width: 412px;
+    width: 100vw;
     height: 240px;
     border-radius: 0;
   }
 
   .coll-card .jumbotron .container {
-    width: 400px;
+    width: 100vw;
     top: 120px;
     left: 10px;
     padding-left: 0;
@@ -96,8 +96,7 @@
   }
 
   .coll-data a .card {
-    width: 392px;
-    /* height: 190px; */
+    width: 98vw;
   }
 
   .coll-data a .card img {
@@ -111,5 +110,27 @@
     padding: 10px;
     border-radius: 0 0 1.6rem 1.6rem;
     box-shadow: rgba(28, 28, 28, 0.12) 0 4px 18px 0;
+  }
+
+  .more {
+    margin: 0 15px;
+  }
+
+  .mt-10 {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .coll-card .jumbotron .container {
+    left: 0;
+  }
+
+  .coll-data a .card img {
+    width: 342px;
+  }
+
+  .coll-data a .card .coll-card-detail {
+    width: 342px;
   }
 }

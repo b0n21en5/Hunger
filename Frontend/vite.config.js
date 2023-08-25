@@ -14,4 +14,9 @@ export default defineConfig({
       verbose: true, // Output compression information to console
     }),
   ],
+  server: {
+    proxy: {
+      "/api": "http://localhost:4000",
+    },
+  },
 });

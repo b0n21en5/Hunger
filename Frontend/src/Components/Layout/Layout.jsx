@@ -89,28 +89,30 @@ const Layout = ({ children, pathname, onFilterRemove }) => {
         </>
       )}
       {children}
-      <div className="bottom">
-        <Link
-          className={`bottom-link link ${
-            pathname === "delivery" ? "active" : ""
-          }`}
-          to="/delivery"
-        >
-          <FontAwesomeIcon icon={faBagShopping} />
-          <div className="ms-2">Delivery</div>
-        </Link>
-        <Link
-          className={`bottom-link link ${
-            pathname === "restaurants" || pathname == "nightlife"
-              ? "active"
-              : ""
-          }`}
-          to="/restaurants"
-        >
-          <FontAwesomeIcon icon={faShoePrints} />
-          <div className="ms-2">Dinning Out</div>
-        </Link>
-      </div>
+      {pathname && (
+        <div className="bottom">
+          <Link
+            className={`bottom-link link ${
+              pathname === "delivery" ? "active" : ""
+            }`}
+            to="/delivery"
+          >
+            <FontAwesomeIcon icon={faBagShopping} />
+            <div className="ms-2">Delivery</div>
+          </Link>
+          <Link
+            className={`bottom-link link ${
+              pathname === "restaurants" || pathname == "nightlife"
+                ? "active"
+                : ""
+            }`}
+            to="/restaurants"
+          >
+            <FontAwesomeIcon icon={faShoePrints} />
+            <div className="ms-2">Dinning Out</div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

@@ -51,7 +51,7 @@
 
 /* Mobile Responsiveness */
 
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 420px) {
   .product {
     width: 378px;
     height: auto;
@@ -71,5 +71,12 @@
   }
 
   .pd-card .pd-card-details {
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .product img {
+    width: 342px;
+    /* border-radius: 15px 15px 0 0; */
   }
 }

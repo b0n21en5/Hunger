@@ -1,63 +1,123 @@
 import { useEffect, useState } from "react";
 import FoodList from "../../Components/FoodCard/FoodList";
 import Layout from "../../Components/Layout/Layout";
-import { brands, inspirations } from "../../../data/food";
 import NoData from "../../Components/NoData/NoData";
 import { useFilterContext } from "../../contexts/useFilterContext";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import CollCard from "../../Components/Collections/CollCard";
-
 import off from "../../assets/off.avif";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import toast from "react-hot-toast";
 
 import "./menupage.css";
 
 const MenuPage = () => {
-  const [foodsData, setFoodsData] = useState([]);
-  const [isVisited, setIsVisited] = useState(true);
-  const [insClick, setInsClick] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currPage, setCurrPage] = useState({
+    fetchedData: [],
+    isVisited: true,
+    page: 1,
+    pageLimit: 10,
+  });
+
+  const [cuisines, setCuisines] = useState({
+    data: [],
+    page: 1,
+    pageLimit: 7,
+    click: false,
+  });
+
+  const [brands, setBrands] = useState({
+    data: [],
+    page: 1,
+    pageLimit: 7,
+  });
 
   const [collectionsData, setCollectionsData] = useState([]);
 
   const { state, dispatch } = useFilterContext();
-  const { fetchedData, filterApplied, dataNotAvailable } = state;
 
   const location = useLocation().pathname.substring(1);
 
-  let path = "restaurants";
-  if (location === "delivery") {
-    path = "foods";
-  }
+  let path = location === "delivery" ? "foods" : "restaurants";
 
   // Get all foods data
   const fetchDataDB = async () => {
     let limit = 3;
-    if (window.innerWidth > 412) {
+    if (window.innerWidth > 420) {
       limit = 9;
     }
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/${path}?page=${currentPage}&limit=${limit}`
+        `/api/${path}?page=${currPage.page}&limit=${limit}`
       );
 
-      if (currentPage === 1) {
-        setFoodsData(data);
+      if (currPage.page === 1) {
+        setCurrPage((p) => ({
+          ...p,
+          fetchedData: data.data,
+          count: data.count,
+        }));
         return;
       }
-      setFoodsData((prev) => [...prev, ...data]);
+      setCurrPage((prev) => ({
+        ...prev,
+        fetchedData: [...prev.fetchedData, ...data.data],
+        pageLimit: data.count,
+      }));
     } catch (error) {
-      console.log(error);
+      toast.error("Error in Product API");
     }
   };
 
   // Get all collections
   const getAllCollections = async () => {
     try {
-      const { data } = await axios.get("http://localhost:4000/api/collections");
+      const { data } = await axios.get("/api/collections");
       setCollectionsData(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Error Fetching Collections!");
+    }
+  };
+
+  // Set Cuisines data
+  const getLimitedCuisines = async () => {
+    let limit = 6;
+    if (window.innerWidth <= 420) {
+      limit = 8;
+    }
+    try {
+      const { data } = await axios.get(
+        `/api/cuisines/get-all?rating=4.5&page=${cuisines.page}&limit=${limit}`
+      );
+      setCuisines((p) => ({
+        ...p,
+        data: data.cuisines,
+        pageLimit: data.count,
+      }));
+    } catch (error) {
+      toast.error("Error Fetching Cuisines!");
+    }
+  };
+
+  // Set Brands data
+  const getLimitedBrands = async () => {
+    let limit = 6;
+    if (window.innerWidth <= 420) {
+      limit = 12;
+    }
+    try {
+      const { data } = await axios.get(
+        `/api/brands/get-all?rating=4.5&page=${brands.page}&limit=${limit}`
+      );
+      setBrands((p) => ({
+        ...p,
+        data: data.brands,
+        pageLimit: data.count,
+      }));
+    } catch (error) {
+      toast.error("Error Fetching Brands!");
     }
   };
 
@@ -68,20 +128,24 @@ const MenuPage = () => {
         dispatch({ type: "ADD_SELECTED_FILTER", payload: ch });
     });
 
-    const response = await axios.get(
-      `http://localhost:4000/api/${path}?checkedFilter=${state.checked?.join(
-        ","
-      )}&sort=${state.radio}`
+    const { data } = await axios.get(
+      `/api/${path}?checkedFilter=${state.checked?.join(",")}&sort=${
+        state.radio
+      }`
     );
-    const filteredFoods = response.data;
 
-    if (filteredFoods.length) {
-      setFoodsData(filteredFoods);
+    if (data.data.length) {
+      setCurrPage((p) => ({
+        ...p,
+        fetchedData: data.data,
+        pageLimit: data.count,
+      }));
       dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
       dispatch({ type: "SET_END_SEARCH_RESULTS", payload: true });
     } else {
-      if (path === "delivery") fetchDataDB();
-      if (path === "restaurants") setFoodsData([]);
+      setCurrPage((p) => ({ ...p, page: 1 }));
+      if (path === "foods") fetchDataDB();
+      else setCurrPage((p) => ({ ...p, fetchedData: [] }));
       dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: true });
       dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
     }
@@ -89,22 +153,21 @@ const MenuPage = () => {
 
   // Method to remove selected filter
   const onFilterRemove = (removeFilter) => {
-    const filteredArray = state.selectedFilter.filter((sf) => {
-      return sf !== removeFilter;
-    });
+    const filteredArray = state.selectedFilter.filter(
+      (sf) => sf !== removeFilter
+    );
     dispatch({ type: "SET_SELECTED_FILTER", payload: filteredArray });
-    const filterChecked = state.checked.filter((sc) => {
-      return sc !== removeFilter;
-    });
+    const filterChecked = state.checked.filter((sc) => sc !== removeFilter);
     dispatch({ type: "SET_CHECKED_FILTER", payload: filterChecked });
 
     // filter foods data based on removed filters
     if (filterChecked.length) {
       onApplyCheckedFilter(path);
-      setInsClick(true);
+      setCuisines((p) => ({ ...p, click: true }));
     } else {
       // Clear all filters and reset data
       fetchDataDB();
+      setCurrPage((p) => ({ ...p, page: 1 }));
 
       dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
       dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
@@ -114,21 +177,13 @@ const MenuPage = () => {
   // Handle Scroll for to change current page
   const handleScroll = () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight / 2) {
-      setCurrentPage((prevPage) => prevPage + 1);
+      setCurrPage((p) => ({ ...p, page: p.page + 1 }));
     }
   };
 
   useEffect(() => {
-    if (currentPage > 1) fetchDataDB();
-  }, [currentPage]);
-
-  // Set Foods Data on initial render
-  useEffect(() => {
-    if (state.checked.length) {
-      onApplyCheckedFilter(path);
-    } else {
-      fetchDataDB();
-    }
+    // Fetch Data on initial render
+    fetchDataDB();
 
     if (location !== "delivery") getAllCollections();
 
@@ -136,44 +191,57 @@ const MenuPage = () => {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      setCurrentPage(1);
-      setFoodsData([]);
+      setCurrPage((p) => ({ ...p, page: 1 }));
+      setCurrPage((p) => ({ ...p, fetchedData: [] }));
+      setCurrPage((p) => ({ ...p, isVisited: false }));
     };
   }, [location]);
 
   // Applying filter on navigating back to the page
   useEffect(() => {
-    if (!isVisited && state.checked.length) {
+    if (!currPage.isVisited && state.checked.length) {
       onApplyCheckedFilter(path);
-      setIsVisited(true);
+      setCurrPage((p) => ({ ...p, isVisited: true }));
     }
-  }, [fetchedData]);
+  }, [currPage.fetchedData]);
 
   useEffect(() => {
-    if (insClick && state.checked.length) {
-      onApplyCheckedFilter(path);
-      setInsClick(false);
-    }
-  }, [insClick]);
+    if (
+      !state.checked.length &&
+      currPage.fetchedData.length < currPage.pageLimit
+    )
+      fetchDataDB();
+  }, [currPage.page]);
 
   useEffect(() => {
+    if (cuisines.click && state.checked.length) {
+      onApplyCheckedFilter(path);
+      setCuisines((p) => ({ ...p, click: false }));
+    }
+  }, [cuisines.click]);
+
+  useEffect(() => {
+    getLimitedCuisines();
+  }, [cuisines.page]);
+
+  useEffect(() => {
+    getLimitedBrands();
+  }, [brands.page]);
+
+  useEffect(() => {
+    getLimitedCuisines();
+    getLimitedBrands();
     // When navigating away from the component, update the visited flag
     return () => {
-      setIsVisited(false);
+      setCurrPage((p) => ({ ...p, isVisited: false }));
     };
   }, []);
 
   return (
     <Layout pathname={location} onFilterRemove={onFilterRemove}>
       {location !== "delivery" && (
-        <div className="dine-cnt">
-          <img
-            className="mb-dis"
-            height="86"
-            width="380"
-            src={off}
-            alt="discount 50%"
-          />
+        <div className="dine-cnt mb-dis">
+          <img height="86" width="380" src={off} alt="discount 50%" />
           <div className="switch-links">
             <Link
               to="/restaurants"
@@ -194,56 +262,74 @@ const MenuPage = () => {
           </div>
         </div>
       )}
-      {dataNotAvailable && <NoData />}
-      {!filterApplied &&
+      {state.dataNotAvailable && <NoData />}
+      {!state.filterApplied &&
         (location === "delivery" ? (
           <>
-            <div className="inspirations">
+            <div className="cuisines">
               <h3>Inspiration for your first order</h3>
-              <div className="ins-cards">
-                {inspirations.map((ins) => (
+              <div className="cui-cards">
+                {cuisines.page > 1 && (
+                  <FontAwesomeIcon
+                    onClick={() =>
+                      setCuisines((p) => ({ ...p, page: p.page - 1 }))
+                    }
+                    icon={faAngleLeft}
+                    className="more-btn prev-btn"
+                  />
+                )}
+                {cuisines.data.map((cui) => (
                   <div
-                    key={ins.id}
-                    className="ins-card-body"
+                    key={cui.id}
+                    className="cui-card-body"
                     onClick={() => {
                       dispatch({
                         type: "ADD_CHECKED_FILTER",
-                        payload: ins.title,
+                        payload: cui.name,
                       });
-                      setInsClick(true);
+                      setCuisines((p) => ({ ...p, click: true }));
                     }}
                   >
-                    <div className="d-flex flex-column">
+                    <div className="cui-det">
                       <img
                         width="150"
                         height="150"
                         style={{ borderRadius: "50%" }}
-                        src={ins.img}
-                        alt={ins.title}
+                        src={cui.imgSrc}
+                        alt={cui.name}
                         className="mb-1"
                       />
-                      <div
-                        className="text-center"
-                        style={{
-                          fontSize: "20px",
-                          lineHeight: "32px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {ins.title}
-                      </div>
+                      <div className="cui-name">{cui.name}</div>
                     </div>
                   </div>
                 ))}
+                {cuisines.page + 6 <= cuisines.pageLimit && (
+                  <FontAwesomeIcon
+                    onClick={() =>
+                      setCuisines((p) => ({ ...p, page: p.page + 1 }))
+                    }
+                    icon={faAngleRight}
+                    className="more-btn"
+                  />
+                )}
               </div>
             </div>
 
             <div className="brands ">
               <h3>Top brands for you</h3>
               <div className="brand-body">
-                {brands.map((ins) => (
-                  <div key={ins.id} className="ins-card-body">
-                    <Link to={`/resturants/${ins.slug}`}>
+                {brands.page > 1 && (
+                  <FontAwesomeIcon
+                    onClick={() =>
+                      setBrands((p) => ({ ...p, page: p.page - 1 }))
+                    }
+                    icon={faAngleLeft}
+                    className="more-btn prev-brnd"
+                  />
+                )}
+                {brands.data.map((brnd) => (
+                  <div key={brnd.id} className="cui-card-body">
+                    <Link to={`/restaurants/${brnd.slug}`}>
                       <img
                         width="148"
                         height="150"
@@ -252,16 +338,24 @@ const MenuPage = () => {
                           borderRadius: "50%",
                           boxShadow: "rgba(0, 0, 0, 0.08) 0px 3px 12px 0px",
                         }}
-                        src={ins.img}
-                        alt={ins.title}
+                        src={brnd.imgSrc}
+                        alt={brnd.name}
                         className="mb-1"
                       />
                     </Link>
-                    <div className="text-center font-weight-bold">
-                      {ins.title}
-                    </div>
+                    <div className="text-center">{brnd.name}</div>
+                    <div className="text-center">{brnd.delivery} min</div>
                   </div>
                 ))}
+                {brands.page + 6 <= brands.pageLimit && (
+                  <FontAwesomeIcon
+                    onClick={() =>
+                      setBrands((p) => ({ ...p, page: p.page + 1 }))
+                    }
+                    icon={faAngleRight}
+                    className="more-btn"
+                  />
+                )}
               </div>
             </div>
           </>
@@ -305,7 +399,7 @@ const MenuPage = () => {
           </div>
         ))}
       {location !== "delivery" && (
-        <div className="dine-cnt">
+        <div className="dine-cnt" style={{ background: "white" }}>
           <img
             className="dsk-dis"
             height="250"
@@ -317,7 +411,7 @@ const MenuPage = () => {
       )}
       <FoodList
         subHead="Order food online in Jai Singh Road"
-        data={foodsData}
+        data={currPage.fetchedData}
         path={path}
         onApplyCheckedFilter={onApplyCheckedFilter}
       />

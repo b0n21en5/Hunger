@@ -1,7 +1,8 @@
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 import "./auth.css";
 import axios from "axios";
@@ -14,13 +15,14 @@ const SignUp = ({ setIsLoginVisible, setIsSignupVisible }) => {
   //  Post Register request
   const handleRegisterPost = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/auth/register-user",
-        { username, email, password }
-      );
-      alert(data.message);
+      const { data } = await axios.post("/api/auth/register-user", {
+        username,
+        email,
+        password,
+      });
+      toast.success(data.message);
     } catch (error) {
-      console.log(error);
+      toast.error("Error in Sign up");
     }
   };
 
@@ -83,4 +85,4 @@ const SignUp = ({ setIsLoginVisible, setIsSignupVisible }) => {
   );
 };
 
-export default React.memo(SignUp);
+export default SignUp;

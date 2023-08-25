@@ -6,72 +6,69 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 import "./similarproducts.css";
+import { toast } from "react-hot-toast";
 
-const SimilarProducts = ({ foods }) => {
-  const [recommendedFoods, setRecommendedFoods] = useState(foods);
+const SimilarProducts = () => {
   const [suggestFoodTypes, setSuggestFoodTypes] = useState([]);
-  const [foodsItemsByType, setFoodsItemsByType] = useState({});
+  const [recommendedFoods, setRecommendedFoods] = useState({});
   const [searchText, setSearchText] = useState("");
   const [activeLink, setActiveLink] = useState(suggestFoodTypes[0]?.type);
 
-  // Method to set suggested FoodType
-  const countFoodType = (foods) => {
-    const foodTypeCount = {};
-    foods.forEach((fd) => {
-      const { type } = fd;
-      if (foodTypeCount[type]) {
-        foodTypeCount[type].count++;
-      } else {
-        foodTypeCount[type] = {
-          type,
-          count: 1,
-          id: fd.id,
-        };
-      }
-    });
+  // Get all recommended food type
+  const getAllTypes = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/recommended/types?search=${searchText}`
+      );
+      setSuggestFoodTypes(data);
+    } catch (error) {
+      toast.error("Error while searching foods");
+    }
+  };
 
-    // Convert object to an array of objects
-    const foodTypeArray = Object.values(foodTypeCount);
+  // Get Recommended Foods
+  const getRecommendedFoods = async () => {
+    try {
+      const { data } = await axios.get(
+        `/api/recommended/all?search=${searchText}`
+      );
 
-    return foodTypeArray;
+      const foodByType = {};
+      data.forEach((fd) => {
+        if (!foodByType[fd.type]) foodByType[fd.type] = [];
+        foodByType[fd.type].push(fd);
+      });
+
+      setRecommendedFoods(foodByType);
+    } catch (error) {
+      toast.error("error in recommended foods");
+    }
   };
 
   useEffect(() => {
-    const updatedFoodTypeArray = countFoodType(recommendedFoods);
-    setSuggestFoodTypes(updatedFoodTypeArray);
-  }, [recommendedFoods]);
-
-  // sorting food items by their types
-  useEffect(() => {
-    const foodByType = {};
-    recommendedFoods.forEach((fd) => {
-      if (!foodByType[fd.type]) foodByType[fd.type] = [];
-      foodByType[fd.type].push(fd);
-    });
-
-    setFoodsItemsByType(foodByType);
-  }, [recommendedFoods]);
-
-  // search within menu
+    getRecommendedFoods();
+    getAllTypes();
+  }, []);
 
   useEffect(() => {
-    if (!searchText) {
-      setRecommendedFoods(foods);
+    let timer;
+    if (searchText) {
+      timer = setTimeout(() => {
+        getRecommendedFoods();
+        getAllTypes();
+      }, 500);
     } else {
-      const lowerCasedSearchText = searchText.toLowerCase();
-      let filteredFoods = foods.filter((fd) => {
-        const lowerCasedType = fd.type.toLowerCase();
-        const lowerCasedTitle = fd.title.toLowerCase();
-        return (
-          lowerCasedType.includes(lowerCasedSearchText) ||
-          lowerCasedTitle.includes(lowerCasedSearchText)
-        );
-      });
-      setRecommendedFoods(filteredFoods);
+      getRecommendedFoods();
+      getAllTypes();
     }
-  }, [searchText, foods]);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchText]);
 
   // Callback for Intersection Observer
   const handleIntersection = (allEntries) => {
@@ -109,12 +106,12 @@ const SimilarProducts = ({ foods }) => {
   }, [activeLink]);
 
   return (
-    <div className="d-flex mb-5 similar-products-container">
+    <div className="similar-products-container">
       <div className="types-list">
-        {suggestFoodTypes?.map((food) => (
+        {suggestFoodTypes?.map((food, idx) => (
           <div
             className={`${activeLink === food.type ? "active" : ""}`}
-            key={food.id}
+            key={idx}
           >
             <div
               className={`btn p-0 m-2 `}
@@ -129,14 +126,7 @@ const SimilarProducts = ({ foods }) => {
         <div className="search-cnt">
           <div className="ms-3">
             <h2>Order Online</h2>
-            <div
-              style={{
-                fontSize: "14px",
-                color: "#828282",
-                marginBottom: "1.5rem",
-                fontWeight: "100",
-              }}
-            >
+            <div className="search-head">
               <FontAwesomeIcon icon={faCompass} /> Live track your order |{" "}
               <FontAwesomeIcon icon={faClockRotateLeft} /> 33 min
             </div>
@@ -144,7 +134,7 @@ const SimilarProducts = ({ foods }) => {
           <div className="search-in-menu">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
             <input
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) => setSearchText(e.target.value.toLowerCase())}
               className="ms-2"
               type="text"
               placeholder="Search within menu"
@@ -156,9 +146,11 @@ const SimilarProducts = ({ foods }) => {
         {suggestFoodTypes?.map((type) => (
           <div key={type.id} id={type.type} className="ms-3">
             <h4 className="mb-3">{type.type}</h4>
-            {foodsItemsByType[type.type]?.map((food) => (
+            {recommendedFoods[type.type]?.map((food) => (
               <div className="d-flex mb-4" key={food.id}>
                 <img
+                  width="130"
+                  height="130"
                   src={food.imgSrc}
                   alt={food.type}
                   style={{ borderRadius: "8px", border: "none" }}
@@ -169,7 +161,7 @@ const SimilarProducts = ({ foods }) => {
                     ₹{food.price}
                   </div>
                   <div style={{ fontSize: "14px", color: "#4f4f4f" }}>
-                    {food.desc}
+                    {food.description}
                   </div>
                 </div>
               </div>

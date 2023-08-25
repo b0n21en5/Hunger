@@ -1,10 +1,17 @@
+import { Navigate } from "react-router";
 import Layout from "../../Components/Layout/Layout";
 import { useAuthContext } from "../../contexts/useAuthContext";
 
 import "./profile.css";
 
 const Profile = () => {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
+
+  const logout = () => {
+    localStorage.removeItem("user-hunger");
+    setUser("");
+    Navigate("/");
+  };
 
   return (
     <Layout>
@@ -17,6 +24,9 @@ const Profile = () => {
             alt="user"
           />
           <div className="profile-user">{user}</div>
+          <div className="logout" onClick={logout}>
+            Log Out
+          </div>
         </div>
       </div>
     </Layout>

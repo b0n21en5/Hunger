@@ -5,6 +5,7 @@ import {
   faAngleDown,
   faAngleUp,
   faMagnifyingGlass,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import SearchModal from "../SearchModal/SearchModal";
@@ -13,6 +14,7 @@ import SignUp from "../Auth/SignUp";
 import { useAuthContext } from "../../contexts/useAuthContext";
 import UserModal from "../UserModal/UserModal";
 import Reset from "../Auth/Reset";
+import { Toaster } from "react-hot-toast";
 
 import "./navbar.css";
 
@@ -28,8 +30,9 @@ const NavBar = () => {
 
   return (
     <div className="nav">
+      <Toaster position="top-right" gutter={24} />
       <div className="nav-left">
-        <Link to="/">
+        <Link to="/" className="logo">
           <img width="126" height="27" src={logo} alt="logo" />
         </Link>
         <div className="search-bar">
@@ -43,32 +46,50 @@ const NavBar = () => {
         </div>
       </div>
       <div className="nav-left">
-        {!user ? (
-          <>
-            <div className="link" onClick={() => setIsLoginVisible(true)}>
-              Log in
+        <div className="user-auth">
+          {!user ? (
+            <>
+              <FontAwesomeIcon
+                className="mb-user-login"
+                icon={faUser}
+                onClick={() => setIsLoginVisible(true)}
+              />
+              <div className="link" onClick={() => setIsLoginVisible(true)}>
+                Log in
+              </div>
+              <div className="link" onClick={() => setIsSignupVisible(true)}>
+                sign up
+              </div>
+            </>
+          ) : (
+            <div
+              className="user-info"
+              onClick={() => setUserModalVisible((pr) => !pr)}
+            >
+              <Link to="/profile">
+                <img
+                  className="mb-user-img"
+                  width="30"
+                  height="30"
+                  src="https://cdn-icons-png.flaticon.com/512/1177/1177568.png"
+                  alt="user"
+                />
+              </Link>
+              <div className="user-det">
+                <img
+                  width="40"
+                  height="40"
+                  src="https://cdn-icons-png.flaticon.com/512/1177/1177568.png"
+                  alt="user"
+                />
+                <div>{user}</div>
+                <FontAwesomeIcon
+                  icon={userModalVisible ? faAngleUp : faAngleDown}
+                />
+              </div>
             </div>
-            <div className="link" onClick={() => setIsSignupVisible(true)}>
-              sign up
-            </div>
-          </>
-        ) : (
-          <div
-            className="user-info"
-            onClick={() => setUserModalVisible((pr) => !pr)}
-          >
-            <img
-              width="40"
-              height="40"
-              src="https://cdn-icons-png.flaticon.com/512/1177/1177568.png"
-              alt="user"
-            />
-            <div>{user}</div>
-            <FontAwesomeIcon
-              icon={userModalVisible ? faAngleUp : faAngleDown}
-            />
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {userModalVisible && (

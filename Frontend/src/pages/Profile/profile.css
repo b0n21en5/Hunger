@@ -19,8 +19,14 @@
   font-weight: 600;
 }
 
+.profile-main .profile-ovr .logout {
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+}
+
 /* Mobile Responsiveness */
-@media screen and (max-width: 412px) {
+@media screen and (max-width: 420px) {
   .profile-main {
     padding: 0;
   }
