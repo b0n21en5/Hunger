@@ -34,6 +34,12 @@
 .search-modal .prod {
   padding: 10px 15px;
   display: flex;
+  text-decoration: none;
+  color: black;
+}
+
+.search-modal .prod:hover {
+  background-color: rgb(242, 236, 236);
 }
 
 .search-modal .prod img {

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faStar } from "@fortawesome/free-solid-svg-icons";
-
-import "./searchmodal.css";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
+import "./searchmodal.css";
 
 const SearchModal = ({
   searchText,
@@ -21,6 +21,7 @@ const SearchModal = ({
     try {
       const { data } = await axios.get(`/api/search?searchTerm=${searchText}`);
       setProductList(data);
+      console.log(data);
     } catch (error) {
       toast.error("Error While Searching!");
     }
@@ -61,7 +62,13 @@ const SearchModal = ({
             />
           </div>
           {productList.map((prod) => (
-            <div className="prod" key={prod.title}>
+            <Link
+              to={`/${prod.category === "foods" ? "delivery" : prod.category}/${
+                prod.slug
+              }`}
+              className="prod"
+              key={prod.title}
+            >
               <img width="72" height="72" src={prod.imgSrc} alt={prod.title} />
               <div className="prod-details">
                 <div className="prod-title">{prod.title}</div>
@@ -76,7 +83,7 @@ const SearchModal = ({
                   {prod.category === "foods" ? "DISH" : "DINING"}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

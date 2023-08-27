@@ -55,7 +55,7 @@ export const loginController = async (req, res) => {
   // Check Password with hashed Password
   const matchPass = await bcrypt.compare(password, user[0].password);
   if (!matchPass) {
-    return res.status(404).send("Wrong Password!");
+    return res.status(404).send({ wrong: "Wrong Password!" });
   }
 
   return res.status(200).send(user[0]);

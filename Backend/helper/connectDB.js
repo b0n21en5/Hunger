@@ -14,9 +14,10 @@ export const pool = mysql.createPool({
 
 const heartBeat = () => {
   pool.query("SELECT 1", (err) => {
+    console.log("1 beat");
     if (err) console.error("Error while HeartBeat: ", err);
   });
 };
 
 // call heartBeat every 30 sec
-setInterval(heartBeat, 30000);
+setInterval(heartBeat, 600000);

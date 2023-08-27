@@ -21,10 +21,15 @@ const Login = ({ setForPassVis, setIsLoginVisible, setIsSignupVisible }) => {
         username,
         password,
       });
-      setUser(data.username);
+      if (data.username) setUser(data.username);
       toast.success(`${data.username} logged in`);
     } catch (error) {
-      toast.error(error);
+      if (error.response && error.response.data && error.response.data.wrong) {
+        toast.error(error.response.data.wrong);
+      } else {
+        console.error("An error occurred:", error.message);
+        toast.error("An error occurred. Please try again later.");
+      }
     }
   };
 
@@ -49,21 +54,21 @@ const Login = ({ setForPassVis, setIsLoginVisible, setIsSignupVisible }) => {
             onClick={() => setIsLoginVisible(false)}
           />
         </div>
-        <div className="auth-middle">
+        <form className="auth-middle" onSubmit={handleLoginBtnClick}>
           <input
             type="text"
             placeholder="Enter Username"
             onChange={(e) => setUsername(e.target.value)}
           />
           <input
-            type="text"
+            type="password"
             placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div className="auth-btn" onClick={handleLoginBtnClick}>
+          <button type="submit" className="auth-btn">
             Log In
-          </div>
-        </div>
+          </button>
+        </form>
         <div className="auth-bottom">
           <div>New to Hunger?</div>
           <div
