@@ -3,7 +3,7 @@ name: Deploy to Render
 on:
   push:
     branches: 
-      -main
+      - main
 
 jobs:
   deploy:
@@ -28,5 +28,5 @@ jobs:
         run: |
           curl -X POST \
             -H "Authorization:Bearer ${{secrets.RENDER_AUTH_TOKEN}}" \
-            -D "branch=main"\
+            -d "branch=main"\
             https://api.render.com/v1/deploys
