@@ -18,12 +18,6 @@ jobs:
         with: 
           node-version: '17'
 
-      - name: install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
       - name: Deploy to Render
         run: |
           curl -X POST \
