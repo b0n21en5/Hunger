@@ -2,28 +2,30 @@ import { faChevronDown, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import filter from "../../assets/filter.svg";
-import { useFilterContext } from "../../contexts/useFilterContext";
 import "./filterbuttons.css";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoadCuisines, setLoadFilter } from "../../store/filterSlice";
 
 const FilterButtons = ({ onFilterRemove }) => {
-  // Destructuring Filter contexts
-  const { state, dispatch } = useFilterContext();
-  const { loadFilter, loadCuisines, filterApplied, selectedFilter } = state;
+  // Destructuring Filter contexts from redux store
+  const state =
+    useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
   // Method to handle filter button
   const onFilterBtnClick = () => {
-    dispatch({ type: "SET_LOAD_FILTER", payload: true });
-    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
+    dispatch(setLoadFilter(true));
+    dispatch(setLoadCuisines(false));
   };
 
   // Handle cuisine button click
   const onCuisineBtnClick = () => {
     if (window.innerWidth <= 440) {
-      dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-      dispatch({ type: "SET_LOAD_FILTER", payload: true });
+      dispatch(setLoadCuisines(false));
+      dispatch(setLoadFilter(true));
     } else {
-      dispatch({ type: "SET_LOAD_CUISINES", payload: true });
-      dispatch({ type: "SET_LOAD_FILTER", payload: false });
+      dispatch(setLoadCuisines(true));
+      dispatch(setLoadFilter(false));
     }
   };
 
@@ -31,12 +33,12 @@ const FilterButtons = ({ onFilterRemove }) => {
     <div
       className="filter-buttons-cnt"
       style={{
-        zIndex: `${loadFilter || loadCuisines ? "0" : "1"}`,
+        zIndex: `${state.loadFilter || state.loadCuisines ? "0" : "1"}`,
       }}
     >
       <div className="filter-buttons">
         <button onClick={onFilterBtnClick}>
-          {filterApplied ? (
+          {state.filterApplied ? (
             <div
               className="btn-dngr"
               style={{
@@ -45,7 +47,7 @@ const FilterButtons = ({ onFilterRemove }) => {
                 borderRadius: "4px",
               }}
             >
-              {filterApplied}
+              {state.filterApplied}
             </div>
           ) : (
             <img
@@ -59,14 +61,14 @@ const FilterButtons = ({ onFilterRemove }) => {
           Filters
         </button>
 
-        {!selectedFilter.length && (
+        {!state.selectedFilter.length && (
           <button onClick={onCuisineBtnClick}>
             Cusines
             <FontAwesomeIcon icon={faChevronDown} />
           </button>
         )}
 
-        {selectedFilter?.map((seleFil, ind) => (
+        {state.selectedFilter?.map((seleFil, ind) => (
           <button
             key={ind}
             className="btn btn-dngr"

@@ -1,11 +1,12 @@
 import { Navigate } from "react-router";
 import Layout from "../../Components/Layout/Layout";
-import { useAuthContext } from "../../contexts/useAuthContext";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./profile.css";
 
 const Profile = () => {
-  const { user, setUser } = useAuthContext();
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const logout = () => {
     localStorage.removeItem("user-hunger");

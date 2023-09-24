@@ -3,13 +3,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight, faXmark } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 import ReactDOM from "react-dom";
-import { useFilterContext } from "../../contexts/useFilterContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addSelectedFilter,
+  setCheckedFilter,
+  setLoadCuisines,
+  setLoadFilter,
+  setRadio,
+  setSelectedFilter,
+} from "../../store/filterSlice";
 
 import "./filterbox.css";
 
 const FilterBox = ({ show, onApplyCheckedFilter, path }) => {
   // Destructuring Filter contexts
-  const { state, dispatch } = useFilterContext();
+  const state = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
   const [sortValue, setSortValue] = useState(state.radio);
   const [showFilter, setShowFilter] = useState(show);
@@ -30,13 +39,13 @@ const FilterBox = ({ show, onApplyCheckedFilter, path }) => {
       all = state.selectedFilter.filter((sf) => {
         return sf !== prevRadio.label;
       });
-      dispatch({ type: "SET_SELECTED_FILTER", payload: all });
+      dispatch(setSelectedFilter(all));
     }
 
     const currSortLabel = sortingOptions.find((opt) => opt.value === sortValue);
 
-    dispatch({ type: "ADD_SELECTED_FILTER", payload: currSortLabel.label });
-    dispatch({ type: "SET_RADIO", payload: sortValue });
+    dispatch(addSelectedFilter(currSortLabel.label));
+    dispatch(setRadio(sortValue));
   };
 
   useEffect(() => {
@@ -47,7 +56,7 @@ const FilterBox = ({ show, onApplyCheckedFilter, path }) => {
 
   // Method to handle apply button
   const onApplyBtnClicked = () => {
-    dispatch({ type: "SET_LOAD_FILTER", payload: false });
+    dispatch(setLoadFilter(false));
 
     if (sortValue || state.checked.length) {
       onApplyCheckedFilter(path);
@@ -56,10 +65,10 @@ const FilterBox = ({ show, onApplyCheckedFilter, path }) => {
 
   // Clear all selected filters
   const onClearBtnClick = () => {
-    dispatch({ type: "SET_LOAD_FILTER", payload: false });
-    dispatch({ type: "SET_CHECKED_FILTER", payload: [] });
-    dispatch({ type: "SET_SELECTED_FILTER", payload: [] });
-    dispatch({ type: "SET_RADIO", payload: "" });
+    dispatch(setLoadFilter(false));
+    dispatch(setCheckedFilter([]));
+    dispatch(setSelectedFilter([]));
+    dispatch(setRadio(""));
     onApplyCheckedFilter(path);
   };
 
@@ -67,8 +76,8 @@ const FilterBox = ({ show, onApplyCheckedFilter, path }) => {
     <div
       className="filter-modal-overlay"
       onClick={() => {
-        dispatch({ type: "SET_LOAD_FILTER", payload: false });
-        dispatch({ type: "SET_LOAD_CUISINES", payload: false });
+        dispatch(setLoadFilter(false));
+        dispatch(setLoadCuisines(false));
       }}
     >
       <div className="filter-box" onClick={(e) => e.stopPropagation()}>
@@ -78,9 +87,7 @@ const FilterBox = ({ show, onApplyCheckedFilter, path }) => {
             <FontAwesomeIcon
               style={{ cursor: "pointer" }}
               icon={faXmark}
-              onClick={() =>
-                dispatch({ type: "SET_LOAD_FILTER", payload: false })
-              }
+              onClick={() => dispatch(setLoadFilter(false))}
             />
           </div>
         </div>

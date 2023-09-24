@@ -4,48 +4,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import Cuisines from "../Cuisines/Cuisines";
 import ReactDOM from "react-dom";
-import { useFilterContext } from "../../contexts/useFilterContext";
 import endResults from "../../assets/end-results.avif";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCheckedFilter,
+  setLoadCuisines,
+  setLoadFilter,
+  setSelectedFilter,
+} from "../../store/filterSlice";
 import "./productlist.css";
 
 const ProductList = ({ data, subHead, onApplyCheckedFilter, path }) => {
   const [showFilter, setShowFilter] = useState("sort");
 
-  const { state, dispatch } = useFilterContext();
-
-  // Destructuring functions and states from filter context
-  const { loadFilter, loadCuisines, endSearchResults } = state;
+  const state = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
   const handleCuisineClearBtn = () => {
-    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
-    dispatch({ type: "SET_SELECTED_FILTER", payload: [] });
-    dispatch({ type: "SET_CHECKED_FILTER", payload: [] });
+    dispatch(setLoadCuisines(false));
+    dispatch(setSelectedFilter([]));
+    dispatch(setCheckedFilter([]));
   };
 
   const handleCuisineApplyBtn = () => {
-    dispatch({ type: "SET_LOAD_CUISINES", payload: false });
+    dispatch(setLoadCuisines(false));
     if (state.checked.length) onApplyCheckedFilter(path);
   };
 
   useEffect(() => {
-    if (window.innerWidth <= 440 && loadCuisines) {
+    if (window.innerWidth <= 440 && state.loadCuisines) {
       setShowFilter("cuisines");
-      dispatch({ type: "SET_LOAD_FILTER", payload: true });
+      dispatch(setLoadFilter(true));
     }
-  }, [loadCuisines]);
+  }, [state.loadCuisines]);
 
   return (
     <div className="foodList">
       {data.length ? <h3 className="mt-4 mb-4">{subHead}</h3> : ""}
 
-      {loadCuisines &&
+      {state.loadCuisines &&
         ReactDOM.createPortal(
           <div
             className="cuisine-modal-overlay"
-            onClick={() =>
-              dispatch({ type: "SET_LOAD_CUISINES", payload: false })
-            }
+            onClick={() => dispatch(setLoadCuisines(false))}
           >
             <div
               className="cuisines-box mt-3"
@@ -56,9 +58,7 @@ const ProductList = ({ data, subHead, onApplyCheckedFilter, path }) => {
                 <FontAwesomeIcon
                   style={{ cursor: "pointer" }}
                   icon={faXmark}
-                  onClick={() =>
-                    dispatch({ type: "SET_LOAD_CUISINES", payload: false })
-                  }
+                  onClick={() => dispatch(setLoadCuisines(false))}
                 />
               </div>
               <Cuisines checked={state.checked} dispatch={dispatch} />
@@ -80,7 +80,7 @@ const ProductList = ({ data, subHead, onApplyCheckedFilter, path }) => {
           </div>,
           document.getElementById("modal-root")
         )}
-      {loadFilter && (
+      {state.loadFilter && (
         <FilterBox
           path={path}
           show={showFilter}
@@ -94,7 +94,7 @@ const ProductList = ({ data, subHead, onApplyCheckedFilter, path }) => {
           ))}
         </div>
       </div>
-      {state.checked.length && endSearchResults ? (
+      {state.checked.length && state.endSearchResults ? (
         <div className="d-flex justify-content-center align-items-center gap-5 mt-5">
           <div className="d-flex flex-column">
             <div style={{ fontSize: "25px", fontWeight: "600" }}>
