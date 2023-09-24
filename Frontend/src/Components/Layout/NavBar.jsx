@@ -11,10 +11,10 @@ import { useState } from "react";
 import SearchModal from "../SearchModal/SearchModal";
 import Login from "../Auth/Login";
 import SignUp from "../Auth/SignUp";
-import { useAuthContext } from "../../contexts/useAuthContext";
 import UserModal from "../UserModal/UserModal";
 import Reset from "../Auth/Reset";
 import { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 import "./navbar.css";
 
@@ -26,7 +26,8 @@ const NavBar = () => {
   const [userModalVisible, setUserModalVisible] = useState(false);
   const [forPassVis, setForPassVis] = useState(false);
 
-  const { user } = useAuthContext();
+  // const { user } = useAuthContext();
+  const { user } = useSelector((state) => state.auth);
 
   return (
     <div className="nav">

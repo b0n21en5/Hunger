@@ -5,6 +5,7 @@ import { Checkbox } from "antd";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import "./cuisines.css";
+import { setCheckedFilter } from "../../store/filterSlice";
 
 const Cuisines = ({ checked, dispatch }) => {
   const [cuisinesOptions, setCuisinesOptions] = useState([]);
@@ -30,7 +31,7 @@ const Cuisines = ({ checked, dispatch }) => {
     } else {
       allChecked = allChecked.filter((c) => c !== name);
     }
-    dispatch({ type: "SET_CHECKED_FILTER", payload: allChecked });
+    dispatch(setCheckedFilter(allChecked));
   };
 
   useEffect(() => {

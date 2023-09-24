@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ProductList from "../../Components/FoodCard/ProductList";
 import Layout from "../../Components/Layout/Layout";
 import NoData from "../../Components/NoData/NoData";
-import { useFilterContext } from "../../contexts/useFilterContext";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import CollCard from "../../Components/Collections/CollCard";
@@ -10,6 +9,16 @@ import off from "../../assets/off.avif";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addCheckedFilter,
+  setCheckedFilter,
+  setDataNotAvailable,
+  setEndSearchResults,
+  setFilterApplied,
+  setSelectedFilter,
+  addSelectedFilter,
+} from "../../store/filterSlice";
 import "./menupage.css";
 
 const MenuPage = () => {
@@ -35,7 +44,8 @@ const MenuPage = () => {
 
   const [collectionsData, setCollectionsData] = useState([]);
 
-  const { state, dispatch } = useFilterContext();
+  const state = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
 
   const location = useLocation().pathname.substring(1);
 
@@ -123,8 +133,7 @@ const MenuPage = () => {
   // Method to apply checked filters
   const onApplyCheckedFilter = async (path) => {
     state.checked.forEach((ch) => {
-      if (!state.selectedFilter.includes(ch))
-        dispatch({ type: "ADD_SELECTED_FILTER", payload: ch });
+      if (!state.selectedFilter.includes(ch)) dispatch(addSelectedFilter(ch));
     });
 
     const { data } = await axios.get(
@@ -139,14 +148,14 @@ const MenuPage = () => {
         fetchedData: data.data,
         pageLimit: data.count,
       }));
-      dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
-      dispatch({ type: "SET_END_SEARCH_RESULTS", payload: true });
+      dispatch(setDataNotAvailable(false));
+      dispatch(setEndSearchResults(true));
     } else {
       setCurrPage((p) => ({ ...p, page: 1 }));
       if (path === "foods") fetchDataDB();
       else setCurrPage((p) => ({ ...p, fetchedData: [] }));
-      dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: true });
-      dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
+      dispatch(setDataNotAvailable(true));
+      dispatch(setEndSearchResults(false));
     }
   };
 
@@ -155,9 +164,9 @@ const MenuPage = () => {
     const filteredArray = state.selectedFilter.filter(
       (sf) => sf !== removeFilter
     );
-    dispatch({ type: "SET_SELECTED_FILTER", payload: filteredArray });
+    dispatch(setSelectedFilter(filteredArray));
     const filterChecked = state.checked.filter((sc) => sc !== removeFilter);
-    dispatch({ type: "SET_CHECKED_FILTER", payload: filterChecked });
+    dispatch(setCheckedFilter(filterChecked));
 
     // filter foods data based on removed filters
     if (filterChecked.length) {
@@ -168,8 +177,8 @@ const MenuPage = () => {
       fetchDataDB();
       setCurrPage((p) => ({ ...p, page: 1 }));
 
-      dispatch({ type: "SET_DATA_NOT_AVAILABLE", payload: false });
-      dispatch({ type: "SET_END_SEARCH_RESULTS", payload: false });
+      dispatch(setDataNotAvailable(false));
+      dispatch(setEndSearchResults(false));
     }
   };
 
@@ -236,6 +245,15 @@ const MenuPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (state.checked) {
+      dispatch(setFilterApplied(state.checked.length));
+      if (!cuisines.click) {
+        onApplyCheckedFilter(path);
+      }
+    }
+  }, [state.checked]);
+
   return (
     <Layout pathname={location} onFilterRemove={onFilterRemove}>
       {location !== "delivery" && (
@@ -282,10 +300,7 @@ const MenuPage = () => {
                     key={cui.id}
                     className="cui-card-body"
                     onClick={() => {
-                      dispatch({
-                        type: "ADD_CHECKED_FILTER",
-                        payload: cui.name,
-                      });
+                      dispatch(addCheckedFilter(cui.name));
                       setCuisines((p) => ({ ...p, click: true }));
                     }}
                   >
