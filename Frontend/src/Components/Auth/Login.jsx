@@ -2,9 +2,10 @@ import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import { useAuthContext } from "../../contexts/useAuthContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/authSlice";
 
 import "./auth.css";
 
@@ -12,7 +13,8 @@ const Login = ({ setForPassVis, setIsLoginVisible, setIsSignupVisible }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setUser } = useAuthContext();
+  // const { setUser } = useAuthContext();
+  const dispatch = useDispatch();
 
   // Login
   const handleLoginPost = async () => {
@@ -21,7 +23,7 @@ const Login = ({ setForPassVis, setIsLoginVisible, setIsSignupVisible }) => {
         username,
         password,
       });
-      if (data.username) setUser(data.username);
+      if (data.username) dispatch(login(data.username));
       toast.success(`${data.username} logged in`);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.wrong) {

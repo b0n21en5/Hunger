@@ -1,16 +1,17 @@
+import React from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/authSlice";
 import ReactDOM from "react-dom";
-import { useAuthContext } from "../../contexts/useAuthContext";
 import { Link } from "react-router-dom";
 
 import "./usermodal.css";
-import React from "react";
 
 const UserModal = ({ setUserModalVisible }) => {
-  const { setUser } = useAuthContext();
+  const dispatch = useDispatch();
 
   const logout = () => {
     localStorage.removeItem("user-hunger");
-    setUser("");
+    dispatch(login(""));
     setUserModalVisible(false);
   };
 

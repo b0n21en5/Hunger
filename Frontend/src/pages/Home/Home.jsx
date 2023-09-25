@@ -6,8 +6,6 @@ import cd1 from "../../assets/cd-1.avif";
 import cd2 from "../../assets/cd-2.avif";
 import cd3 from "../../assets/cd-3.avif";
 import { useEffect, useState } from "react";
-import { useFilterContext } from "../../contexts/useFilterContext";
-import { useAuthContext } from "../../contexts/useAuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleDown,
@@ -23,6 +21,10 @@ import UserModal from "../../Components/UserModal/UserModal";
 import Reset from "../../Components/Auth/Reset";
 import toast, { Toaster } from "react-hot-toast";
 import Footer from "../../Components/Layout/Footer";
+
+import { useSelector, useDispatch } from "react-redux";
+import { resetState } from "../../store/filterSlice";
+
 import "./home.css";
 
 const Home = () => {
@@ -34,8 +36,10 @@ const Home = () => {
   const [forPassVis, setForPassVis] = useState(false);
   const [collectionsData, setCollectionsData] = useState([]);
 
-  const { state, dispatch } = useFilterContext();
-  const { user } = useAuthContext();
+  const { filterApplied } = useSelector((state) => state.filter);
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
 
   // Get all collections
   const getAllCollections = async () => {
@@ -52,8 +56,8 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({ type: "RESET_STATE" });
-  }, [state.filterApplied]);
+    dispatch(resetState());
+  }, [filterApplied]);
 
   return (
     <div className="home">
