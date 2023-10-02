@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import NotFound from "./Components/NotFound/NotFound";
 
 const MenuPage = lazy(() => import("./pages/MenuPage/MenuPage"));
 const ProductDetails = lazy(() =>
@@ -28,6 +29,7 @@ function App() {
         <Route path="/collections/:slug" element={<CollectionDetail />} />
         <Route path="/coll-details/:slug" element={<ProductDetails />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
